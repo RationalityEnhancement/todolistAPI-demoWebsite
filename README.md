@@ -1,4 +1,4 @@
-# To Do List
+# Demo Website for REG ToDo List Gamification Project"
 
 ## Page information
  ```src/app/views/todo-list.component.ts```

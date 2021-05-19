@@ -1,4 +1,16 @@
-# CO2L
+# To Do List
+
+## Page information
+ ```src/app/views/todo-list.component.ts```
+ is the file which contains the front-end where the user can enter the goals and tasks.
+ 
+ ```src/app/views/optimized-list.component.ts```
+ is the file which contains the front-end where the optimized gamified to-do list is shown.
+ 
+```src/app/provder/item.service.ts``` 
+contains the file which handles the API POST call. The Cross-Origin Resource Sharing has been fixed by means of an OPTION call which verifies that the domain https://saksham36.github.io is verified to access the API.
+
+## Website Deployment Information
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.2.
 

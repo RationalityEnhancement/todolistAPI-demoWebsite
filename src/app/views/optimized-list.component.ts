@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Globals } from "../globals";
 import { outputItem } from "./item";
-import { ItemService } from '../provider/item.service';
 
 @Component({
   selector: "optimized",
@@ -22,9 +21,9 @@ import { ItemService } from '../provider/item.service';
 
     <li *ngFor="let item of optList" (click)="toggleOpacity($event)">
       
-      <div class="item-amount">{{item.id}}</div>
+      <div class="item-amount">{{getHumanReadable(item.nm)}}</div>
       <div class="item-amount">{{item.val}}</div>
-      <div class="item-amount">{{item.est}} minutes</div>
+      <div class="item-amount">{{getTime(item.nm)}}</div>
     </li>
   </ul>
 
@@ -90,51 +89,50 @@ import { ItemService } from '../provider/item.service';
   ],
 })
 export class OptimizedListComponent implements OnInit{
+  public optList: outputItem[]
+  public re: RegExp
 
-    public optList: outputItem[]
+  constructor(public router: Router, private activatedRoute:ActivatedRoute) {
+    this.optList = Globals.optTaskList;
+    this.re = /[\s]?[(]takes about[\s]?[0-9]+[\s]?[a-z]*[\s]?[a-z]*[\s]?[0-9]*[\s]?[a-z]*[)]/;
 
-    constructor(public router: Router, private activatedRoute:ActivatedRoute) {
-        this.optList = Globals.optTaskList;
-        console.log('In optimized page constructor');
-        console.log(this.optList);
-        console.log("length");
-        console.log(this.optList.length>0);
+    console.log('In optimized page constructor');
+    console.log(this.optList);
+    // console.log("length");
+    // console.log(this.optList.length>0);
+  }
+
+  ngOnInit() {
+    console.log("In Running Algo");
+    this.optList = this.activatedRoute.snapshot.data['optList'];
+    Globals.optTaskList = this.optList;
+    console.log('API finished. In optimed page');
+    console.log(this.optList);
+    // this.itemService.getOptimalList().subscribe((optList)=> {
+    //   console.log("RUNNING");
+    //   Globals.optTaskList = optList;
+    //   console.log(optList);
+    // })
+
+  }
+
+  toggleOpacity(e) {
+
+    let ele = e.target.closest('li')
+
+    if(ele.getAttribute('checked') == 'true') {
+
+      ele.style.opacity = '1'
+
+      ele.setAttribute('checked', 'false')
     }
+    else {
 
-    ngOnInit() {
-      console.log("In Running Algo");
-      this.optList = this.activatedRoute.snapshot.data['optList'];
-      Globals.optTaskList = this.optList;
-      console.log('API finished. In optimed page');
-      console.log(this.optList);
-      // this.itemService.getOptimalList().subscribe((optList)=> {
-      //   console.log("RUNNING");
-      //   Globals.optTaskList = optList;
-      //   console.log(optList);
-      // })
-  
+      ele.style.opacity = '.3'
+
+      ele.setAttribute('checked', 'true')
     }
-
-    toggleOpacity(e) {
-
-      let ele = e.target.closest('li')
-
-      if(ele.getAttribute('checked') == 'true') {
-
-        ele.style.opacity = '1'
-
-        ele.setAttribute('checked', 'false')
-      }
-      else {
-
-        ele.style.opacity = '.3'
-
-        ele.setAttribute('checked', 'true')
-      }
-    }
-
-   
-
+  }
 
   titleCase(str) {
     let splitStr = str.toLowerCase().split(' ');
@@ -142,5 +140,29 @@ export class OptimizedListComponent implements OnInit{
         splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
     }
     return splitStr.join(' '); 
- }
+  }
+
+  getTagRegex(tag){
+      return tag.exec('(?:\b|)');
+  }
+
+  getHumanReadable(item_name){
+    item_name = this.re[Symbol.replace](item_name,"");  
+    let prefix = /[0-9]*[)]?[\s]?/;
+    item_name = prefix[Symbol.replace](item_name,""); 
+    // console.log('After Regex Name Removing )');
+    // console.log(item_name);
+    return item_name;
+  }
+
+  getTime(item_name){
+    let time = this.re[Symbol.match](item_name).toString();  
+    let prefix = /[\s]?[(]takes about[\s]?/;
+    time = prefix[Symbol.replace](time,""); 
+    let suffix = /[)]/;
+    time = suffix[Symbol.replace](time,""); 
+    // console.log('After Regex Time');
+    // console.log(time);
+    return time
+  }
 }

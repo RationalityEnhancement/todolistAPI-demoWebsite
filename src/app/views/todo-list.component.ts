@@ -22,7 +22,7 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
         <input [(ngModel)]="task_desc" type="text" placeholder="Item Description" name="item-desc" required>
 
         <label for="item-time"></label>
-        <input [(ngModel)]="task_time_est" type="text" placeholder="Enter Time Estimate" name="item-time-est" required>
+        <input [(ngModel)]="task_time_est" type="text" placeholder="Enter Time Estimate (Hours)" name="item-time-est" required>
 
         <label for="item-deadline"></label>
         <input [(ngModel)]="task_deadline" type="text" placeholder="Enter Deadline (YYYY.MM.DD)" name="item-deadline">
@@ -38,7 +38,7 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
           </label>
           <b>Today</b>
         -->
-        <button type="submit" class="btn add" (click)="addItem($event, goal_opened)">Add"</button>
+        <button type="submit" class="btn add" (click)="addItem($event, goal_opened)">Add</button>
         <button type="submit" class="btn cancel" (click)="closeItem($event)">Cancel</button>
       </form>
     </div>
@@ -54,7 +54,7 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
         <input [(ngModel)]="goal_val" type="text" placeholder="Goal Value" name="item-val">
 
         <label for="goal-time"></label>
-        <input [(ngModel)]="goal_time_est" type="text" placeholder="Enter Time Estimate" name="goal-time-est">
+        <input [(ngModel)]="goal_time_est" type="text" placeholder="Enter Time Estimate (Hours)" name="goal-time-est">
 
         <label for="goal-deadline"></label>
         <input [(ngModel)]="goal_deadline" type="text" placeholder="Enter Deadline (YYYY.MM.DD)" name="goal-deadline">
@@ -147,12 +147,12 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
     .form-container .btn {
       background-color: #4CAF50;
       color: white;
-      padding: 16px 20px;
       border: none;
       cursor: pointer;
       width: 100%;
       margin-bottom:10px;
       opacity: 0.8;
+      margin: 10px;
     }
 
     /* Add a red background color to the cancel button */
@@ -249,8 +249,10 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
         min-width: 300px;
         display: inline-block;
         text-align: center;
-        background: #33cc33;
+        background: #E4E6C3;
         border-radius: 25px;
+        padding: 10px;
+        margin: 10px;
         
       }
       .task-wrapper{
@@ -261,8 +263,9 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
         min-height: 50px;
         display: inline-block;
         text-align: center;
-        background: #77b300;
+        background: #F7F7E3;
         border-radius: 25px;
+        margin: 5px;
       }
       .btn.bottom-fixed {
 
@@ -344,17 +347,16 @@ export class ToDoListComponent {
   }
 
   public route(){
-    console.log("Go to Optimized");
+    // console.log("Go to Optimized");
     this.router.navigateByUrl('/optimized')
   } 
 
 
   openGoal(e?) {
-    console.log("in openGoal");
-    console.log(this.goal_form_open)
+    // console.log("in openGoal");
+    // console.log(this.goal_form_open)
     // this.closeItem(e);
     if(this.goal_form_open == true){
-      console.log("YO");
       document.getElementById("goal-form").style.display = "block";
     }
     // this.goal_form_open = false;
@@ -365,9 +367,9 @@ export class ToDoListComponent {
   }
   
   openItem(e?, goal?) {
-    console.log("In openItem");
+    // console.log("In openItem");
     this.goal_opened = goal;
-    console.log(goal);
+    // console.log(goal);
     // console.log(this.goals.indexOf(goal));
     this.closeGoal(e);
     document.getElementById("task-form").style.display = "block";
@@ -375,20 +377,20 @@ export class ToDoListComponent {
   }
 
   closeGoal(e?){
-    console.log("Close Goal Form");
+    // console.log("Close Goal Form");
     this.goal_form_open = true;
     document.getElementById("goal-form").style.display = "none";
   }
 
   closeItem(e?){
-    console.log("Close Item Form");
+    // console.log("Close Item Form");
     this.task_form_open = true;
     document.getElementById("task-form").style.display = "none";
   }
 
   addGoal(event?) {
     this.goal_form_open = true;
-    console.log(this.goal_desc)
+    // console.log(this.goal_desc)
     var goal = <Goal>({
       name: this.goal_desc,
       time_est: this.goal_time_est,
@@ -398,7 +400,7 @@ export class ToDoListComponent {
     if(this.goal_desc != undefined){
       this.goals.push(goal);
       this.goal_opened = goal;
-      console.log(goal);
+      // console.log(goal);
     }
     this.goal_desc = undefined;
     this.goal_val = undefined;
@@ -406,7 +408,7 @@ export class ToDoListComponent {
     this.goal_time_est = undefined;
     
     
-    console.log(this.goals);
+    // console.log(this.goals);
     // this.displayGoal(goal);
   }
 
@@ -418,8 +420,8 @@ export class ToDoListComponent {
   }
 
   addItem(event, goal) {
-    console.log("In AddItem");
-    console.log(goal)
+    // console.log("In AddItem");
+    // console.log(goal)
     var item = <Item>({
       name: this.task_desc,
       time_est: this.task_time_est,
@@ -427,23 +429,23 @@ export class ToDoListComponent {
       today: this.task_today == "Not Today" ? false: true,
       
     });
-    console.log(item);
+    // console.log(item);
     if(this.task_desc != undefined){
       
-      console.log(goal);
+      // console.log(goal);
       
       if('num_children' in goal){
-        console.log("HAVE CHILD");
+        // console.log("HAVE CHILD");
         goal.tasks.push(item);
         goal.num_children += 1;
       }
       else{
-        console.log("FIRST CHILD");
+        // console.log("FIRST CHILD");
         goal.tasks = [];
         goal.tasks.push(item);
         goal.num_children = 1;
       }
-    console.log(goal.num_children);
+    // console.log(goal.num_children);
     }
     this.task_desc = undefined;
     this.task_today = undefined;
@@ -452,11 +454,11 @@ export class ToDoListComponent {
   }
 
   deleteItem(event, goal, item){
-    console.log("In deleteItem");
-    console.log(goal);
-    console.log(item);
+    // console.log("In deleteItem");
+    // console.log(goal);
+    // console.log(item);
     const index = goal.tasks.indexOf(item);
-    console.log(index);
+    // console.log(index);
     if(index > -1){
       goal.tasks.splice(index, 1);
       goal.num_children -= 1;

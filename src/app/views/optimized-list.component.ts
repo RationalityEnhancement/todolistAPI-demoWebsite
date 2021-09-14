@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Globals } from "../globals";
-import { outputItem } from "./item";
+import { ItemService } from "../provider/item.service";
+import { Item, outputItem } from "./item";
 
 @Component({
   selector: "optimized",
@@ -20,9 +21,10 @@ import { outputItem } from "./item";
     </li>
 
     <li *ngFor="let item of optList" (click)="toggleOpacity($event)">
-      
-      <div class="item-amount">{{getHumanReadable(item.nm)}}</div>
-      <div class="item-amount">{{item.val}}</div>
+    <li *ngFor="let item of optList" (click)="toggleOpacity($event)">
+  <!--<div class="item-amount">{{getHumanReadable(item.nm)}}</div>
+  -->
+    <div class="item-amount">{{getGoalName(item.parentId)}}</div><div class="item-amount">{{item.val}}</div>
       <div class="item-amount">{{getTime(item.nm)}}</div>
     </li>
   </ul>
@@ -91,8 +93,9 @@ import { outputItem } from "./item";
 export class OptimizedListComponent implements OnInit{
   public optList: outputItem[]
   public re: RegExp
+  public goalname_map: {}
 
-  constructor(public router: Router, private activatedRoute:ActivatedRoute) {
+  constructor(public router: Router, private activatedRoute:ActivatedRoute, public itemService: ItemService) {
     this.optList = Globals.optTaskList;
     this.re = /[\s]?[(]takes about[\s]?[0-9]+[\s]?[a-z]*[\s]?[a-z]*[\s]?[0-9]*[\s]?[a-z]*[)]/;
 
@@ -108,6 +111,9 @@ export class OptimizedListComponent implements OnInit{
     Globals.optTaskList = this.optList;
     console.log('API finished. In optimed page');
     console.log(this.optList);
+
+    this.goalname_map = this.itemService.goalname_map
+    console.log("goalname_map: ", this.goalname_map)
     // this.itemService.getOptimalList().subscribe((optList)=> {
     //   console.log("RUNNING");
     //   Globals.optTaskList = optList;
@@ -165,4 +171,13 @@ export class OptimizedListComponent implements OnInit{
     // console.log(time);
     return time
   }
+
+  getGoalname(parentId){
+    let idx = parentId.slice(1,); //g1 -> 1
+    let goalname = this.goalname_map[idx];
+    return goalname;
+    
+    }
+    
+    //todo: display a prioritized list
 }

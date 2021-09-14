@@ -10,6 +10,8 @@ export class ItemService {
     private gamifyUrl: string = 'https://aqueous-hollows-34193.herokuapp.com/api/smdp/mdp/30/14/inf/0/inf/0/inf/false/0/max/0.999999/0.1/2/1.39/0.0001/0.01/tree/__test__/getTasksForToday'
     constructor(private http: HttpClient) {}
 
+    public goalname_map = {};//add a goalname map
+
     makeProject() {
         console.log("In makeProject");
         let project = [];
@@ -22,7 +24,7 @@ export class ItemService {
                 ch: null,
                 parentId: "None"
               }
-            
+            this.goalname_map[i-1]=Globals.goalList[i-1].name;//update a goalname map
             if ('num_children' in Globals.goalList[i-1] && Globals.goalList[i-1].num_children > 0){
                 node.ch = [];
                 for (let j = 1; j < Globals.goalList[i-1].num_children+1; j++){
@@ -43,6 +45,8 @@ export class ItemService {
             console.log("String Project");
             JSON.stringify(project);
             console.log(project);
+
+            console.log("print map of goal name: ", this.goalname_map) //
  
         }
         return project;
@@ -51,7 +55,6 @@ export class ItemService {
     setGoalName_map(goalname_map){
     this.goalname_map = goalname_map;
     }
-
     make_typical_hours() {
         let list = [];
         let obj = {

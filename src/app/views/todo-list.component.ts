@@ -77,15 +77,20 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
             </div>
             <div *ngIf = "goal.tasks !== undefined">
               <div *ngIf = "goal.tasks.length > 0">
-                <ul>
+              <div> ------ Subgoals ------
+              <ul>
                   <li *ngFor = "let task of goal.tasks" class="task-item">
-                      <div> Task: {{task.name}} {{task.time_est}}
-                        <div class="del-wrapper"> 
+                     <!--
+                        <div> Task: {{task.name}} {{task.time_est}}
+                      -->
+                      <div> {{task.name}} <br/> Time: {{task.time_est}} hr
+                       <div class="del-wrapper"> 
                           <div class="del" (click)="deleteItem($event, goal, task)"><div>-</div></div>
                         </div>
                       </div>
                     </li>
                   </ul>
+                  </div>
               </div>
             </div>
           </div>
@@ -241,12 +246,19 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
 
       .goal-wrapper ul{
        width: 100%;
-       display:flex;
-      }
+       display: inline-grid;
+       overflow: auto;
+       justify-content: space-between;
+       max-height: -webkit-fill-available;
+       grid-template-columns: 50% 50%;
+   }
+      
+      
 
       .goal-item{
-        width: 33%;
+        width: 90%;
         min-width: 300px;
+        min-height: 300px;
         display: inline-block;
         text-align: center;
         background: #E4E6C3;
@@ -259,14 +271,19 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
         display: grid;
       }
       .task-item{
-        width: 33%;
-        min-height: 50px;
-        display: inline-block;
+        width: 80%;
+        min-height: 100px;
+        min-width: 50%;
+        display: block;
         text-align: center;
         background: #F7F7E3;
         border-radius: 25px;
         margin: 5px;
-      }
+        justify-content: space-between;
+        padding: 8px;
+    }
+       
+      
       .btn.bottom-fixed {
 
         position: fixed;
@@ -278,7 +295,7 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
         position: relative;
       }
       .del{
-        position: absolute;
+        position: relative;
         top: 0px;
         cursor: pointer;
         display: inline-grid;

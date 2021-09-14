@@ -51,6 +51,10 @@ export class ItemService {
         }
         return project;
     }
+    //need to set GoalName_map ?
+    setGoalName_map(goalname_map){
+    this.goalname_map = goalname_map;
+    }
 
     make_typical_hours() {
         let list = [];

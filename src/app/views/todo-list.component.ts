@@ -1,7 +1,7 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {filter, map, startWith} from 'rxjs/operators';
+import {filter, map, min, startWith} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Globals } from '../globals';
 import { Goal, Item} from './item';
@@ -17,15 +17,15 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
     <div class="form-popup" id="task-form" *ngIf = "task_form_open == true">
       
       <form class="form-container">
-        <h1>Add Item in Goal {{goal_opened.name}}</h1>
+        <h1>Add Subgoal in Goal {{goal_opened.name}}</h1>
         <label for="item-desc"></label>
-        <input [(ngModel)]="task_desc" type="text" placeholder="Item Description" name="item-desc" required>
+        <input [(ngModel)]="task_desc" type="text" placeholder="Subgoal Description (*Required)" name="item-desc" required>
 
         <label for="item-time"></label>
-        <input [(ngModel)]="task_time_est" type="text" placeholder="Enter Time Estimate (Hours)" name="item-time-est" required>
+        <input [(ngModel)]="task_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)" name="item-time-est" required >
 
         <label for="item-deadline"></label>
-        <input [(ngModel)]="task_deadline" type="text" placeholder="Enter Deadline (YYYY.MM.DD)" name="item-deadline">
+        <input [(ngModel)]="task_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD) (optional)" name="item-deadline">
         <label for="item-today"></label>
         <input [(ngModel)]="task_today" type="radio" id="nt" name="item-today" value="Not Today"> <label for = "nt"> Not Today </label>
         <input [(ngModel)]="task_today" type="radio" id="t" name="item-today" value="Today"> <label for = "t"> Today </label>
@@ -38,7 +38,8 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
           </label>
           <b>Today</b>
         -->
-        <button type="submit" class="btn add" (click)="addItem($event, goal_opened)">Add</button>
+       
+        <button type="submit" class="btn add" (click)="validateForm_task($event)">Add</button>
         <button type="submit" class="btn cancel" (click)="closeItem($event)">Cancel</button>
       </form>
     </div>
@@ -46,20 +47,20 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
     <div class="form-popup" id="goal-form" *ngIf = "goal_form_open == true">
       <form class="form-container">
         <h1>Add Goal</h1>
-
+ 
         <label for="goal-desc"></label>
-        <input [(ngModel)]="goal_desc" type="text" placeholder="Goal Description" name="item-desc" required>
+        <input [(ngModel)]="goal_desc" type="text" placeholder="Goal Description (*Required)" name="item-desc" required>
 
         <label for="goal-val"></label>
-        <input [(ngModel)]="goal_val" type="text" placeholder="Goal Value" name="item-val">
+        <input [(ngModel)]="goal_val" type="number" placeholder="Goal Value (0-9999) (*Required)" name="item-val"  min="0" max="9999" required>
 
         <label for="goal-time"></label>
-        <input [(ngModel)]="goal_time_est" type="text" placeholder="Enter Time Estimate (Hours)" name="goal-time-est">
+        <input [(ngModel)]="goal_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)" name="goal-time-est">
 
         <label for="goal-deadline"></label>
-        <input [(ngModel)]="goal_deadline" type="text" placeholder="Enter Deadline (YYYY.MM.DD)" name="goal-deadline">
-        
-        <button type="submit" class="btn add" (click) = "addGoal($event)">Add</button>
+        <input [(ngModel)]="goal_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD)" name="goal-deadline">
+       
+        <button type="submit" class="btn add" (click) = "validateForm_goal($event)">Add</button>
         <button type="submit" class="btn cancel" (click)="closeGoal($event)">Cancel</button>
       </form>
     </div>
@@ -134,16 +135,30 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
     }
 
     /* Full-width input fields */
-    .form-container input[type=text], .form-container input[type=password] {
-      width: 100%;
-      padding: 15px;
-      margin: 5px 0 22px 0;
-      border: none;
-      background: #f1f1f1;
+    .form-container input[type=text],
+    input[type=number], input[type=date], .form-container input[type=password] {
+      width: 92%;
+      height: 40px;
+      border: 1px solid 615757;
+      /* box-sizing: unset; */
+      padding: 6px;
+      margin: 6px;
+     
+    }
+    /* hide arrows in the number input box - Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+      }
+/* hide arrows in the number input box in FireFox */
+    input[type=number]{
+      -moz-appearance: textfield;
     }
 
+
     /* When the inputs get focus, do something */
-    .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+    .form-container input[type=text]:focus, input[type=number]:focus, input[type=date]:focus, .form-container input[type=password]:focus {
       background-color: #ddd;
       outline: none;
     }
@@ -180,6 +195,7 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
       height: 34px;
     }
     
+  
     .switch input { 
       opacity: 0;
       width: 0;
@@ -316,8 +332,10 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
     `
   ]
 })
+
 export class ToDoListComponent {
 
+  
   public goal_val : number; 
   public goal_desc: string;
   public goal_deadline: string;
@@ -462,12 +480,13 @@ export class ToDoListComponent {
         goal.tasks.push(item);
         goal.num_children = 1;
       }
-    // console.log(goal.num_children);
+    console.log("num child",goal.num_children);
     }
     this.task_desc = undefined;
     this.task_today = undefined;
     this.task_deadline = undefined;
     this.task_time_est = undefined;
+    
   }
 
   deleteItem(event, goal, item){
@@ -480,6 +499,61 @@ export class ToDoListComponent {
       goal.tasks.splice(index, 1);
       goal.num_children -= 1;
     }
+  }
+
+ 
+  validateForm_goal() {
+    // console.log("validate")
+    // console.log(this.goal_desc);
+    // console.log(this.goal_time_est);
+    // console.log(this.goal_val);
+
+    if (this.goal_desc == undefined && this.goal_time_est == undefined && this.goal_val == undefined){
+    alert("please fill the form!")
+    }else{
+      console.log("there's some input!");
+    if (this.goal_desc == "") {
+      alert("Description must be filled out");
+      return false;
+    }
+    if (this.goal_val==null)
+    {
+      alert("Goal value must be filled out");
+      return false;
+    }
+    if (this.goal_time_est == null) {
+      alert("Time estimation must be filled out");
+      return false;
+    }
+    //pass validator and add goal
+       this.addGoal();
+  
+  }
+  }
+  validateForm_task(){
+    // console.log("validate subgoal")
+    // console.log(this.task_desc);
+    // console.log(this.task_time_est);
+    if (this.task_desc == undefined && this.task_time_est == undefined){
+      alert("please fill the form!")
+    }else{
+    if (this.task_desc == "") {
+      alert("Description must be filled out");
+      return false;
+    }
+  
+    if (this.task_time_est == null) {
+      alert("Time estimation must be filled out");
+      return false;
+    }
+    //pass validator and add item
+       this.addItem(event,this.goal_opened);
+    
+  
+  }
+
+
+
   }
 
 }

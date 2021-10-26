@@ -24,7 +24,7 @@ import { Item, outputItem } from "./item";
     <li *ngFor="let item of optList" (click)="toggleOpacity($event)">
   <!--<div class="item-amount">{{getHumanReadable(item.nm)}}</div>
   -->
-    <div class="item-amount">{{getGoalName(item.parentId)}}</div><div class="item-amount">{{item.val}}</div>
+    <div class="item-amount">{{getGoalName(finalList)}}</div><div class="item-amount">{{item.val}}</div>
       <div class="item-amount">{{getTime(item.nm)}}</div>
     </li>
   </ul>
@@ -114,6 +114,17 @@ export class OptimizedListComponent implements OnInit{
 
     this.goalname_map = this.itemService.goalname_map
     console.log("goalname_map: ", this.goalname_map)
+
+    //check optList, remove duplicated goals {g2, g1, g1, g2, g1} -> {g2, g1}
+    var finalList=[];
+    for (let i = 0; i < this.optList.length; i++) {
+    var temp = this.optList[i]["id"].slice(0,2)
+    if (!finalList.includes(temp)){
+      finalList.push(temp);
+    }
+    console.log(finalList); // in the suggested order for users to follow
+    }
+
     // this.itemService.getOptimalList().subscribe((optList)=> {
     //   console.log("RUNNING");
     //   Globals.optTaskList = optList;
@@ -172,12 +183,14 @@ export class OptimizedListComponent implements OnInit{
     return time
   }
 
-  getGoalname(parentId){
-    let idx = parentId.slice(1,); //g1 -> 1
-    let goalname = this.goalname_map[idx];
-    return goalname;
-    
+  getGoalname(finalList){     
+    //display a prioritized list
+    let final_optList = [];
+    for (let i = 0; i < finalList.length; i++) {
+    final_optList.push(this.goalname_map[finalList[i].slice(1,)]);
     }
-    
-    //todo: display a prioritized list
+    console.log("final opt List: ", final_optList);
+    return final_optList;
+    }
+
 }

@@ -186,14 +186,14 @@ export class OptimizedListComponent implements OnInit{
     return time
   }
 
-  getGoalname(finalList){     
-    //display a prioritized list
-    let final_optList = [];
-    for (let i = 0; i < finalList.length; i++) {
-    final_optList.push(this.goalname_map[finalList[i].slice(1,)]);
-    }
-    console.log("final opt List: ", final_optList);
-    return final_optList;
-    }
+  // getGoalname(finalList){     
+  //   //display a prioritized list
+  //   let final_optList = [];
+  //   for (let i = 0; i < finalList.length; i++) {
+  //   final_optList.push(this.goalname_map[finalList[i].slice(1,)]);
+  //   }
+  //   console.log("final opt List: ", final_optList);
+  //   return final_optList;
+  //   }
 
 }

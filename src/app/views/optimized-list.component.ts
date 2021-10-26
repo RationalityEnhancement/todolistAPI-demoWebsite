@@ -22,9 +22,9 @@ import { Item, outputItem } from "./item";
 
     <li *ngFor="let item of optList" (click)="toggleOpacity($event)">
     <li *ngFor="let item of optList" (click)="toggleOpacity($event)">
-  <!--<div class="item-amount">{{getHumanReadable(item.nm)}}</div>
-  -->
-    <div class="item-amount">{{getGoalName(finalList)}}</div><div class="item-amount">{{item.val}}</div>
+  <div class="item-amount">{{getHumanReadable(item.nm)}}</div>
+  
+  <!--<div class="item-amount">{{getGoalName(finalList)}}</div><div class="item-amount">{{item.val}}</div>-->
       <div class="item-amount">{{getTime(item.nm)}}</div>
     </li>
   </ul>
@@ -119,7 +119,7 @@ export class OptimizedListComponent implements OnInit{
 
     //check optList, remove duplicated goals {g2, g1, g1, g2, g1} -> {g2, g1}
  
- 
+    console.log("1 final List: ",this.finalList);
     for (let i = 0; i < this.optList.length; i++) {
     var temp = this.optList[i]["id"].slice(0,2);
     if (!this.finalList.includes(temp)){

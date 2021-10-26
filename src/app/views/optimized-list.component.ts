@@ -94,6 +94,8 @@ export class OptimizedListComponent implements OnInit{
   public optList: outputItem[]
   public re: RegExp
   public goalname_map: {}
+  public finalList = [];
+  
 
   constructor(public router: Router, private activatedRoute:ActivatedRoute, public itemService: ItemService) {
     this.optList = Globals.optTaskList;
@@ -104,7 +106,7 @@ export class OptimizedListComponent implements OnInit{
     // console.log("length");
     // console.log(this.optList.length>0);
   }
-
+  
   ngOnInit() {
     console.log("In Running Algo");
     this.optList = this.activatedRoute.snapshot.data['optList'];
@@ -116,13 +118,14 @@ export class OptimizedListComponent implements OnInit{
     console.log("goalname_map: ", this.goalname_map)
 
     //check optList, remove duplicated goals {g2, g1, g1, g2, g1} -> {g2, g1}
-    var finalList=[];
+ 
+ 
     for (let i = 0; i < this.optList.length; i++) {
-    var temp = this.optList[i]["id"].slice(0,2)
-    if (!finalList.includes(temp)){
-      finalList.push(temp);
+    var temp = this.optList[i]["id"].slice(0,2);
+    if (!this.finalList.includes(temp)){
+      this.finalList.push(temp);
     }
-    console.log(finalList); // in the suggested order for users to follow
+    console.log("final List: ",this.finalList); // in the suggested order for users to follow
     }
 
     // this.itemService.getOptimalList().subscribe((optList)=> {

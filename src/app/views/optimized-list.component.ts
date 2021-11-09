@@ -24,7 +24,8 @@ import { Item, outputItem } from "./item";
     <li *ngFor="let item of optList" (click)="toggleOpacity($event)">
   <div class="item-amount">{{getHumanReadable(item.nm)}}</div>
   
-  <!--<div class="item-amount">{{getGoalName(finalList)}}</div><div class="item-amount">{{item.val}}</div>-->
+  <!--<div class="item-amount">{{getGoalname(finalList)}}</div>
+  <div class="item-amount">{{item.val}}</div>-->
       <div class="item-amount">{{getTime(item.nm)}}</div>
     </li>
   </ul>
@@ -188,10 +189,12 @@ export class OptimizedListComponent implements OnInit{
 
   getGoalname(finalList){     
     //display a prioritized list
+    console.log("finalList: ", finalList);
     let final_optList = [];
     for (let i = 0; i < finalList.length; i++) {
-    final_optList.push(this.goalname_map[finalList[i].slice(1,)]);
+    final_optList.push(this.goalname_map[finalList[i].slice(1,)-1]);
     }
+    console.log("goalname_map: ", this.goalname_map);
     console.log("final opt List: ", final_optList);
     return final_optList;
     }

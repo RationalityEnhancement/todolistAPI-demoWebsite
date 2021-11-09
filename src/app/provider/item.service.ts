@@ -46,7 +46,7 @@ export class ItemService {
             JSON.stringify(project);
             console.log(project);
 
-            console.log("print map of goal name: ", this.goalname_map) //
+            console.log("print map of goal name__: ", this.goalname_map) //
  
         }
         return project;

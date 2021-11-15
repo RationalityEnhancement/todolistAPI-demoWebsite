@@ -20,15 +20,16 @@ import { Item, outputItem } from "./item";
       <div class="item-amount">Estimated Time</div>
     </li>
     <p>ng For: item of optList</p>
+    <!--<li *ngFor="let item of optList" (click)="toggleOpacity($event)">--!>
     <li *ngFor="let item of optList" (click)="toggleOpacity($event)">
-    <li *ngFor="let item of optList" (click)="toggleOpacity($event)">
-    <p>Get HumanReadable items</p>
   <div class="item-amount">{{getHumanReadable(item.nm)}}</div>
+  <div class="item-amount">{{item.val}}</div>
+  <div class="item-amount">{{getTime(item.nm)}}</div>
+  </li>
   <p>Get Goal Names</p>
   <div class="item-amount">{{getGoalname(finalList)}}</div>
-  <div class="item-amount">{{item.val}}</div>
-      <div class="item-amount">{{getTime(item.nm)}}</div>
-    </li>
+  <li *ngFor="let item of finalList" (click)="toggleOpacity($event)"></li>
+
   </ul>
 
 </div>
@@ -92,14 +93,14 @@ import { Item, outputItem } from "./item";
     `,
   ],
 })
-export class OptimizedListComponent implements OnInit{
+export class OptimizedListComponent implements OnInit {
   public optList: outputItem[]
   public re: RegExp
   public goalname_map: {}
   public finalList = [];
-  
 
-  constructor(public router: Router, private activatedRoute:ActivatedRoute, public itemService: ItemService) {
+
+  constructor(public router: Router, private activatedRoute: ActivatedRoute, public itemService: ItemService) {
     this.optList = Globals.optTaskList;
     this.re = /[\s]?[(]takes about[\s]?[0-9]+[\s]?[a-z]*[\s]?[a-z]*[\s]?[0-9]*[\s]?[a-z]*[)]/;
 
@@ -108,7 +109,7 @@ export class OptimizedListComponent implements OnInit{
     // console.log("length");
     // console.log(this.optList.length>0);
   }
-  
+
   ngOnInit() {
     console.log("In Running Algo");
     this.optList = this.activatedRoute.snapshot.data['optList'];
@@ -120,14 +121,14 @@ export class OptimizedListComponent implements OnInit{
     console.log("goalname_map: ", this.goalname_map)
 
     //check optList, remove duplicated goals {g2, g1, g1, g2, g1} -> {g2, g1}
- 
-    console.log("1 final List: ",this.finalList);
+
+    console.log("1 final List: ", this.finalList);
     for (let i = 0; i < this.optList.length; i++) {
-    var temp = this.optList[i]["id"].slice(0,2);
-    if (!this.finalList.includes(temp)){
-      this.finalList.push(temp);
-    }
-    console.log("final List: ",this.finalList); // in the suggested order for users to follow
+      var temp = this.optList[i]["id"].slice(0, 2);
+      if (!this.finalList.includes(temp)) {
+        this.finalList.push(temp);
+      }
+      console.log("final List: ", this.finalList); // in the suggested order for users to follow
     }
 
     this.getGoalname(this.finalList);
@@ -143,7 +144,7 @@ export class OptimizedListComponent implements OnInit{
 
     let ele = e.target.closest('li')
 
-    if(ele.getAttribute('checked') == 'true') {
+    if (ele.getAttribute('checked') == 'true') {
 
       ele.style.opacity = '1'
 
@@ -160,45 +161,45 @@ export class OptimizedListComponent implements OnInit{
   titleCase(str) {
     let splitStr = str.toLowerCase().split(' ');
     for (let i = 0; i < splitStr.length; i++) {
-        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
     }
-    return splitStr.join(' '); 
+    return splitStr.join(' ');
   }
 
-  getTagRegex(tag){
-      return tag.exec('(?:\b|)');
+  getTagRegex(tag) {
+    return tag.exec('(?:\b|)');
   }
 
-  getHumanReadable(item_name){
-    item_name = this.re[Symbol.replace](item_name,"");  
+  getHumanReadable(item_name) {
+    item_name = this.re[Symbol.replace](item_name, "");
     let prefix = /[0-9]*[)]?[\s]?/;
-    item_name = prefix[Symbol.replace](item_name,""); 
+    item_name = prefix[Symbol.replace](item_name, "");
     // console.log('After Regex Name Removing )');
     // console.log(item_name);
     return item_name;
   }
 
-  getTime(item_name){
-    let time = this.re[Symbol.match](item_name).toString();  
+  getTime(item_name) {
+    let time = this.re[Symbol.match](item_name).toString();
     let prefix = /[\s]?[(]takes about[\s]?/;
-    time = prefix[Symbol.replace](time,""); 
+    time = prefix[Symbol.replace](time, "");
     let suffix = /[)]/;
-    time = suffix[Symbol.replace](time,""); 
+    time = suffix[Symbol.replace](time, "");
     // console.log('After Regex Time');
     // console.log(time);
     return time
   }
 
-  getGoalname(finalList){     
+  getGoalname(finalList) {
     //display a prioritized list
     console.log("finalList (in getGoalname): ", finalList);
     let final_optList = [];
     for (let i = 0; i < finalList.length; i++) {
-    final_optList.push(this.goalname_map[finalList[i].slice(1,)-1]);
+      final_optList.push(this.goalname_map[finalList[i].slice(1,) - 1]);
     }
     console.log("goalname_map: ", this.goalname_map);
     console.log("final opt List: ", final_optList);
     return final_optList;
-    }
+  }
 
 }

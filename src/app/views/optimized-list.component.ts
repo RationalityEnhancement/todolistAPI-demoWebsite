@@ -42,7 +42,7 @@ import { Item, outputItem } from "./item";
   To sum it up, our AI algorithm suggests the following prioritized goal list for you:<br>
   (The first suggestion being the most valuable goal of yours.)
   
-  <div class="item-amount" style="color:blue; >{{getGoalname(finalList)}}</div>
+  <div class="item-amount" style="color:blue;" >{{getGoalname(finalList)}}</div>
 
   <ul>
   <li *ngFor="let item of final_optList"></li><br>

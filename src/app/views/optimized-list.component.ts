@@ -20,7 +20,7 @@ import { Item, outputItem } from "./item";
       <div class="item-amount">Estimated Time</div>
     </li>
     <p>ng For: item of optList</p>
-    <!--<li *ngFor="let item of optList" (click)="toggleOpacity($event)">--!>
+    <li *ngFor="let item of optList" (click)="toggleOpacity($event)">
     <li *ngFor="let item of optList" (click)="toggleOpacity($event)">
   <div class="item-amount">{{getHumanReadable(item.nm)}}</div>
   <div class="item-amount">{{item.val}}</div>

@@ -26,31 +26,38 @@ import { Item, outputItem } from "./item";
   <div class="item-amount">{{getTime(item.nm)}}</div>
   </li>
   </ul>
-  <h3>Your prioritized goals</h3>
-  <p>We aim at brining the long-term value to the present in order to help people make a better decision. 
+  <h2>Your prioritized goals</h2>
+  <p>Dear participant, we aim at brining the long-term value to the present in order to help people make a better decision. 
   In other words, our AI algorithm suggests a rational prioritized list for you. 
   There are many life goals to acheive, if you are not sure what to start first, here we are.</p>
 
   <h4>What does the algorithm take into account?</h4>
-  <p>The number of your goals and tasks</p>
-  <p>The value of your goals</p>
-  <p>The estimate time of your goals and tasks</p>
-
-  To sum it up, our AI algorithm suggests the following prioritized goal list for you:
+  <ul>
+  <li>The number of your goals and tasks</li>
+  <li>The value of your goals</li>
+  <li>The estimate time of your goals and tasks</li>
+  </ul>
+  <br>
+  To sum it up, our AI algorithm suggests the following prioritized goal list for you:<br>
   (The first suggestion being the most valuable goal of yours.)
-
-  <div class="item-amount">{{getGoalname(finalList)}}</div>
-  <li *ngFor="let item of final_optList" (click)="toggleOpacity($event)"></li>
-
-  Please go through the list and think about these questions:
-  1. Does it make sense?
-  2. Do I believe that it is better for me if I follow the list and work on the most valuable goals?
-  3. Which goal seems not so convincing? Why?
   
-  UX questions:
-  1. Before using this app, what was your goal pursuit priority?
-  2. Do you think it is a good suggestion? Why or why not?
-  3. How might this result change your behaviour of goal pursuit from now on? Will you spend more time and energy on the prioritized goals? 
+  <div class="item-amount">{{getGoalname(finalList)}}</div>
+  <li *ngFor="let item of final_optList" (click)="toggleOpacity($event)"></li><br>
+
+  <h4>Please go through the list and think about these questions:</h4>
+  <ol>
+  <li>Does it make sense?</li>
+  <li>Do I believe that it is better for me if I follow the list and work on the prioritized goals?</li>
+  <li>Which goal seems not so convincing to the suggested order? Why?</li>
+  </ol><br>
+  
+  <h4>UX questions:</h4>
+  <ol>
+  <li>Before using this app, what was your goal pursuit priority?</li>
+  <li>Do you think it is a good suggestion? Why or why not?
+  <li>Before using this app, what was your goal pursuit priority?</li>
+  <li>How might this result change your behaviour of goal pursuit from now on? Will you spend more time and energy on the prioritized goals? 
+  </ol>
 
 </div>
 

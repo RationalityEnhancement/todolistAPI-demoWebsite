@@ -130,6 +130,7 @@ export class OptimizedListComponent implements OnInit{
     console.log("final List: ",this.finalList); // in the suggested order for users to follow
     }
 
+    this.getGoalname(this.finalList);
     // this.itemService.getOptimalList().subscribe((optList)=> {
     //   console.log("RUNNING");
     //   Globals.optTaskList = optList;
@@ -190,7 +191,7 @@ export class OptimizedListComponent implements OnInit{
 
   getGoalname(finalList){     
     //display a prioritized list
-    console.log("finalList: ", finalList);
+    console.log("finalList (in getGoalname): ", finalList);
     let final_optList = [];
     for (let i = 0; i < finalList.length; i++) {
     final_optList.push(this.goalname_map[finalList[i].slice(1,)-1]);

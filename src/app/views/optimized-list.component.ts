@@ -19,13 +19,14 @@ import { Item, outputItem } from "./item";
       <div class="item-amount">Psuedo Reward</div>
       <div class="item-amount">Estimated Time</div>
     </li>
-
+    <p>ng For: item of optList</p>
     <li *ngFor="let item of optList" (click)="toggleOpacity($event)">
     <li *ngFor="let item of optList" (click)="toggleOpacity($event)">
+    <p>Get HumanReadable items</p>
   <div class="item-amount">{{getHumanReadable(item.nm)}}</div>
-  
-  <!--<div class="item-amount">{{getGoalname(finalList)}}</div>
-  <div class="item-amount">{{item.val}}</div>-->
+  <p>Get Goal Names</p>
+  <div class="item-amount">{{getGoalname(finalList)}}</div>
+  <div class="item-amount">{{item.val}}</div>
       <div class="item-amount">{{getTime(item.nm)}}</div>
     </li>
   </ul>

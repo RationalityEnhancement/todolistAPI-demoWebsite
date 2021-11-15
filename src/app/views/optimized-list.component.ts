@@ -21,16 +21,36 @@ import { Item, outputItem } from "./item";
     </li>
     <p>ng For: item of optList</p>
     <li *ngFor="let item of optList" (click)="toggleOpacity($event)">
-    <li *ngFor="let item of optList" (click)="toggleOpacity($event)">
   <div class="item-amount">{{getHumanReadable(item.nm)}}</div>
   <div class="item-amount">{{item.val}}</div>
   <div class="item-amount">{{getTime(item.nm)}}</div>
   </li>
-  <p>Get Goal Names</p>
-  <div class="item-amount">{{getGoalname(finalList)}}</div>
-  <li *ngFor="let item of finalList" (click)="toggleOpacity($event)"></li>
-
   </ul>
+  <h3>Your prioritized goals</h3>
+  <p>We aim at brining the long-term value to the present in order to help people make a better decision. 
+  In other words, our AI algorithm suggests a rational prioritized list for you. 
+  There are many life goals to acheive, if you are not sure what to start first, here we are.</p>
+
+  <h4>What does the algorithm take into account?</h4>
+  <p>The number of your goals and tasks</p>
+  <p>The value of your goals</p>
+  <p>The estimate time of your goals and tasks</p>
+
+  To sum it up, our AI algorithm suggests the following prioritized goal list for you:
+  (The first suggestion being the most valuable goal of yours.)
+
+  <div class="item-amount">{{getGoalname(finalList)}}</div>
+  <li *ngFor="let item of final_optList" (click)="toggleOpacity($event)"></li>
+
+  Please go through the list and think about these questions:
+  1. Does it make sense?
+  2. Do I believe that it is better for me if I follow the list and work on the most valuable goals?
+  3. Which goal seems not so convincing? Why?
+  
+  UX questions:
+  1. Before using this app, what was your goal pursuit priority?
+  2. Do you think it is a good suggestion? Why or why not?
+  3. How might this result change your behaviour of goal pursuit from now on? Will you spend more time and energy on the prioritized goals? 
 
 </div>
 
@@ -98,6 +118,7 @@ export class OptimizedListComponent implements OnInit {
   public re: RegExp
   public goalname_map: {}
   public finalList = [];
+  public final_optList = [];
 
 
   constructor(public router: Router, private activatedRoute: ActivatedRoute, public itemService: ItemService) {

@@ -32,17 +32,21 @@ import { Item, outputItem } from "./item";
   There are many life goals to acheive, if you are not sure what to start first, here we are.</p>
 
   <h4>What does the algorithm take into account?</h4>
+
   <ul>
-  <li>The number of your goals and tasks</li>
-  <li>The value of your goals</li>
-  <li>The estimate time of your goals and tasks</li>
+    <li>The number of your goals and tasks</li>
+    <li>The value of your goals</li>
+    <li>The estimate time of your goals and tasks</li>
   </ul>
   <br>
   To sum it up, our AI algorithm suggests the following prioritized goal list for you:<br>
   (The first suggestion being the most valuable goal of yours.)
   
-  <div class="item-amount">{{getGoalname(finalList)}}</div>
-  <li *ngFor="let item of final_optList" (click)="toggleOpacity($event)"></li><br>
+  <div class="item-amount" style="color:blue; >{{getGoalname(finalList)}}</div>
+
+  <ul>
+  <li *ngFor="let item of final_optList"></li><br>
+  </ul>
 
   <h4>Please go through the list and think about these questions:</h4>
   <ol>

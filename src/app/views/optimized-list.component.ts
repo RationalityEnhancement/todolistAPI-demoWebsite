@@ -32,15 +32,16 @@ import { Item, outputItem } from "./item";
   <h2>Your prioritized goals</h2>
   <p>Dear participant, we aim at brining the long-term value to the present in order to help people make a better decision. 
   In other words, our AI algorithm suggests a rational prioritized list for you. </p>
+  <br>
 
-  <h4>What does the algorithm take into account?</h4>
+  <h3><b>What does the algorithm take into account?</b></h3>
   1. The number of your goals and tasks<br>
   2. The value of your goals<br>
   3. The estimate time of your goals and tasks<br>
   
   <br>
   To sum it up, our AI algorithm suggests the following prioritized goal list for you:<br>
-  (The first suggestion being the most valuable goal of yours.)
+  (The first suggestion is the most valuable goal of yours.)
   
   <div class="item-amount" style="color:blue; font-size:24 px" >{{getGoalname(finalList)}}</div>
 

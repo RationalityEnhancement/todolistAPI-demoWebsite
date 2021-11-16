@@ -13,7 +13,12 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
   template: `
 
     <div class="btn top-fixed" (click)="openGoal($event)"><div>Add Goals</div></div>
-
+    <div style="text-align: center; margin-top:10px; color: red;"> Please add at least <b>5</b> goals and at least <b>2</b> subgoals for each.</div>
+    <div style="text-align: left; margin-top:10px; margin-left:20%;">
+    <b>Goal</b>: A goal that you need to or want to achieve within 2 months. <br>
+    <b>Subgoal</b>: A subordinate goal that helps you achieve a goal.<br>
+    Please click on <b>Get My Gamifying List</b> button when you finish.
+    </div>
     <div class="form-popup" id="task-form" *ngIf = "task_form_open == true">
       
       <form class="form-container">
@@ -63,21 +68,23 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
         <button type="submit" class="btn add" (click) = "validateForm_goal($event)">Add</button>
         <button type="submit" class="btn cancel" (click)="closeGoal($event)">Cancel</button>
       </form>
-    </div>
+      </div>
 
-    <div class="btn bottom-fixed" (click)="route()">Gamifying List</div>
-
+    <div class="btn bottom-fixed" (click)="route()">Get My Gamifying List</div>
+    
     
     <div class="goal-wrapper" id="goal-display" *ngIf = "goals.length > 0">
       <ul>
         <li *ngFor = "let goal of goals" class="goal-item">
-          <div> Goal: {{goal.name}}  {{goal.time_est}} {{goal.value}}
+          <div> Goal: <b>{{goal.name}}</b> <br> Value: {{goal.value}} <br>Time Estimation:  {{goal.time_est}} hr
             <div>
               <div class="icon plus" (click)="openItem($event, goal)"><div>+</div></div>
               <div class="icon plus" (click)="deleteGoal($event, goal)"><div>-</div></div>
             </div>
             <div *ngIf = "goal.tasks !== undefined">
               <div *ngIf = "goal.tasks.length > 0">
+              <!--<div id="goal-sum-time" > Time Estimation:  {{goal.goal_time_est}} </div>-->
+      
               <div> ------ Subgoals ------
               <ul>
                   <li *ngFor = "let task of goal.tasks" class="task-item">
@@ -121,7 +128,7 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
     .form-popup {
       display: none;
       position: fixed;
-      bottom: 0;
+      bottom: 120px;
       right: 15px;
       border: 3px solid #f1f1f1;
       z-index: 9;
@@ -173,6 +180,7 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
       margin-bottom:10px;
       opacity: 0.8;
       margin: 10px;
+      min-inline-size: -webkit-fill-available;
     }
 
     /* Add a red background color to the cancel button */
@@ -267,6 +275,7 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
        justify-content: space-between;
        max-height: -webkit-fill-available;
        grid-template-columns: 50% 50%;
+       margin-bottom:30px;
    }
       
       
@@ -301,11 +310,12 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
        
       
       .btn.bottom-fixed {
-
+       
         position: fixed;
-
-        bottom: 20px;
-        left: 10%
+        margin: 30px;
+        margin-top: 30px;
+        bottom: 10px;
+        align: center;
       }
       .del-wrapper{
         position: relative;
@@ -352,6 +362,7 @@ export class ToDoListComponent {
   });
   public optimalList = []
   public barFormControl = new FormControl()
+  public validateGoalNum = false;
   public get taskList() {
 
     return Globals.taskList;
@@ -383,7 +394,14 @@ export class ToDoListComponent {
 
   public route(){
     // console.log("Go to Optimized");
-    this.router.navigateByUrl('/optimized')
+    
+    if(this.goals.length>=5){
+      this.router.navigateByUrl('/optimized')
+    }else{
+      alert("Please add at least 5 goals");
+      return false;
+    }
+
   } 
 
 
@@ -473,14 +491,26 @@ export class ToDoListComponent {
         // console.log("HAVE CHILD");
         goal.tasks.push(item);
         goal.num_children += 1;
+        // update sum of time of tasks
+        //goal.sumTime = goal.sumTime + this.task_time_est;
+        //console.log("add a new child, new sumTime: ",goal.sumTime);
+       // goal.goal_time_est = goal.sumTime;
+        //console.log("add a new child, new goal sumTime: ", goal.goal_time_est);
+      
+       // var display_goal_time = document.getElementById("goal-sum-time")
+       // display_goal_time.firstChild.nodeValue=goal.goal_time_est;
+   
       }
       else{
         // console.log("FIRST CHILD");
         goal.tasks = [];
         goal.tasks.push(item);
         goal.num_children = 1;
+        // create sum of time of tasks
+       // goal.sumTime = this.task_time_est; 
       }
     console.log("num child",goal.num_children);
+    console.log("Sum Time: ",goal.sumTime);
     }
     this.task_desc = undefined;
     this.task_today = undefined;
@@ -548,13 +578,9 @@ export class ToDoListComponent {
     }
     //pass validator and add item
        this.addItem(event,this.goal_opened);
-    
-  
   }
-
-
-
   }
+ 
 
 }
 

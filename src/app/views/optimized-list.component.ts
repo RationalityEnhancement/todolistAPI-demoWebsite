@@ -8,7 +8,7 @@ import { Item, outputItem } from "./item";
   selector: "optimized",
   template: `
   
-
+<!--
   <h4>Optimized To-Do List</h4>
 
   <div id="todo-list-wrapper">
@@ -26,42 +26,29 @@ import { Item, outputItem } from "./item";
   <div class="item-amount">{{getTime(item.nm)}}</div>
   </li>
   </ul>
+-->
+
+<div>
   <h2>Your prioritized goals</h2>
   <p>Dear participant, we aim at brining the long-term value to the present in order to help people make a better decision. 
-  In other words, our AI algorithm suggests a rational prioritized list for you. 
-  There are many life goals to acheive, if you are not sure what to start first, here we are.</p>
+  In other words, our AI algorithm suggests a rational prioritized list for you. </p>
 
   <h4>What does the algorithm take into account?</h4>
-
-  <ul>
-    <li>The number of your goals and tasks</li>
-    <li>The value of your goals</li>
-    <li>The estimate time of your goals and tasks</li>
-  </ul>
+  1. The number of your goals and tasks<br>
+  2. The value of your goals<br>
+  3. The estimate time of your goals and tasks<br>
+  
   <br>
   To sum it up, our AI algorithm suggests the following prioritized goal list for you:<br>
   (The first suggestion being the most valuable goal of yours.)
   
-  <div class="item-amount" style="color:blue;" >{{getGoalname(finalList)}}</div>
+  <div class="item-amount" style="color:blue; font-size:24 px" >{{getGoalname(finalList)}}</div>
 
   <ul>
   <li *ngFor="let item of final_optList"></li><br>
   </ul>
 
-  <h4>Please go through the list and think about these questions:</h4>
-  <ol>
-  <li>Does it make sense?</li>
-  <li>Do I believe that it is better for me if I follow the list and work on the prioritized goals?</li>
-  <li>Which goal seems not so convincing to the suggested order? Why?</li>
-  </ol><br>
-  
-  <h4>UX questions:</h4>
-  <ol>
-  <li>Before using this app, what was your goal pursuit priority?</li>
-  <li>Do you think it is a good suggestion? Why or why not?
-  <li>Before using this app, what was your goal pursuit priority?</li>
-  <li>How might this result change your behaviour of goal pursuit from now on? Will you spend more time and energy on the prioritized goals? 
-  </ol>
+ 
 
 </div>
 
@@ -227,7 +214,7 @@ export class OptimizedListComponent implements OnInit {
     console.log("finalList (in getGoalname): ", finalList);
     let final_optList = [];
     for (let i = 0; i < finalList.length; i++) {
-      final_optList.push(this.goalname_map[finalList[i].slice(1,) - 1]);
+      final_optList.push(" " +this.goalname_map[finalList[i].slice(1,) - 1]);
     }
     console.log("goalname_map: ", this.goalname_map);
     console.log("final opt List: ", final_optList);

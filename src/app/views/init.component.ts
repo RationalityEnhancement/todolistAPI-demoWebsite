@@ -68,6 +68,6 @@ export class InitComponent {
   
   public route(){
 
-    this.router.navigateByUrl('/login')
+    this.router.navigateByUrl('/list') //skip login.component.ts
   } 
 }

@@ -12,12 +12,13 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
   selector: 'todo-list',
   template: `
 
-    <div class="btn top-fixed" (click)="openGoal($event)"><div>Add Goals</div></div>
+    <div class="btn top-fixed" (click)="openGoal($event)" ><div>Add Goals</div></div>
     <div style="text-align: center; margin-top:10px; color: red;"> Please add at least <b>5</b> goals and at least <b>2</b> subgoals for each.</div>
     <div style="text-align: left; margin-top:10px; margin-left:20%;">
     <b>Goal</b>: A goal that you need to or want to achieve within 2 months. <br>
     <b>Subgoal</b>: A subordinate goal that helps you achieve a goal.<br>
-    Please click on <b>Get My Gamifying List</b> button when you finish.
+    Please click on <b>Get My Gamifying List</b> button when you finish. <br>
+    You will see the result page in a few seconds.
     </div>
     <div class="form-popup" id="task-form" *ngIf = "task_form_open == true">
       
@@ -62,17 +63,16 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
         <label for="goal-time"></label>
         <input [(ngModel)]="goal_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)" name="goal-time-est">
 
-        <label for="goal-deadline"></label>
+        <label for="goal-deadline" style="font-size: 12px; color: gray; margin-left: 6px">Enter a deadline (optional)</label>
         <input [(ngModel)]="goal_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD)" name="goal-deadline">
        
         <button type="submit" class="btn add" (click) = "validateForm_goal($event)">Add</button>
         <button type="submit" class="btn cancel" (click)="closeGoal($event)">Cancel</button>
       </form>
       </div>
-
-    <div class="btn bottom-fixed" (click)="route()">Get My Gamifying List</div>
-    
-    
+      <div class="btn bottom-fixed" (click)="route()" >Get My Gamifying List</div>
+     
+   
     <div class="goal-wrapper" id="goal-display" *ngIf = "goals.length > 0">
       <ul>
         <li *ngFor = "let goal of goals" class="goal-item">
@@ -128,7 +128,7 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
     .form-popup {
       display: none;
       position: fixed;
-      bottom: 120px;
+      bottom: 10%;
       right: 15px;
       border: 3px solid #f1f1f1;
       z-index: 9;
@@ -310,13 +310,14 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
        
       
       .btn.bottom-fixed {
-       
-        position: fixed;
-        margin: 30px;
+        position: relative;
         margin-top: 30px;
         bottom: 10px;
-        align: center;
+        width: 35%;
+        background-color: #BE9F9C;
       }
+     
+     
       .del-wrapper{
         position: relative;
       }
@@ -394,11 +395,30 @@ export class ToDoListComponent {
 
   public route(){
     // console.log("Go to Optimized");
-    
+    var children_num_validator = true;
+    var goals_num_validator = false
+    for(let i=0; i<this.goals.length; i++){
+      console.log("check num of children")
+      console.log(this.goals[i], this.goals[i].num_children);
+      if(this.goals[i].num_children == undefined || this.goals[i].num_children < 2 ){
+        console.log(this.goals[i], this.goals[i].num_children);
+        children_num_validator = false;
+        alert("Please add at least 2 subgoals for each goal");
+        return false;
+      }
+    }
+
     if(this.goals.length>=5){
-      this.router.navigateByUrl('/optimized')
+      goals_num_validator = true;
     }else{
       alert("Please add at least 5 goals");
+      return false;
+    }
+
+    if(goals_num_validator && children_num_validator){
+      this.router.navigateByUrl('/optimized')
+    }else{
+      alert("Please fulfill the requirements before you continue!");
       return false;
     }
 
@@ -581,7 +601,7 @@ export class ToDoListComponent {
   }
   }
  
-
+ 
 }
 
 

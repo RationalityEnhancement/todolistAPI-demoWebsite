@@ -36,7 +36,7 @@ ul, li {
 }
 
 .btn {
-    width: 80%;
+    width: 60%;
     height: 56px;
     line-height: 56px;
     margin: 0 auto;
@@ -48,9 +48,10 @@ ul, li {
 }
 
 .bottom {
-    position:absolute;
+    position:inherit;
     bottom: 70px;
     left: 10%;
+    margin-top:50px
 }
 
     
@@ -74,9 +75,8 @@ ul, li {
 .icon { 
     cursor: pointer;
     display: inline-grid;
-    width: 5%;
+    position: relative;
     min-width: 20px;
-    height: 5%;
     min-height: 20px;
     margin-left: 10px;
     margin-right: 10px;

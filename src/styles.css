@@ -76,6 +76,7 @@ ul, li {
     cursor: pointer;
     display: inline-grid;
     position: relative;
+    color: white;
     min-width: 20px;
     min-height: 20px;
     margin-left: 10px;

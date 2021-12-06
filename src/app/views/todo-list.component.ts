@@ -55,10 +55,10 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
         <h1>Add Goal</h1>
  
         <label for="goal-desc"></label>
-        <input [(ngModel)]="goal_desc" type="text" placeholder="Goal Description (*Required)" name="item-desc" required>
+        <input [(ngModel)]="goal_desc" type="text" placeholder="Goal Description (*Required)" name="goal-desc" required>
 
         <label for="goal-val"></label>
-        <input [(ngModel)]="goal_val" type="number" placeholder="Goal Value (0-9999) (*Required)" name="item-val"  min="0" max="9999" required>
+        <input [(ngModel)]="goal_val" type="number" placeholder="Goal Value (0-9999) (*Required)" name="goal-val"  min="0" max="9999" required>
 
         <label for="goal-time"></label>
         <input [(ngModel)]="goal_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)" name="goal-time-est">
@@ -70,6 +70,32 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
         <button type="submit" class="btn cancel" (click)="closeGoal($event)">Cancel</button>
       </form>
       </div>
+
+    
+    <div class="form-popup" id="edit-goal-form" *ngIf = "goal_form_open == true">
+      <form class="form-container">
+        <h1>Edit Goal: {{goal_opened.name.name}}</h1>
+        <h4>Only enter what you want to change.</h4>
+        <label for="goal-desc" style="font-size: 12px; color: gray; margin-left: 6px">Goal Name</label>
+        <input [(ngModel)]="goal_desc"  type="text" placeholder={{goal_opened.name.name}} name="goal-desc" required>
+
+        <label for="goal-val" style="font-size: 12px; color: gray; margin-left: 6px"> Goal Value</label>
+        <input [(ngModel)]="goal_val" type="number" placeholder={{goal_opened.name.value}} name="goal-val"  min="0" max="9999" required>
+
+        <label for="goal-time" style="font-size: 12px; color: gray; margin-left: 6px">Goal Time Estimation (hrs)</label>
+        <input [(ngModel)]="goal_time_est" type="number" placeholder={{goal_opened.name.time_est}} name="goal-time-est">
+
+        <label for="goal-deadline" style="font-size: 12px; color: gray; margin-left: 6px">Enter a deadline (optional)</label>
+        <input [(ngModel)]="goal_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD)" name="goal-deadline">
+       
+        <button type="submit" class="btn add" (click) = "updateGoal($event, goal_opened.name)">Submit</button>
+        <button type="submit" class="btn cancel" (click)="closeGoal($event)">Cancel</button>
+      </form>
+      </div>
+
+
+
+
       <div class="btn bottom-fixed" (click)="route()" >Get My Gamifying List</div>
      
    
@@ -80,6 +106,7 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
             <div>
               <div class="icon plus" (click)="openItem($event, goal)"><div>+</div></div>
               <div class="icon plus" (click)="deleteGoal($event, goal)"><div>-</div></div>
+              <div style= "cursor:pointer;" (click)="editGoal($event, goal)" ><img src="assets/images/Edit_icon.svg.png" alt="edit icon" width="20px" height="20px" > </div>
             </div>
             <div *ngIf = "goal.tasks !== undefined">
               <div *ngIf = "goal.tasks.length > 0">
@@ -359,8 +386,9 @@ export class ToDoListComponent {
   public task_today: string;
   public task_form_open = true;
   public goal_opened =  <Goal>({
-    name: "DEFAULT"
+    name: "DEFAULT",
   });
+
   public optimalList = []
   public barFormControl = new FormControl()
   public validateGoalNum = false;
@@ -453,6 +481,8 @@ export class ToDoListComponent {
     // console.log("Close Goal Form");
     this.goal_form_open = true;
     document.getElementById("goal-form").style.display = "none";
+    document.getElementById("edit-goal-form").style.display = "none";
+    this.goal_opened;
   }
 
   closeItem(e?){
@@ -473,16 +503,16 @@ export class ToDoListComponent {
     if(this.goal_desc != undefined){
       this.goals.push(goal);
       this.goal_opened = goal;
-      // console.log(goal);
+    //  console.log(goal);
     }
     this.goal_desc = undefined;
     this.goal_val = undefined;
     this.goal_deadline = undefined;
     this.goal_time_est = undefined;
     
-    
-    // console.log(this.goals);
-    // this.displayGoal(goal);
+  //  console.log("------all goals-----");
+ //   console.log(this.goals);
+
   }
 
   deleteGoal(event, goal){
@@ -491,6 +521,81 @@ export class ToDoListComponent {
       this.goals.splice(index,1);
     }
   }
+
+  
+
+  editGoal(event, goal){
+    this.goal_opened = goal;
+    if(this.goal_form_open == true){
+      document.getElementById("edit-goal-form").style.display = "block";
+    }
+    const index = this.goals.indexOf(goal);
+    //placeholder for submitted values
+    this.goal_opened = <Goal>({
+      name: goal,
+      time_est: this.goals[index].time_est,
+      deadline: this.goals[index].deadline,
+      value: this.goals[index].value
+    });
+
+ 
+  }
+
+  
+  updateGoal(event, goal){
+    const index = this.goals.indexOf(goal);
+   // console.log(index);
+   
+    this.goal_opened = goal;
+   
+    //console.log("+*+* before update: ", this.goal_opened);
+   // console.log("+*+* before update: ", goal);
+    if(this.goal_desc == undefined || this.goal_desc==""){
+      this.goal_desc = goal.name;
+   //   console.log("update goal name: ", this.goal_desc);
+    }
+    if(this.goal_time_est == null){
+      this.goal_time_est = goal.time_est;
+    }
+    if(this.goal_val == null){
+      this.goal_val = goal.value;
+    }
+    if(this.goal_deadline == undefined || this.goal_deadline == ""){
+      this.goal_deadline = goal.deadline;
+    }
+   
+    goal = <Goal>({
+      name: this.goal_desc,
+      time_est: this.goal_time_est,
+      deadline: this.goal_deadline,
+      value: this.goal_val,
+    });
+     //get child nodes
+     if ('tasks' in this.goals[index]){
+      const children = this.goals[index].tasks;
+      goal["tasks"]=children;
+    }
+      if('num_children' in this.goals[index]){
+      const num_children = this.goals[index].num_children;
+      goal["num_children"] = num_children;
+    }
+  //  console.log("*+*+updated goal: ", goal);
+  //  console.log("*+*+before update goals: ", this.goals);
+  //update to the goals
+    this.goals[index] = goal;
+  //  console.log("*+*+updated goals: ", this.goals);
+    document.getElementById("edit-goal-form").style.display = "none";
+    //all values to undefined.
+    this.goal_desc = undefined;
+    this.goal_val = undefined;
+    this.goal_deadline = undefined;
+    this.goal_time_est = undefined;
+    
+  }
+
+
+    
+  
 
   addItem(event, goal) {
     // console.log("In AddItem");
@@ -511,26 +616,16 @@ export class ToDoListComponent {
         // console.log("HAVE CHILD");
         goal.tasks.push(item);
         goal.num_children += 1;
-        // update sum of time of tasks
-        //goal.sumTime = goal.sumTime + this.task_time_est;
-        //console.log("add a new child, new sumTime: ",goal.sumTime);
-       // goal.goal_time_est = goal.sumTime;
-        //console.log("add a new child, new goal sumTime: ", goal.goal_time_est);
-      
-       // var display_goal_time = document.getElementById("goal-sum-time")
-       // display_goal_time.firstChild.nodeValue=goal.goal_time_est;
-   
+       
       }
       else{
         // console.log("FIRST CHILD");
         goal.tasks = [];
         goal.tasks.push(item);
         goal.num_children = 1;
-        // create sum of time of tasks
-       // goal.sumTime = this.task_time_est; 
+       
       }
-    console.log("num child",goal.num_children);
-    console.log("Sum Time: ",goal.sumTime);
+ 
     }
     this.task_desc = undefined;
     this.task_today = undefined;
@@ -577,6 +672,7 @@ export class ToDoListComponent {
     }
     //pass validator and add goal
        this.addGoal();
+
   
   }
   }

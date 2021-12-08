@@ -89,6 +89,106 @@ ul, li {
     background-position: center center;
     margin: 5px;
 }
+#onhover{
+    visibility: hidden;
+}
+#hoverText:hover ~ #onhover{
+    visibility: visible;
+
+
+}
+.instruction{
+    background:rgba(174, 187, 101, 0.9);
+    opacity: 1;
+    width:160px;
+    margin-left:42%;
+
+}
+
+
+
+
+
+
+/* Popup container */
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+  visibility: hidden;
+  width: 500px;
+  background-color: rgb(168, 210, 214);
+  color: rgb(105, 92, 92);
+  text-align: left;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  top: 125%;
+  left: 1%;
+  margin-left: -150px;
+  margin-right:40%;
+  padding:10px;
+}
+.popup .popuptext_info {
+    visibility: hidden;
+    width: 200px;
+    background-color: rgb(168, 210, 214);
+    color: rgb(105, 92, 92);
+    text-align: left;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    top: 125%;
+    left: 1%;
+    margin-left: -100px;
+    margin-right:35%;
+    padding:10px;
+  }
+  
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
+
+
+
+
+
+
+
+
 
 
 /*

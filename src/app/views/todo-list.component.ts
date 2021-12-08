@@ -6,20 +6,69 @@ import { Router } from '@angular/router';
 import { Globals } from '../globals';
 import { Goal, Item} from './item';
 import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector';
+import { Timestamp } from 'rxjs/internal/operators/timestamp';
 
 
 @Component({
   selector: 'todo-list',
   template: `
-
-    <div class="btn top-fixed" (click)="openGoal($event)" ><div>Add Goals</div></div>
-    <div style="text-align: center; margin-top:10px; color: red;"> Please add at least <b>5</b> goals and at least <b>2</b> subgoals for each.</div>
-    <div style="text-align: left; margin-top:10px; margin-left:20%;">
+  <div class="btn top-fixed" (click)="openGoal($event)" ><div>Add Goals</div></div>
+ 
+   
+   <div style="text-align: center; margin-top:10px; color: red;"> Please add at least <b>5</b> goals and at least <b>2</b> subgoals for each.</div>
+    
+    <div style="text-align: left; margin-top:10px; margin-left:20%; margin-right:15%;">
     <b>Goal</b>: A goal that you need to or want to achieve within 2 months. <br>
     <b>Subgoal</b>: A subordinate goal that helps you achieve a goal.<br>
-    Please click on <b>Get My Gamifying List</b> button when you finish. <br>
-    You will see the result page in a few seconds.
+    
+    <div class="popup" (click)="myFunction_example()" id="hoverText" style=" text-align: left; margin-top:10px;  cursor: pointer; color:blue;" >
+    <img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > Example for a good goal
+    <span  class="popuptext" id="myPopup_example">
+    It's recommended to set some ongoing projects such as "finish my thesis" or "finish a term paper" as your goals.<br>
+    In comparison, "cooking dinner on X'mas" isn't a suitable goal. 
+    
+    <b>Example</b>:
+    <br>Goal: Finish my term paper
+    <br>&nbsp;&nbsp;&nbsp;&nbsp;|----General research [5 hrs]
+    <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Finalize a topic [2 hrs]
+    <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Do more research [5 hrs]
+    <br> &nbsp;&nbsp;&nbsp;&nbsp;|----Structure the paper [1hr]
+    <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and so on... 
+    </span>
     </div>
+
+<br>
+    <div class="popup" (click)="myFunction()" id="hoverText" style=" text-align: left; margin-top:10px; cursor: pointer; color:blue;" >
+    <img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > What are the parameters?
+    <span  class="popuptext" id="myPopup">
+    <b>Description</b> 
+    <br>Give a name for this goal/subgoal! 
+    <br><br><b>Value</b>
+    <br>How important is this goal for you? Try to quantify it!
+    <br>Think about why do you need to accomplish this goal. 
+    <br>Will something good or bad happen if you achieve it, or not achieve it? 
+    <br>Values are relative numbers. 
+    <br><br><b>Estimated Time</b>
+    <br>How much time do you need to achieve this goal/subgoal?
+    <br><br><b>Deadline</b>
+    <br>If there is a deadline for this goal/subgoal. Fill it in!
+
+    <br></span>
+</div>
+<br>
+<div class="popup" (click)="myFunction_finish()" id="hoverText" style=" text-align: left; margin-top:10px; cursor: pointer; color:blue;" >
+    <img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > What to do when I finish adding goals?
+    <span  class="popuptext" id="myPopup_finish">
+    <b>Next step</b> 
+    <br>Please click on <b>Get My Gamifying List</b> button when you finish.
+    You will see the result page in a few seconds.
+    <br></span>
+</div>
+
+</div>
+
+
+  
     <div class="form-popup" id="task-form" *ngIf = "task_form_open == true">
       
       <form class="form-container">
@@ -32,9 +81,12 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
 
         <label for="item-deadline"></label>
         <input [(ngModel)]="task_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD) (optional)" name="item-deadline">
+        
+        <!--
         <label for="item-today"></label>
         <input [(ngModel)]="task_today" type="radio" id="nt" name="item-today" value="Not Today"> <label for = "nt"> Not Today </label>
         <input [(ngModel)]="task_today" type="radio" id="t" name="item-today" value="Today"> <label for = "t"> Today </label>
+        -->
 
         <!--
           <b>Not Today</b>
@@ -53,7 +105,6 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
     <div class="form-popup" id="goal-form" *ngIf = "goal_form_open == true">
       <form class="form-container">
         <h1>Add Goal</h1>
- 
         <label for="goal-desc"></label>
         <input [(ngModel)]="goal_desc" type="text" placeholder="Goal Description (*Required)" name="goal-desc" required>
 
@@ -94,18 +145,32 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
       </div>
 
 
-
-
       <div class="btn bottom-fixed" (click)="route()" >Get My Gamifying List</div>
-     
-   
+    
+    
     <div class="goal-wrapper" id="goal-display" *ngIf = "goals.length > 0">
-      <ul>
+   
+    <div class="popup" (click)="myFunction_info()"  id="hoverText" style="text-align: left; margin-top:10px; margin-left:45%;cursor: pointer; color:blue;" ><img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > Icons
+    <span  class="popuptext_info" id="myPopupInfo">
+    
+    <div class="icon plus" style="text-align:center;cursor:not-allowed; " ><div> +</div></div>
+    <span>Add a subgoal </span><br>
+    <div class="icon plus"  style="text-align:center; cursor:not-allowed"><div> -</div></div>
+    <span>Delete the goal  </span>
+    <div style="cursor:not-allowed; padding-left:5px;  "><img src="assets/images/Edit_icon.svg.png" alt="edit icon" width="20px" height="20px" >       Edit the goal</div>
+    
+   
+    </span>
+    </div>
+
+
+    <ul>
         <li *ngFor = "let goal of goals" class="goal-item">
           <div> Goal: <b>{{goal.name}}</b> <br> Value: {{goal.value}} <br>Time Estimation:  {{goal.time_est}} hr
-            <div>
+          <br> Deadline: / {{goal.deadline}}  
+          <div>
               <div class="icon plus" (click)="openItem($event, goal)"><div>+</div></div>
-              <div class="icon plus" (click)="deleteGoal($event, goal)"><div>-</div></div>
+              <div class="icon plus" (click)="deleteGoal($event, goal)" id= "hoverText" ><div>-</div></div>
               <div style= "cursor:pointer;" (click)="editGoal($event, goal)" ><img src="assets/images/Edit_icon.svg.png" alt="edit icon" width="20px" height="20px" > </div>
             </div>
             <div *ngIf = "goal.tasks !== undefined">
@@ -119,6 +184,7 @@ import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector'
                         <div> Task: {{task.name}} {{task.time_est}}
                       -->
                       <div> {{task.name}} <br/> Time: {{task.time_est}} hr
+                      <br> Deadline: / {{task.deadline}}  
                        <div class="del-wrapper"> 
                           <div class="del" (click)="deleteItem($event, goal, task)"><div>-</div></div>
                         </div>
@@ -457,6 +523,10 @@ export class ToDoListComponent {
     // console.log("in openGoal");
     // console.log(this.goal_form_open)
     // this.closeItem(e);
+    //close other forms
+    document.getElementById("edit-goal-form").style.display = "none";
+    document.getElementById("task-form").style.display = "none";
+
     if(this.goal_form_open == true){
       document.getElementById("goal-form").style.display = "block";
     }
@@ -465,10 +535,14 @@ export class ToDoListComponent {
     // console.log("Goal Length");
     // console.log(this.goals.length);
     // return true
+
   }
   
   openItem(e?, goal?) {
     // console.log("In openItem");
+    //close other forms
+    document.getElementById("goal-form").style.display = "none";
+    document.getElementById("edit-goal-form").style.display = "none";
     this.goal_opened = goal;
     // console.log(goal);
     // console.log(this.goals.indexOf(goal));
@@ -482,6 +556,7 @@ export class ToDoListComponent {
     this.goal_form_open = true;
     document.getElementById("goal-form").style.display = "none";
     document.getElementById("edit-goal-form").style.display = "none";
+   // document.getElementById("task-form").style.display = "none";
     this.goal_opened;
   }
 
@@ -489,6 +564,7 @@ export class ToDoListComponent {
     // console.log("Close Item Form");
     this.task_form_open = true;
     document.getElementById("task-form").style.display = "none";
+    
   }
 
   addGoal(event?) {
@@ -529,6 +605,9 @@ export class ToDoListComponent {
     if(this.goal_form_open == true){
       document.getElementById("edit-goal-form").style.display = "block";
     }
+    //close other forms
+    document.getElementById("goal-form").style.display = "none";
+    document.getElementById("task-form").style.display = "none";
     const index = this.goals.indexOf(goal);
     //placeholder for submitted values
     this.goal_opened = <Goal>({
@@ -670,6 +749,7 @@ export class ToDoListComponent {
       alert("Time estimation must be filled out");
       return false;
     }
+
     //pass validator and add goal
        this.addGoal();
 
@@ -696,7 +776,22 @@ export class ToDoListComponent {
        this.addItem(event,this.goal_opened);
   }
   }
- 
+  myFunction() {
+    var popup = document.getElementById("myPopup");
+    popup.classList.toggle("show");
+  }
+  myFunction_info() {
+    var popup = document.getElementById("myPopupInfo");
+    popup.classList.toggle("show");
+  }
+  myFunction_finish(){
+    var popup = document.getElementById("myPopup_finish");
+    popup.classList.toggle("show");
+  }
+    myFunction_example(){
+    var popup = document.getElementById("myPopup_example");
+    popup.classList.toggle("show");
+  }
  
 }
 

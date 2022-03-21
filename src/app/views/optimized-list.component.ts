@@ -40,16 +40,15 @@ import { Item, outputItem } from "./item";
   </div>
   </ul>
   
-  <div class="item-amount" style="color:blue; font-size:24 px" >{{getGoalname(finalList)}}</div>
+  <div class="item-amount" style="color:blue; font-size: 18px; white-space:pre-wrap;" >{{getGoalname(finalList)}}</div>
 
+  <br>
   <h3><b>What does the algorithm take into account?</b></h3>
   1. The number of your goals and tasks<br>
   2. The value of your goals<br>
   3. The estimate time of your goals and tasks<br>
   
-  <br>
-  To sum it up, our AI algorithm suggests the following prioritized goal list for you:<br>
-  (The first suggestion is the most valuable goal of yours.)
+  
   
  
  

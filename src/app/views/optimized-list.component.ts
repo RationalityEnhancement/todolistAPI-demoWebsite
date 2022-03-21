@@ -40,7 +40,7 @@ import { Item, outputItem } from "./item";
   </div>
   </ul>
   
-  <div class="item-amount" style="color:blue; font-size:24 px" >{{getGoalname(finalList)}<br>}</div>
+  <div class="item-amount" style="color:blue; font-size:24 px" >{{getGoalname(finalList)}}</div>
 
   <h3><b>What does the algorithm take into account?</b></h3>
   1. The number of your goals and tasks<br>

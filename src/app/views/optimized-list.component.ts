@@ -36,9 +36,11 @@ import { Item, outputItem } from "./item";
 
   <ul>
   <div>
-  <li *ngFor="let item of final_optList"></li><br>
+  <li *ngFor="let item of final_optList"></li>
   </div>
   </ul>
+  
+  <div class="item-amount" style="color:blue; font-size:24 px" >{{getGoalname(finalList)}<br>}</div>
 
   <h3><b>What does the algorithm take into account?</b></h3>
   1. The number of your goals and tasks<br>
@@ -49,9 +51,7 @@ import { Item, outputItem } from "./item";
   To sum it up, our AI algorithm suggests the following prioritized goal list for you:<br>
   (The first suggestion is the most valuable goal of yours.)
   
-  <div class="item-amount" style="color:blue; font-size:24 px" >{{getGoalname(finalList)}}</div>
-
-
+ 
  
 
 </div>
@@ -224,7 +224,7 @@ export class OptimizedListComponent implements OnInit {
     let final_optList = [];
     for (let i = 0; i < finalList.length; i++) {
       //final_optList.push(i+1 + " " +this.goalname_map[finalList[i].slice(1,) - 1]);
-      final_optList.push(i+1 + " " +this.goal_map[finalList[i].slice(1,) - 1]);
+      final_optList.push(i+1 + ". " +this.goal_map[finalList[i].slice(1,) - 1]+ "\n");
     }
     console.log("goalname_map: ", this.goalname_map);
     console.log("goal_map ", this.goal_map);

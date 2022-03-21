@@ -224,12 +224,16 @@ export class OptimizedListComponent implements OnInit {
     let final_optList = [];
     for (let i = 0; i < finalList.length; i++) {
       //final_optList.push(i+1 + " " +this.goalname_map[finalList[i].slice(1,) - 1]);
-      final_optList.push(i+1 + ". " +this.goal_map[finalList[i].slice(1,) - 1]+ "<br>");
+      final_optList.push(i+1 + ". " +this.goal_map[finalList[i].slice(1,) - 1]);
     }
     console.log("goalname_map: ", this.goalname_map);
     console.log("goal_map ", this.goal_map);
     console.log("final opt List: ", final_optList);
-    return final_optList;
+    console.log("type: ",typeof(final_optList));
+    let fianl_optList_br = final_optList.join('\r\n');
+    console.log(fianl_optList_br)
+    console.log(typeof(fianl_optList_br))
+    return fianl_optList_br;
   }
 
 }

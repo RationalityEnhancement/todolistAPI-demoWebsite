@@ -11,6 +11,7 @@ export class ItemService {
     constructor(private http: HttpClient) {}
 
     public goalname_map = {};//add a goalname map
+    public goal_map ={}; //add a goalmap for all info
 
     makeProject() {
         console.log("In makeProject");
@@ -25,6 +26,7 @@ export class ItemService {
                 parentId: "None"
               }
             this.goalname_map[i-1]=Globals.goalList[i-1].name;//update a goalname map
+            this.goal_map[i-1]=Globals.goalList[i-1].name + "/ Value: "+ Globals.goalList[i-1].value + "/ Time Estimation: "+ Globals.goalList[i-1].time_est + "h/ Deadline: " + Globals.goalList[i-1].deadline; //update a goalmap
             if ('num_children' in Globals.goalList[i-1] && Globals.goalList[i-1].num_children > 0){
                 node.ch = [];
                 for (let j = 1; j < Globals.goalList[i-1].num_children+1; j++){
@@ -47,7 +49,7 @@ export class ItemService {
             console.log(project);
 
             console.log("print map of goal name__: ", this.goalname_map) //
- 
+            console.log("print map of goalmap with goal info: ", this.goal_map)
         }
         return project;
     }
@@ -55,6 +57,9 @@ export class ItemService {
     setGoalName_map(goalname_map){
     this.goalname_map = goalname_map;
     }
+    setGoal_map(goal_map){
+        this.goal_map = goal_map;
+        }
     make_typical_hours() {
         let list = [];
         let obj = {

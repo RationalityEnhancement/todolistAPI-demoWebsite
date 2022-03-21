@@ -34,6 +34,12 @@ import { Item, outputItem } from "./item";
   In other words, our AI algorithm suggests a rational prioritized list for you. </p>
   <br>
 
+  <ul>
+  <div>
+  <li *ngFor="let item of final_optList"></li><br>
+  </div>
+  </ul>
+
   <h3><b>What does the algorithm take into account?</b></h3>
   1. The number of your goals and tasks<br>
   2. The value of your goals<br>
@@ -45,9 +51,6 @@ import { Item, outputItem } from "./item";
   
   <div class="item-amount" style="color:blue; font-size:24 px" >{{getGoalname(finalList)}}</div>
 
-  <ul>
-  <li *ngFor="let item of final_optList"></li><br>
-  </ul>
 
  
 
@@ -116,6 +119,7 @@ export class OptimizedListComponent implements OnInit {
   public optList: outputItem[]
   public re: RegExp
   public goalname_map: {}
+  public goal_map: {}
   public finalList = [];
   public final_optList = [];
 
@@ -139,6 +143,9 @@ export class OptimizedListComponent implements OnInit {
 
     this.goalname_map = this.itemService.goalname_map
     console.log("goalname_map: ", this.goalname_map)
+    this.goal_map = this.itemService.goal_map;
+    console.log("goal_map: ", this.goal_map)
+
 
     //check optList, remove duplicated goals {g2, g1, g1, g2, g1} -> {g2, g1}
 
@@ -213,11 +220,14 @@ export class OptimizedListComponent implements OnInit {
   getGoalname(finalList) {
     //display a prioritized list
     console.log("finalList (in getGoalname): ", finalList);
+
     let final_optList = [];
     for (let i = 0; i < finalList.length; i++) {
-      final_optList.push(" " +this.goalname_map[finalList[i].slice(1,) - 1]);
+      //final_optList.push(i+1 + " " +this.goalname_map[finalList[i].slice(1,) - 1]);
+      final_optList.push(i+1 + " " +this.goal_map[finalList[i].slice(1,) - 1]);
     }
     console.log("goalname_map: ", this.goalname_map);
+    console.log("goal_map ", this.goal_map);
     console.log("final opt List: ", final_optList);
     return final_optList;
   }

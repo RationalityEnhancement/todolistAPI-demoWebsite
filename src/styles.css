@@ -33,6 +33,7 @@ ul, li {
 #outlet-wrapper {
 
     padding: 5%;
+    min-width: 800px;
 }
 
 .btn {

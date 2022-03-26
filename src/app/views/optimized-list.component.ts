@@ -29,10 +29,10 @@ import { Item, outputItem } from "./item";
 -->
 
 <div>
-  <h2>Your prioritized goals</h2>
-  <p>Dear participant, we aim at brining the long-term value to the present in order to help people make a better decision. 
-  In other words, our AI algorithm suggests a rational prioritized list for you. </p>
+  <h2>Our recommendation for you</h2>
+  <p>Based on the information you provided, the following (sub)goals seem most important for you at the moment: </p>
   <br>
+  <p>If you are not sure what to prioritise over the course of the next week(s), this could be a way to prioritise your to-do list for you.</p>
 
   <ul>
   <div>
@@ -42,12 +42,18 @@ import { Item, outputItem } from "./item";
   
   <div class="item-amount" style="color:blue; font-size: 18px; white-space:pre-wrap;" >{{getGoalname(finalList)}}</div>
 
-  <br>
-  <h3><b>What does the algorithm take into account?</b></h3>
+  <br><br>
+  <h3><b>This recommendation is based on</b></h3>
   1. The number of your goals and tasks<br>
   2. The value of your goals<br>
-  3. The estimate time of your goals and tasks<br>
-  
+  3. The estimated duration of your goals and tasks<br>
+  4. How much each (sub)goal contributes to the larger goal<br>
+
+  <br><br>
+  <p>
+  Here is the passcode you need to proceed on GuidedTrack survey: <b>goal100</b>
+  Please DO NOT close this window yet because you will need the information on this screen to answer some questions. 
+  </p>
   
   
  
@@ -223,6 +229,7 @@ export class OptimizedListComponent implements OnInit {
     let final_optList = [];
     for (let i = 0; i < finalList.length; i++) {
       //final_optList.push(i+1 + " " +this.goalname_map[finalList[i].slice(1,) - 1]);
+      this.goal_map[finalList[i]].replace("Deadline: undefined", "");
       final_optList.push(i+1 + ". " +this.goal_map[finalList[i].slice(1,) - 1]);
     }
     console.log("goalname_map: ", this.goalname_map);

@@ -15,53 +15,55 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
   <div class="btn top-fixed" (click)="openGoal($event)" ><div>Add Goals</div></div>
  
    
-   <div style="text-align: center; margin-top:10px; color: red;"> Please add at least <b>5</b> goals and at least <b>2</b> subgoals for each.</div>
+   <div style="text-align: center; margin-top:10px; color: red;"> Please tell us about <b>5</b> or more of your goals and list at least <b>two</b> subgoals for each of them.</div>
     
     <div style="text-align: left; margin-top:10px; margin-left:20%; margin-right:15%;">
-    <b>Goal</b>: A goal that you need to or want to achieve within 2 months. <br>
-    <b>Subgoal</b>: A subordinate goal that helps you achieve a goal.<br>
+    <b>Goal</b>: Something that you need to or want to achieve. <br>
+    <b>Subgoal</b>: A milestone along your path to achieving the goal that you could realistically accomplish in a few days or hours.<br>
     
     <div class="popup" (click)="myFunction_example()" id="hoverText" style=" text-align: left; margin-top:10px;  cursor: pointer; color:blue;" >
     <img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > Example for a good goal
     <span  class="popuptext" id="myPopup_example">
-    It's recommended to set some ongoing projects such as "finish my thesis" or "finish a term paper" as your goals.<br>
-    In comparison, "cooking dinner on X'mas" isn't a suitable goal. 
+    We recommend choosing an ongoing project, such as “write the term paper for my English class”, “start my own business”, “learn programming”, or “get a good job”, that you can work on in the next 7 days.
+    <br><br>
+    In comparison, "cooking dinner on X'mas" isn't a suitable goal. Ideally, your goal can be broken down into a series of subgoals.
+    <br><br>
+
     
     <b>Example</b>:
-    <br>Goal: Finish my term paper
-    <br>&nbsp;&nbsp;&nbsp;&nbsp;|----General research [5 hrs]
-    <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Finalize a topic [2 hrs]
-    <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Do more research [5 hrs]
-    <br> &nbsp;&nbsp;&nbsp;&nbsp;|----Structure the paper [1hr]
+    <br>Goal: Write a  term paper for my English class (Value: 5000)
+    <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Brainstorm potential topics [2 hrs]
+    <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Choose a topic [1 hrs]
+    <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Read up on the chosen topic [10 hrs]
+    <br> &nbsp;&nbsp;&nbsp;&nbsp;|----Outline the paper [3hr]
     <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and so on... 
     </span>
     </div>
 
 <br>
     <div class="popup" (click)="myFunction()" id="hoverText" style=" text-align: left; margin-top:10px; cursor: pointer; color:blue;" >
-    <img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > What are the parameters?
+    <img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > Which information should I enter?
     <span  class="popuptext" id="myPopup">
     <b>Description</b> 
-    <br>Give a name for this goal/subgoal! 
+    <br>Write down what you want to achieve (e.g., “Start my own business”)
     <br><br><b>Value</b>
-    <br>How important is this goal for you? Try to quantify it!
-    <br>Think about why do you need to accomplish this goal. 
-    <br>Will something good or bad happen if you achieve it, or not achieve it? 
-    <br>Values are relative numbers. 
+    <br>How valuable would it be for you to have achieved this goal on a scale from 0 to 1000, where 0 means “I couldn’t care less.” and 1000 means “Nothing could be more valuable to me.”? Don’t stress about the exact value. What matters most is that you assign higher values to the goals that are more important to you. If your first goal is twice as valuable to you as your second goal, then its value should be twice as high.  
     <br><br><b>Estimated Time</b>
-    <br>How much time do you need to achieve this goal/subgoal?
+    <br>How many hours will it take to achieve this (sub)goal? 
     <br><br><b>Deadline</b>
-    <br>If there is a deadline for this goal/subgoal. Fill it in!
+    <br>If there is a deadline for this (sub)goal, then please fill it in!
 
     <br></span>
 </div>
 <br>
 <div class="popup" (click)="myFunction_finish()" id="hoverText" style=" text-align: left; margin-top:10px; cursor: pointer; color:blue;" >
     <img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > What to do when I finish adding goals?
+    
     <span  class="popuptext" id="myPopup_finish">
     <b>Next step</b> 
-    <br>Please click on <b>Get My Gamifying List</b> button when you finish.
-    You will see the result page in a few seconds.
+    <br>Please click on <b>Which of these goals should I focus on first?</b> button when you finish.
+    You will receive our app’s recommendation in a few seconds.
+    
     <br></span>
 </div>
 
@@ -145,7 +147,7 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
       </div>
 
 
-      <div class="btn bottom-fixed" (click)="route()" >Get My Gamifying List</div>
+      <div class="btn bottom-fixed" (click)="route()" >Which of these goals should I focus on first?</div>
     
     
     <div class="goal-wrapper" id="goal-display" *ngIf = "goals.length > 0">
@@ -406,7 +408,7 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
         position: relative;
         margin-top: 30px;
         bottom: 10px;
-        width: 35%;
+        width: 55%;
         background-color: #BE9F9C;
       }
      

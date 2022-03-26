@@ -51,7 +51,7 @@ import { Item, outputItem } from "./item";
 
   <br><br>
   <p>
-  Here is the passcode you need to proceed on GuidedTrack survey: <b>goal100</b>
+  Here is the passcode you need to proceed on GuidedTrack survey: <b>goal100</b><br>
   Please DO NOT close this window yet because you will need the information on this screen to answer some questions. 
   </p>
   
@@ -229,7 +229,7 @@ export class OptimizedListComponent implements OnInit {
     let final_optList = [];
     for (let i = 0; i < finalList.length; i++) {
       //final_optList.push(i+1 + " " +this.goalname_map[finalList[i].slice(1,) - 1]);
-      this.goal_map[finalList[i]].replace("Deadline: undefined", "");
+      this.goal_map[finalList[i].slice(1,)-1].replace("Deadline: undefined", "");
       final_optList.push(i+1 + ". " +this.goal_map[finalList[i].slice(1,) - 1]);
     }
     console.log("goalname_map: ", this.goalname_map);

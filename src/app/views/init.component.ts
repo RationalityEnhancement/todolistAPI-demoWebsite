@@ -67,6 +67,6 @@ export class InitComponent {
   
   public route(){
 
-    this.router.navigateByUrl('/list') //skip login.component.ts
+    this.router.navigateByUrl('/onboarding') //skip login.component.ts
   } 
 }

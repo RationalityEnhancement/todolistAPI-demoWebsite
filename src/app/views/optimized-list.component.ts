@@ -28,37 +28,26 @@ import { Item, outputItem } from "./item";
   </ul>
 -->
 
-<div>
-  <h2>Our recommendation for you</h2>
-  <p>Based on the information you provided, the following (sub)goals seem most important for you at the moment: </p>
-  <br>
-  <p>If you are not sure what to prioritise over the course of the next week(s), this could be a way to prioritise your to-do list for you.</p>
-
-  <ul>
-  <div>
-  <li *ngFor="let item of final_optList"></li>
-  </div>
-  </ul>
+  <div id="todo-list-wrapper">
   
-  <div class="item-amount" style="color:blue; font-size: 18px; white-space:pre-wrap;" >{{getGoalname(finalList)}}</div>
+  <h2>Your most important goal is</h2>
+  <p id="most_important_goal" style="color:blue; font-size: 18px; white-space:pre-wrap;">placeholder for the most important goal</p>
+  <br><br>
+
+  <h2>Your second most important goal is</h2>
+  <p id="2nd_important_goal" style="color:blue; font-size: 18px; white-space:pre-wrap;">placeholder for the second most important goal</p>
 
   <br><br>
-  <h3><b>This recommendation is based on</b></h3>
-  1. The number of your goals and tasks<br>
-  2. The value of your goals<br>
-  3. The estimated duration of your goals and tasks<br>
-  4. How much each (sub)goal contributes to the larger goal<br>
+  <h3>Your other goals are:</h3>
+  <div>
+  <li *ngFor="let item of final_optList.slice(2)"></li>
+  </div>
 
   <br><br>
   <p>
   Here is the passcode you need to proceed on GuidedTrack survey: <b>goal100</b><br>
   Please DO NOT close this window yet because you will need the information on this screen to answer some questions. 
   </p>
-  
-  
- 
- 
-
 </div>
 
 
@@ -162,8 +151,15 @@ export class OptimizedListComponent implements OnInit {
       }
       console.log("final List: ", this.finalList); // in the suggested order for users to follow
     }
-
     this.getGoalname(this.finalList);
+    //after generating a list
+    const most_important_goal = document.getElementById("most_important_goal");
+    most_important_goal.innerHTML= this.final_optList[0];
+    
+    const second_important_goal = document.getElementById("2nd_important_goal");
+    second_important_goal.innerHTML = this.final_optList[1];
+    
+
     // this.itemService.getOptimalList().subscribe((optList)=> {
     //   console.log("RUNNING");
     //   Globals.optTaskList = optList;

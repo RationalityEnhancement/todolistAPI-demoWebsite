@@ -15,23 +15,23 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
   <div class="btn top-fixed" (click)="openGoal($event)" ><div>Add Goals</div></div>
  
    
-   <div style="text-align: center; margin-top:10px; color: red;"> Please tell us about <b>5</b> or more of your goals and list at least <b>two</b> subgoals for each of them.</div>
+   <div style="text-align: center; margin-top:10px; color: red;"> Please tell us about <b>5</b> or more of your goals and list at least <b>two</b> milestones for each of them.</div>
     
     <div style="text-align: left; margin-top:10px; margin-left:20%; margin-right:15%;">
     <b>Goal</b>: Something that you need to or want to achieve. <br>
-    <b>Subgoal</b>: A milestone along your path to achieving the goal that you could realistically accomplish in a few days or hours.<br>
+    <b>Milestones</b>: A milestone along your path to achieving the goal that you could realistically accomplish in a few days or hours.<br>
     
     <div class="popup" (click)="myFunction_example()" id="hoverText" style=" text-align: left; margin-top:10px;  cursor: pointer; color:blue;" >
     <img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > Example for a good goal
     <span  class="popuptext" id="myPopup_example">
     We recommend choosing an ongoing project, such as “write the term paper for my English class”, “start my own business”, “learn programming”, or “get a good job”, that you can work on in the next 7 days.
     <br><br>
-    In comparison, "cooking dinner on X'mas" isn't a suitable goal. Ideally, your goal can be broken down into a series of subgoals.
+    In comparison, "cooking dinner on X'mas" isn't a suitable goal. Ideally, your goal can be broken down into a series of milestones.
     <br><br>
 
     
     <b>Example</b>:
-    <br>Goal: Write a  term paper for my English class (Value: 5000)
+    <br>Goal: Write a  term paper for my English class (Value: 100)
     <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Brainstorm potential topics [2 hrs]
     <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Choose a topic [1 hrs]
     <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Read up on the chosen topic [10 hrs]
@@ -47,11 +47,11 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
     <b>Description</b> 
     <br>Write down what you want to achieve (e.g., “Start my own business”)
     <br><br><b>Value</b>
-    <br>How valuable would it be for you to have achieved this goal on a scale from 0 to 1000, where 0 means “I couldn’t care less.” and 1000 means “Nothing could be more valuable to me.”? Don’t stress about the exact value. What matters most is that you assign higher values to the goals that are more important to you. If your first goal is twice as valuable to you as your second goal, then its value should be twice as high.  
+    <br>How valuable would it be for you to have achieved this goal on a scale from 0 to 100, where 0 means “I couldn’t care less.” and 100 means “Nothing could be more valuable to me.”? Don’t stress about the exact value. What matters most is that you assign higher values to the goals that are more important to you. If your first goal is twice as valuable to you as your second goal, then its value should be twice as high.  
     <br><br><b>Estimated Time</b>
-    <br>How many hours will it take to achieve this (sub)goal? 
+    <br>How many hours will it take to achieve this goal or milestone? 
     <br><br><b>Deadline</b>
-    <br>If there is a deadline for this (sub)goal, then please fill it in!
+    <br>If there is a deadline for this goal or milestone, then please fill it in!
 
     <br></span>
 </div>
@@ -74,9 +74,9 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
     <div class="form-popup" id="task-form" *ngIf = "task_form_open == true">
       
       <form class="form-container">
-        <h1>Add Subgoal in Goal {{goal_opened.name}}</h1>
+        <h1>Add a Milestone in Goal {{goal_opened.name}}</h1>
         <label for="item-desc"></label>
-        <input [(ngModel)]="task_desc" type="text" placeholder="Subgoal Description (*Required)" name="item-desc" required>
+        <input [(ngModel)]="task_desc" type="text" placeholder="Milestone Description (*Required)" name="item-desc" required>
 
         <label for="item-time"></label>
         <input [(ngModel)]="task_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)" name="item-time-est" required >
@@ -111,7 +111,7 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
         <input [(ngModel)]="goal_desc" type="text" placeholder="Goal Description (*Required)" name="goal-desc" required>
 
         <label for="goal-val"></label>
-        <input [(ngModel)]="goal_val" type="number" placeholder="Goal Value (0-9999) (*Required)" name="goal-val"  min="0" max="9999" required>
+        <input [(ngModel)]="goal_val" type="number" placeholder="Goal Value (0-100) (*Required)" name="goal-val"  min="0" max="9999" required>
 
         <label for="goal-time"></label>
         <input [(ngModel)]="goal_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)" name="goal-time-est">
@@ -147,16 +147,14 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
       </div>
 
 
-      <div class="btn bottom-fixed" (click)="route()" >Which of these goals should I focus on first?</div>
-    
-    
+     
     <div class="goal-wrapper" id="goal-display" *ngIf = "goals.length > 0">
    
     <div class="popup" (click)="myFunction_info()"  id="hoverText" style="text-align: left; margin-top:10px; margin-left:45%;cursor: pointer; color:blue;" ><img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > Icons
     <span  class="popuptext_info" id="myPopupInfo">
     
     <div class="icon plus" style="text-align:center;cursor:not-allowed; " ><div> +</div></div>
-    <span>Add a subgoal </span><br>
+    <span>Add a milestone </span><br>
     <div class="icon plus"  style="text-align:center; cursor:not-allowed"><div> -</div></div>
     <span>Delete the goal  </span>
     <div style="cursor:not-allowed; padding-left:5px;  "><img src="assets/images/Edit_icon.svg.png" alt="edit icon" width="20px" height="20px" >       Edit the goal</div>
@@ -199,6 +197,9 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
           </div>
         </li>
       </ul>
+      <div class="btn bottom-fixed" (click)="route()" >Which of these goals should I focus on first?</div>
+    
+    
     </div>
    
 
@@ -496,10 +497,11 @@ export class ToDoListComponent {
     for(let i=0; i<this.goals.length; i++){
       console.log("check num of children")
       console.log(this.goals[i], this.goals[i].num_children);
+      console.log(this.goals[i].tasks);
       if(this.goals[i].num_children == undefined || this.goals[i].num_children < 2 ){
         console.log(this.goals[i], this.goals[i].num_children);
         children_num_validator = false;
-        alert("Please add at least 2 subgoals for each goal");
+        alert("Please add at least 2 milestones for each goal");
         return false;
       }
     }
@@ -745,6 +747,10 @@ export class ToDoListComponent {
     if (this.goal_val==null)
     {
       alert("Goal value must be filled out");
+      return false;
+    }
+    if (this.goal_val> 100 || this.goal_val<0){
+      alert("Goal value needs to be between 0 and 100")
       return false;
     }
     if (this.goal_time_est == null) {

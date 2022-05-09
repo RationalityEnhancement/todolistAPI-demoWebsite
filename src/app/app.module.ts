@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { InitComponent } from './views/init.component'
 import { ToDoListComponent } from './views/todo-list.component'
 import { LoginComponent } from './views/login.component'
+import { OnboardingComponent } from './views/onboarding.compotent'
 
 import {MatSliderModule} from '@angular/material/slider';
 import {MatButtonModule} from '@angular/material/button';
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'intro', component: InitComponent },
   { path: 'list', component: ToDoListComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'onboarding', component: OnboardingComponent },
   { path: 'optimized', component: OptimizedListComponent },
   { path: '**', redirectTo: '/intro', pathMatch: 'full' },
 ];
@@ -36,7 +38,9 @@ const routes: Routes = [
     InitComponent,
     ToDoListComponent,
     LoginComponent,
+    OnboardingComponent,
     OptimizedListComponent
+
   ],
   imports: [
     BrowserModule,

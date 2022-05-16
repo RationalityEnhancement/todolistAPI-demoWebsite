@@ -30,7 +30,7 @@ import { Item, outputItem } from "./item";
 
   <div id="todo-list-wrapper">
   <h2> Final List </h2>
-  <p id="finallist>text</p>
+  <p id="finallist">text</p>
 
   <h2>Your most important goal is</h2>
   <p id="most_important_goal" style="color:blue; font-size: 18px; white-space:pre-wrap;">placeholder for the most important goal</p>

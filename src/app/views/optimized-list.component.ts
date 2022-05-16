@@ -116,6 +116,7 @@ export class OptimizedListComponent implements OnInit {
   public goal_map: {}
   public finalList = [];
   public final_optList = [];
+  public project_list = [];
 
 
   constructor(public router: Router, private activatedRoute: ActivatedRoute, public itemService: ItemService) {
@@ -139,6 +140,8 @@ export class OptimizedListComponent implements OnInit {
     console.log("goalname_map: ", this.goalname_map)
     this.goal_map = this.itemService.goal_map;
     console.log("goal_map: ", this.goal_map)
+    this.project_list = this.itemService.project_list;
+    console.log("project list: ", this.project_list)
 
 
     //check optList, remove duplicated goals {g2, g1, g1, g2, g1} -> {g2, g1}
@@ -152,12 +155,36 @@ export class OptimizedListComponent implements OnInit {
       console.log("final List: ", this.finalList); // in the suggested order for users to follow
     }
     this.getGoalname(this.finalList);
+    //get children nodes in a list with the order of final list
+    const top_priority_idx = this.project_list.findIndex(object => { return object.id === this.finalList[0] }) 
+    const second_priority_idx = this.project_list.findIndex(object => { return object.id === this.finalList[1] }) 
+    console.log("priority idx: ", top_priority_idx, second_priority_idx)
+  
+    console.log("get children list - children nodes only:")
+    var ch_1 = this.project_list[top_priority_idx].ch
+    var ch_2 = this.project_list[second_priority_idx].ch
+    console.log("children nodes -- ")
+    var ch_1list = []
+    var ch_2list = []
+    for (let i = 0; i < ch_1.length; i++){
+       // console.log("object info of a child: ", ch_1[i].nm);
+       // console.log("object info of a child without #today: ", ch_1[i].nm.substring(0, ch[i].nm.length-6));
+        ch_1list.push(ch_1[i].nm);
+    }
+    for (let i = 0; i < ch_2.length; i++){
+    //  console.log("object info of a child: ", ch_2[i].nm);
+    //  console.log("object info of a child without #today: ", ch_2[i].nm.substring(0, ch[i].nm.length-6));
+      ch_2list.push(ch_2[i].nm);
+  }
+    console.log("print temp_arr: ", ch_1list)
+    console.log("print temp_arr: ", ch_2list)
+
     //after generating a list
     const most_important_goal = document.getElementById("most_important_goal");
-    most_important_goal.innerHTML= this.final_optList[0];
+    most_important_goal.innerText= this.final_optList[0] + ch_1list;
     
     const second_important_goal = document.getElementById("2nd_important_goal");
-    second_important_goal.innerHTML = this.final_optList[1];
+    second_important_goal.innerText = this.final_optList[1] + ch_2list;
     
 
     // this.itemService.getOptimalList().subscribe((optList)=> {

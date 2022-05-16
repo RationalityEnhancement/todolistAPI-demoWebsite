@@ -6,13 +6,13 @@ import { Globals } from "../globals";
 
 @Injectable() 
 export class ItemService {
-    // private gamifyUrl: string = 'http:///127.0.0.1:6789/api/constant/basic/30/14/inf/0/7000/0/60/t/2/10/tree/u123/getTasksForToday'
+   // private gamifyUrl: string = 'http:///127.0.0.1:6789/api/constant/basic/30/14/inf/0/7000/0/60/t/2/10/tree/u123/getTasksForToday'
     private gamifyUrl: string = 'https://aqueous-hollows-34193.herokuapp.com/api/smdp/mdp/30/14/inf/0/inf/0/inf/false/0/max/0.999999/0.1/2/1.39/0.0001/0.01/tree/__test__/getTasksForToday'
     constructor(private http: HttpClient) {}
 
     public goalname_map = {};//add a goalname map
     public goal_map ={}; //add a goalmap for all info
-
+    public project_list = [];
     makeProject() {
         console.log("In makeProject");
         let project = [];
@@ -47,9 +47,10 @@ export class ItemService {
             console.log("String Project");
             JSON.stringify(project);
             console.log(project);
-
+            this.project_list = project;
             console.log("print map of goal name__: ", this.goalname_map) //
             console.log("print map of goalmap with goal info: ", this.goal_map)
+            
         }
         return project;
     }
@@ -95,6 +96,7 @@ export class ItemService {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
         })
+
 
         const options = {
             headers,

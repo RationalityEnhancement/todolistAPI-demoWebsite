@@ -31,6 +31,7 @@ import { Item, outputItem } from "./item";
   <div id="todo-list-wrapper">
   <h2> Final List </h2>
   <p id="finallist">text</p>
+  <br><br>
 
   <h2>Your most important goal is</h2>
   <p id="most_important_goal" style="color:blue; font-size: 18px; white-space:pre-wrap;">placeholder for the most important goal</p>
@@ -42,7 +43,7 @@ import { Item, outputItem } from "./item";
   <br><br>
   <h3>Your other goals are:</h3>
   <div>
-  <li *ngFor="let item of final_optList.slice(2)"></li>
+  <p id="othergoals">other goals</p>
   </div>
 
   <br><br>
@@ -147,7 +148,6 @@ export class OptimizedListComponent implements OnInit {
 
 
     //check optList, remove duplicated goals {g2, g1, g1, g2, g1} -> {g2, g1}
-
     console.log("1 final List: ", this.finalList);
     for (let i = 0; i < this.optList.length; i++) {
       var temp = this.optList[i]["id"].slice(0, 2);
@@ -226,13 +226,23 @@ export class OptimizedListComponent implements OnInit {
       this.goal_map[finalList[i].slice(1,)-1]=this.goal_map[finalList[i].slice(1,)-1].replace("Deadline: undefined", "");
       final_optList.push(i+1 + ". " +this.goal_map[finalList[i].slice(1,) - 1]);
     }
+
     console.log("goalname_map: ", this.goalname_map);
     console.log("goal_map ", this.goal_map);
     console.log("final opt List: ", final_optList);
     console.log("type: ",typeof(final_optList));
-    let fianl_optList_br = final_optList.join('\r\n');
-    console.log(fianl_optList_br)
-    console.log(typeof(fianl_optList_br))
+    // put the list in a string
+    let final_optList_br = final_optList.join('\r\n');
+    console.log(final_optList_br)
+    console.log(typeof(final_optList_br))
+    
+    // other goals (goal 3-5)
+    let final_othergoals = [];
+    for (let i = 2; i < finalList.length; i++) {
+      this.goal_map[finalList[i].slice(1,)-1]=this.goal_map[finalList[i].slice(1,)-1].replace("Deadline: undefined", "");
+      final_othergoals.push(i-1 + ". " +this.goal_map[finalList[i].slice(1,) - 1]);
+    }
+    let final_othergoals_str = final_othergoals.join('\r\n');
 
 
     //get children nodes in a list with the order of final list
@@ -249,29 +259,37 @@ export class OptimizedListComponent implements OnInit {
     for (let i = 0; i < ch_1.length; i++){
        // console.log("object info of a child: ", ch_1[i].nm);
        // console.log("object info of a child without #today: ", ch_1[i].nm.substring(0, ch[i].nm.length-6));
-        ch_1list.push(ch_1[i].nm);
+        ch_1list.push("--" + ch_1[i].nm.substring(0, ch_1[i].nm.length-6));
     }
     for (let i = 0; i < ch_2.length; i++){
     //  console.log("object info of a child: ", ch_2[i].nm);
     //  console.log("object info of a child without #today: ", ch_2[i].nm.substring(0, ch[i].nm.length-6));
-      ch_2list.push(ch_2[i].nm);
+      ch_2list.push("--" + ch_2[i].nm.substring(0, ch_2[i].nm.length-6));
   }
     console.log("print temp_arr: ", ch_1list)
     console.log("print temp_arr: ", ch_2list)
+    var ch_1list_str =ch_1list.join("\r\n");
+    var ch_2list_str =ch_2list.join("\r\n");
+    console.log("print ch_1list_str: ", ch_1list_str)
+    console.log("print ch_2list_str: ", ch_2list_str)
+
 
     //after generating a list
     const most_important_goal = document.getElementById("most_important_goal");
-    most_important_goal.innerText= this.final_optList[0] + ch_1list;
+    most_important_goal.innerText= final_optList[0] +"\r\n"+ ch_1list_str;
     
     const second_important_goal = document.getElementById("2nd_important_goal");
-    second_important_goal.innerText = this.final_optList[1] + ch_2list;
+    second_important_goal.innerText = final_optList[1] + "\r\n"+ ch_2list_str;
     
     console.log("final optList", this.final_optList)
 
     const finallist_opt = document.getElementById("finallist");
-    finallist_opt.innerText = fianl_optList_br;
+    finallist_opt.innerText = final_optList_br;
 
-    return fianl_optList_br;
+    const othergoals = document.getElementById("othergoals");
+    othergoals.innerText = final_othergoals_str;
+
+    return final_optList_br;
   }
 
 }

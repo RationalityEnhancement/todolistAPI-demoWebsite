@@ -66,7 +66,7 @@ export class ItemService {
         let list = [];
         let obj = {
             id: "_",
-            nm: "#HOURS_TYPICAL ==12",
+            nm: "#HOURS_TYPICAL ==1000000",
             lm: 0
         };
         list.push(obj);
@@ -79,7 +79,7 @@ export class ItemService {
         let list = [];
         let obj = {
             id: "_",
-            nm: "#HOURS_TODAY ==12",
+            nm: "#HOURS_TODAY ==1000000",
             lm: 0
         };
         list.push(obj);

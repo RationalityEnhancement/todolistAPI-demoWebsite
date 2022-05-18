@@ -11,6 +11,7 @@ import { InitComponent } from './views/init.component'
 import { ToDoListComponent } from './views/todo-list.component'
 import { LoginComponent } from './views/login.component'
 import { OnboardingComponent } from './views/onboarding.compotent'
+import { ResultComponent} from './views/result.component'
 
 import {MatSliderModule} from '@angular/material/slider';
 import {MatButtonModule} from '@angular/material/button';
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'onboarding', component: OnboardingComponent },
   { path: 'optimized', component: OptimizedListComponent },
+  { path: 'result', component: ResultComponent},
   { path: '**', redirectTo: '/intro', pathMatch: 'full' },
 ];
 
@@ -39,7 +41,8 @@ const routes: Routes = [
     ToDoListComponent,
     LoginComponent,
     OnboardingComponent,
-    OptimizedListComponent
+    OptimizedListComponent,
+    ResultComponent,
 
   ],
   imports: [

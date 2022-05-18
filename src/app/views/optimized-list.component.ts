@@ -29,9 +29,6 @@ import { Item, outputItem } from "./item";
 -->
 
   <div id="todo-list-wrapper">
-  <h2> Final List </h2>
-  <p id="finallist">text</p>
-  <br><br>
 
   <h2>Your most important goal is</h2>
   <p id="most_important_goal" style="color:blue; font-size: 18px; white-space:pre-wrap;">placeholder for the most important goal</p>
@@ -259,12 +256,12 @@ export class OptimizedListComponent implements OnInit {
     for (let i = 0; i < ch_1.length; i++){
        // console.log("object info of a child: ", ch_1[i].nm);
        // console.log("object info of a child without #today: ", ch_1[i].nm.substring(0, ch[i].nm.length-6));
-        ch_1list.push("--" + ch_1[i].nm.substring(0, ch_1[i].nm.length-6));
+        ch_1list.push("-- " + ch_1[i].nm.substring(0, ch_1[i].nm.length-6));
     }
     for (let i = 0; i < ch_2.length; i++){
     //  console.log("object info of a child: ", ch_2[i].nm);
     //  console.log("object info of a child without #today: ", ch_2[i].nm.substring(0, ch[i].nm.length-6));
-      ch_2list.push("--" + ch_2[i].nm.substring(0, ch_2[i].nm.length-6));
+      ch_2list.push("-- " + ch_2[i].nm.substring(0, ch_2[i].nm.length-6));
   }
     console.log("print temp_arr: ", ch_1list)
     console.log("print temp_arr: ", ch_2list)
@@ -282,11 +279,8 @@ export class OptimizedListComponent implements OnInit {
     second_important_goal.innerText = final_optList[1] + "\r\n"+ ch_2list_str;
     
     console.log("final optList", this.final_optList)
-
-    const finallist_opt = document.getElementById("finallist");
-    finallist_opt.innerText = final_optList_br;
-
     const othergoals = document.getElementById("othergoals");
+    console.log("othergoals", othergoals)
     othergoals.innerText = final_othergoals_str;
 
     return final_optList_br;

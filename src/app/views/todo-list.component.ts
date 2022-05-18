@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {filter, map, min, startWith} from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { Globals } from '../globals';
 import { Goal, Item} from './item';
 import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector';
 import { Timestamp } from 'rxjs/internal/operators/timestamp';
-
+import { InitComponent } from './init.component';
 
 @Component({
   selector: 'todo-list',
@@ -437,7 +437,8 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
         background-position: center center;
       }
     `
-  ]
+  ],
+  providers:[InitComponent],
 })
 
 export class ToDoListComponent {
@@ -472,11 +473,15 @@ export class ToDoListComponent {
 
   public items = Globals.taskList
   public goals = Globals.goalList
-  
+
+
+  public get condition_method() { //get condition code
+    return Globals.ai_method_result
+  }
+
 
   constructor(public router: Router) {
-
-  }
+   }
 
 
   get itemsList() {
@@ -486,11 +491,13 @@ export class ToDoListComponent {
 
 
   ngAfterViewInit() {
-
-
   }
 
+  public ai_method_result = undefined;
   public route(){
+
+   console.log("Condition - Using AI method? : ", Globals.ai_method_result)
+
     // console.log("Go to Optimized");
     var children_num_validator = true;
     var goals_num_validator = false
@@ -513,8 +520,23 @@ export class ToDoListComponent {
       return false;
     }
 
+
     if(goals_num_validator && children_num_validator){
-      this.router.navigateByUrl('/optimized')
+      //check condition
+      console.log("check condition: ", Globals.ai_method_result)
+      if(Globals.ai_method_result == true){
+        console.log("treatment condition, go to optimized page")
+        console.log(Globals.goalList);
+        this.router.navigateByUrl('/optimized')
+      }else if(Globals.ai_method_result == false){ //random generated suggestion list
+        console.log("control condition, go to result page")
+        console.log(Globals.goalList);
+        this.router.navigateByUrl('/result')
+      }
+
+
+
+      
     }else{
       alert("Please fulfill the requirements before you continue!");
       return false;
@@ -749,8 +771,8 @@ export class ToDoListComponent {
       alert("Goal value must be filled out");
       return false;
     }
-    if (this.goal_val> 100 || this.goal_val<0){
-      alert("Goal value needs to be between 0 and 100")
+    if (this.goal_val> 100 || this.goal_val<1){
+      alert("Goal value needs to be between 1 and 100")
       return false;
     }
     if (this.goal_time_est == null) {
@@ -784,6 +806,9 @@ export class ToDoListComponent {
        this.addItem(event,this.goal_opened);
   }
   }
+
+ 
+
   myFunction() {
     var popup = document.getElementById("myPopup");
     popup.classList.toggle("show");

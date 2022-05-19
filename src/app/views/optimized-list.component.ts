@@ -30,16 +30,16 @@ import { Item, outputItem } from "./item";
 
   <div id="todo-list-wrapper">
 
-  <h2>Your most important goal is</h2>
-  <p id="most_important_goal" style="color:blue; font-size: 18px; white-space:pre-wrap;">placeholder for the most important goal</p>
+  <h2>You will do best if you first prioritize this goal first:</h2>
+  <p id="most_important_goal" style="font-size: 18px; white-space:pre-wrap;">placeholder for the most important goal</p>
   <br><br>
 
-  <h2>Your second most important goal is</h2>
-  <p id="2nd_important_goal" style="color:blue; font-size: 18px; white-space:pre-wrap;">placeholder for the second most important goal</p>
+  <h2>And then tackle your goal</h2>
+  <p id="second_important_goal" style="font-size: 18px; white-space:pre-wrap;">placeholder for the second most important goal</p>
 
   <br><br>
   <h3>Your other goals are:</h3>
-  <div>
+  <div id="others">
   <p id="othergoals">other goals</p>
   </div>
 
@@ -103,7 +103,24 @@ import { Item, outputItem } from "./item";
 
     }
 
+    #most_important_goal{
+      background-color: #E4E6C3;
+      border-radius: 10px;
+      padding: 20px
+    }
 
+    #second_important_goal{
+        background-color: #eceed5;
+        border-radius: 10px;
+        padding: 20px
+    }
+
+    #others{
+        background-color: #f4f5e7;
+        border-radius: 10px;
+        padding: 20px
+    }
+ 
 
   
     `,
@@ -142,10 +159,22 @@ export class OptimizedListComponent implements OnInit {
     console.log("goal_map: ", this.goal_map)
     this.project_list = this.itemService.project_list;
     console.log("project list: ", this.project_list)
+    //sort optList by task value
 
+    // var val = this.optList[0]["val"]
+    // console.log("val", val, typeof(val));
+    // var val2 = this.optList[0].val
+    // console.log("val2", val2, typeof(val2));
+    // this.optList.sort(function(a,b)){
+    //   return parseFloat(a.val) - parseFloat(b.val)
+    // }
+    console.log("opt List before sortting: ", this.finalList);
+
+    this.optList = this.optList.sort((a, b) => parseFloat(b.val.toString(0)) - parseFloat(a.val.toString()))
+    console.log("sorted list by value of task: ", this.optList)
 
     //check optList, remove duplicated goals {g2, g1, g1, g2, g1} -> {g2, g1}
-    console.log("1 final List: ", this.finalList);
+    
     for (let i = 0; i < this.optList.length; i++) {
       var temp = this.optList[i]["id"].slice(0, 2);
       if (!this.finalList.includes(temp)) {
@@ -253,15 +282,18 @@ export class OptimizedListComponent implements OnInit {
     console.log("children nodes -- ")
     var ch_1list = []
     var ch_2list = []
-    for (let i = 0; i < ch_1.length; i++){
+
+    // create the children list, ignore the last child (everything else)
+    for (let i = 0; i < ch_1.length-1; i++){
        // console.log("object info of a child: ", ch_1[i].nm);
        // console.log("object info of a child without #today: ", ch_1[i].nm.substring(0, ch[i].nm.length-6));
-        ch_1list.push("-- " + ch_1[i].nm.substring(0, ch_1[i].nm.length-6));
+       this.goal_map[finalList[i].slice(1,)-1]=this.goal_map[finalList[i].slice(1,)-1].replace("Deadline: undefined", "");
+       ch_1list.push("-- " + ch_1[i].nm.substring(0, ch_1[i].nm.length-6).replace("~~", ": This step will take about "));
     }
-    for (let i = 0; i < ch_2.length; i++){
+    for (let i = 0; i < ch_2.length-1; i++){
     //  console.log("object info of a child: ", ch_2[i].nm);
     //  console.log("object info of a child without #today: ", ch_2[i].nm.substring(0, ch[i].nm.length-6));
-      ch_2list.push("-- " + ch_2[i].nm.substring(0, ch_2[i].nm.length-6));
+    ch_2list.push("-- " + ch_2[i].nm.substring(0, ch_2[i].nm.length-6).replace("~~", ": This step will take about "));
   }
     console.log("print temp_arr: ", ch_1list)
     console.log("print temp_arr: ", ch_2list)
@@ -275,7 +307,7 @@ export class OptimizedListComponent implements OnInit {
     const most_important_goal = document.getElementById("most_important_goal");
     most_important_goal.innerText= final_optList[0] +"\r\n"+ ch_1list_str;
     
-    const second_important_goal = document.getElementById("2nd_important_goal");
+    const second_important_goal = document.getElementById("second_important_goal");
     second_important_goal.innerText = final_optList[1] + "\r\n"+ ch_2list_str;
     
     console.log("final optList", this.final_optList)

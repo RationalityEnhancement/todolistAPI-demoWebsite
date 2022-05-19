@@ -15,11 +15,12 @@ import { InitComponent } from './init.component';
   <div class="btn top-fixed" (click)="openGoal($event)" ><div>Add Goals</div></div>
  
    
-   <div style="text-align: center; margin-top:10px; color: red;"> Please tell us about <b>5</b> or more of your goals and list at least <b>two</b> milestones for each of them.</div>
+   <div style="text-align: left; margin-top:10px; margin-left:20%; margin-right:15%; line-height:1.5; "> - Please add <b>two</b> or more milestones to your most important goal. <br>- Then, please tell us about <b>four</b> more goals of yours and add at least two milestones for each of them.<br> - Please estimate how valuable each of the additional goals is relative to your most valuable gaol on a scale from 0% to 100%.”
+   </div>
     
-    <div style="text-align: left; margin-top:10px; margin-left:20%; margin-right:15%;">
-    <b>Goal</b>: Something that you need to or want to achieve. <br>
-    <b>Milestones</b>: A milestone along your path to achieving the goal that you could realistically accomplish in a few days or hours.<br>
+    <div style="text-align: left; margin-top:10px; margin-left:20%; margin-right:15%;  line-height:1.5; ">
+    <b>Goal</b>: Something that you want to achieve. <br>
+    <b>Milestones</b>: First steps along your path to achieving the goal that you could realistically accomplish in a few days or hours.<br>
     
     <div class="popup" (click)="myFunction_example()" id="hoverText" style=" text-align: left; margin-top:10px;  cursor: pointer; color:blue;" >
     <img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > Example for a good goal
@@ -31,7 +32,7 @@ import { InitComponent } from './init.component';
 
     
     <b>Example</b>:
-    <br>Goal: Write a  term paper for my English class (Value: 100)
+    <br>Goal: Write a  term paper for my English class (Value: 100%)
     <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Brainstorm potential topics [2 hrs]
     <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Choose a topic [1 hrs]
     <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Read up on the chosen topic [10 hrs]
@@ -63,8 +64,8 @@ import { InitComponent } from './init.component';
     <b>Next step</b> 
     <br>Please click on <b>Which of these goals should I focus on first?</b> button when you finish.
     You will receive our app’s recommendation in a few seconds.
-    
     <br></span>
+   
 </div>
 
 </div>
@@ -111,7 +112,7 @@ import { InitComponent } from './init.component';
         <input [(ngModel)]="goal_desc" type="text" placeholder="Goal Description (*Required)" name="goal-desc" required>
 
         <label for="goal-val"></label>
-        <input [(ngModel)]="goal_val" type="number" placeholder="Goal Value (0-100) (*Required)" name="goal-val"  min="0" max="9999" required>
+        <input [(ngModel)]="goal_val" type="number" placeholder="Goal Value (1%-100%) (*Required)" name="goal-val"  min="0" max="9999" required>
 
         <label for="goal-time"></label>
         <input [(ngModel)]="goal_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)" name="goal-time-est">
@@ -166,7 +167,7 @@ import { InitComponent } from './init.component';
 
     <ul>
         <li *ngFor = "let goal of goals" class="goal-item">
-          <div> Goal: <b>{{goal.name}}</b> <br> Value: {{goal.value}} <br>Time Estimation:  {{goal.time_est}} hr
+          <div> Goal: <b>{{goal.name}}</b> <br> Value: {{goal.value}} % <br>Time Estimation:  {{goal.time_est}} hr
           <br> Deadline: / {{goal.deadline}}  
           <div>
               <div class="icon plus" (click)="openItem($event, goal)"><div>+</div></div>
@@ -197,10 +198,10 @@ import { InitComponent } from './init.component';
           </div>
         </li>
       </ul>
+      <div id="loader" style="font-size: 20px; color: red; display:none; text-align:center;"> Please wait while the AI computes its recommendation</div> 
+ 
       <div class="btn bottom-fixed" (click)="route()" >Which of these goals should I focus on first?</div>
-    
-    
-    </div>
+        </div>
    
 
   `,
@@ -436,6 +437,21 @@ import { InitComponent } from './init.component';
         background-repeat: no-repeat;
         background-position: center center;
       }
+
+      .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
     `
   ],
   providers:[InitComponent],
@@ -495,9 +511,9 @@ export class ToDoListComponent {
 
   public ai_method_result = undefined;
   public route(){
-
    console.log("Condition - Using AI method? : ", Globals.ai_method_result)
-
+    const wait_msg = document.getElementById("loader")
+    wait_msg.style.display="block";
     // console.log("Go to Optimized");
     var children_num_validator = true;
     var goals_num_validator = false
@@ -523,15 +539,35 @@ export class ToDoListComponent {
 
     if(goals_num_validator && children_num_validator){
       //check condition
+      //go through each goal and set everything else task
+      for (var i=0; i<this.goals.length; i++){
+        var sum_task_time = 0;
+        for (var j=0; j< this.goals[i].tasks.length; j++){
+          
+          sum_task_time= sum_task_time + this.goals[i].tasks[j].time_est
+          console.log("task time: ", this.goals[i]["tasks"][j].time_est )
+          console.log("sum time", sum_task_time)
+        }
+        var temp_time = this.goals[i].time_est - sum_task_time
+        console.log("temp time", temp_time)
+        var item = <Item>({name: "everything else", time_est: temp_time, deadline: undefined, today: undefined })
+        console.log("item", item)
+        this.goals[i].tasks.push(item);
+        this.goals[i].num_children += 1;
+        console.log("show the goal", this.goals[i])
+
+      }
       console.log("check condition: ", Globals.ai_method_result)
       if(Globals.ai_method_result == true){
         console.log("treatment condition, go to optimized page")
         console.log(Globals.goalList);
         this.router.navigateByUrl('/optimized')
+
       }else if(Globals.ai_method_result == false){ //random generated suggestion list
         console.log("control condition, go to result page")
         console.log(Globals.goalList);
         this.router.navigateByUrl('/result')
+
       }
 
 
@@ -541,7 +577,7 @@ export class ToDoListComponent {
       alert("Please fulfill the requirements before you continue!");
       return false;
     }
-
+  
   } 
 
 
@@ -721,7 +757,7 @@ export class ToDoListComponent {
         // console.log("HAVE CHILD");
         goal.tasks.push(item);
         goal.num_children += 1;
-       
+      
       }
       else{
         // console.log("FIRST CHILD");
@@ -772,7 +808,7 @@ export class ToDoListComponent {
       return false;
     }
     if (this.goal_val> 100 || this.goal_val<1){
-      alert("Goal value needs to be between 1 and 100")
+      alert("Goal value needs to be between 1% and 100%")
       return false;
     }
     if (this.goal_time_est == null) {
@@ -821,10 +857,11 @@ export class ToDoListComponent {
     var popup = document.getElementById("myPopup_finish");
     popup.classList.toggle("show");
   }
-    myFunction_example(){
+  myFunction_example(){
     var popup = document.getElementById("myPopup_example");
     popup.classList.toggle("show");
   }
+
  
 }
 

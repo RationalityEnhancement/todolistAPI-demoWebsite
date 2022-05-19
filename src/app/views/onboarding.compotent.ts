@@ -10,10 +10,11 @@ import { nextTick } from "process";
 
   <div >
     <div >
-    <span id="text" style="font-size:16px;display: block;margin-left: auto;margin-right: auto;width: 680px;">
+    <span id="text" style="font-size:18px;display: block;margin-left: auto;margin-right: auto;width: 680px;">
     Take a moment to think about the question and enter your first goal.</span>
     <span id="text2" style="font-size:20px; color:#8B0000; font-weight:bold; display: block;margin-left: auto;margin-right: auto;width: 680px;">
     What is the most important goal you want to achieve before you're gone?</span>
+    <span id="text3"style="font-size:16px; display: block;margin-left: auto;margin-right: auto; width: 680px; text-align:left;" ></span>
     </div>
    <br>
 
@@ -30,6 +31,7 @@ import { nextTick } from "process";
         <button type="submit" class="btn add" (click) = "validateForm_goal()">Add</button>
 
       </form>
+      
       <div>
       
       <div class="btn bottom" id="btn-next" style="width:200px; display:none;" (click)="route()">Next</div>
@@ -90,7 +92,10 @@ import { nextTick } from "process";
       -moz-appearance: textfield;
     }
 
-
+    #explanation_value{
+      font-size:14px;
+      color:blue;
+    }
     /* When the inputs get focus, do something */
     .form-container input[type=text]:focus, input[type=number]:focus, input[type=date]:focus, .form-container input[type=password]:focus {
       background-color: #ddd;
@@ -177,6 +182,7 @@ export class OnboardingComponent {
   const btn_next = document.getElementById('btn-next');
   const txt = document.getElementById('text');
   const txt2 = document.getElementById('text2');
+  const txt3 = document.getElementById("text3");
   if (form.style.display === 'none') {
     // 👇️ this SHOWS the form and hide the Next button
     form.style.display = 'block';
@@ -189,15 +195,18 @@ export class OnboardingComponent {
     if (this.goals[0].deadline != undefined ){
         var deadline = this.goals[0].deadline;
     }
+    var value_exp =  "Because this is your most valuable goal, we set its value to 100% and use it as a reference point for estimating the value of your other goals."
+    
     var text_display_1 = "Here is your most important goal: <br><br>"
-    var text_display_2 = this.goals[0].name+ "<br><br> Value: " + this.goals[0].value +
+    var text_display_2 = "Goal Name: "+ this.goals[0].name+ 
     "<br> Estimation of Time: " + this.goals[0].time_est +
-    "hrs <br> Deadline: " + deadline;
-
+    "hrs <br> Deadline: " + deadline+"<br>Value: " + this.goals[0].value + "%";
+    
     txt.style.textAlign="left";
     txt.innerHTML= text_display_1;
     txt2.style.textAlign="left";
     txt2.innerHTML= text_display_2;
+    txt3.innerHTML=value_exp;
   
   }
   

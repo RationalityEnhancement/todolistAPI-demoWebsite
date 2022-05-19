@@ -10,18 +10,18 @@ import { Item, outputItem } from "./item";
   
 
 
-  <div id="todo-list-wrapper">
  
-  <h2>Your most important goal is</h2>
-  <p id="most_important_goal" style="color:blue; font-size: 18px; white-space:pre-wrap;">placeholder for the most important goal</p>
+ 
+  <h2>You will do best if you first prioritize this goal first:</h2>
+  <div id="most_important_goal" style=" font-size: 18px; white-space:pre-wrap;">placeholder for the most important goal</div>
   <br><br>
 
-  <h2>Your second most important goal is</h2>
-  <p id="2nd_important_goal" style="color:blue; font-size: 18px; white-space:pre-wrap;">placeholder for the second most important goal</p>
+  <h2>And then tackle your goal</h2>
+  <div id="second_important_goal" style=" font-size: 18px; white-space:pre-wrap;">placeholder for the second most important goal</div>
 
   <br><br>
   <h3>Your other goals are:</h3>
-  <div>
+  <div id= "others">
   <p id="othergoals">other goals</p>
   </div>
 
@@ -30,64 +30,31 @@ import { Item, outputItem } from "./item";
   Here is the passcode you need to proceed on GuidedTrack survey: <b>goal100</b><br>
   Please DO NOT close this window yet because you will need the information on this screen to answer some questions. 
   </p>
-</div>
+
 
 
   `,
   styles: [
     `
-    #todo-list-wrapper {
-      margin-bottom: 100px;
-    }
-    
-    #todo-list-wrapper ul {
-    }
-  
-    #todo-list-wrapper ul li {
-      position: relative;
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      box-sizing:border-box;
-      padding: 2.5%;
-      text-align:center;
-      cursor:pointer;
-      border-bottom: 1px solid #777;
-    }
-    #todo-list-wrapper ul li:last-child {
-      cursor:default;
-      border: none;
-    }
-    #todo-list-wrapper ul li:first-child {
-      cursor:default;
-      font-size: 1.2rem;
+    #most_important_goal{
+        background-color: #E4E6C3;
+        border-radius: 10px;
+        padding: 20px
     }
 
-    #todo-list-wrapper ul li div {
-      width: 20%;
-      text-align:left;
+    #second_important_goal{
+        background-color: #eceed5;
+        border-radius: 10px;
+        padding: 20px
     }
 
-    #todo-list-wrapper ul li img {
-      width: 100%;
+    #others{
+        background-color: #f4f5e7;
+        border-radius: 10px;
+        padding: 20px
     }
+   
 
-    #todo-list-wrapper ul li .item-bar {
-  
-      display: flex;
-      justify-content:center;
-      width: 90%;
-      height: 50px;
-      line-height: 50px;
-    }
-
-    #todo-list-wrapper ul li .item-bar div {
-
-    }
-
-
-
-  
     `,
   ],
 })
@@ -125,9 +92,13 @@ export class ResultComponent implements OnInit {
     this.project_list = this.itemService.project_list;
     console.log("project list: ", this.project_list)
 
+    //sort optList by task value
+
+    console.log("opt List before sortting: ", this.finalList);
+    this.optList = this.optList.sort((a, b) => parseFloat(b.val.toString(0)) - parseFloat(a.val.toString()))
+    console.log("sorted list by value of task: ", this.optList)
 
     //check optList, remove duplicated goals {g2, g1, g1, g2, g1} -> {g2, g1}
-    console.log("1 final List: ", this.finalList);
     for (let i = 0; i < this.optList.length; i++) {
       var temp = this.optList[i]["id"].slice(0, 2);
       if (!this.finalList.includes(temp)) {
@@ -237,15 +208,13 @@ export class ResultComponent implements OnInit {
     console.log("children nodes -- ")
     var ch_1list = []
     var ch_2list = []
-    for (let i = 0; i < ch_1.length; i++){
-       // console.log("object info of a child: ", ch_1[i].nm);
-       // console.log("object info of a child without #today: ", ch_1[i].nm.substring(0, ch[i].nm.length-6));
-        ch_1list.push("-- " + ch_1[i].nm.substring(0, ch_1[i].nm.length-6));
+    for (let i = 0; i < ch_1.length-1; i++){ //without the last node (everything else)
+      console.log("ch_1: ", ch_1[i])
+      console.log("ch_1 replace: ",ch_1[i].nm.substring(0, ch_1[i].nm.length-6).replace("~~", ": This step will take about ") )
+      ch_1list.push("-- " + ch_1[i].nm.substring(0, ch_1[i].nm.length-6).replace("~~", ": This step will take about "));
     }
-    for (let i = 0; i < ch_2.length; i++){
-    //  console.log("object info of a child: ", ch_2[i].nm);
-    //  console.log("object info of a child without #today: ", ch_2[i].nm.substring(0, ch[i].nm.length-6));
-      ch_2list.push("-- " + ch_2[i].nm.substring(0, ch_2[i].nm.length-6));
+    for (let i = 0; i < ch_2.length-1; i++){
+    ch_2list.push("-- " + ch_2[i].nm.substring(0, ch_2[i].nm.length-6).replace("~~", ": This step will take about "));
   }
     console.log("print temp_arr: ", ch_1list)
     console.log("print temp_arr: ", ch_2list)
@@ -259,7 +228,7 @@ export class ResultComponent implements OnInit {
     const most_important_goal = document.getElementById("most_important_goal");
     most_important_goal.innerText= final_optList[0] +"\r\n"+ ch_1list_str;
     
-    const second_important_goal = document.getElementById("2nd_important_goal");
+    const second_important_goal = document.getElementById("second_important_goal");
     second_important_goal.innerText = final_optList[1] + "\r\n"+ ch_2list_str;
     
     console.log("final optList", this.final_optList)

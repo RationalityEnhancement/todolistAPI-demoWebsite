@@ -27,7 +27,7 @@ export class ItemService {
                 parentId: "None"
               }
             this.goalname_map[i-1]=Globals.goalList[i-1].name;//update a goalname map
-            this.goal_map[i-1]=Globals.goalList[i-1].name + "/ Value: "+ Globals.goalList[i-1].value + "/ Time Estimation: "+ Globals.goalList[i-1].time_est + "h/ Deadline: " + Globals.goalList[i-1].deadline; //update a goalmap
+            this.goal_map[i-1]="Goal Name: "+Globals.goalList[i-1].name + "     Value: "+ Globals.goalList[i-1].value + "     Time Estimation: "+ Globals.goalList[i-1].time_est + "h      Deadline: " + Globals.goalList[i-1].deadline; //update a goalmap
             if ('num_children' in Globals.goalList[i-1] && Globals.goalList[i-1].num_children > 0){
                 node.ch = [];
                 for (let j = 1; j < Globals.goalList[i-1].num_children+1; j++){

@@ -198,7 +198,7 @@ export class OnboardingComponent {
     var text_display_1 = "Here is your most important goal: <br><br>"
     var text_display_2 = "Goal Name: "+ this.goals[0].name+ 
     "<br> Estimation of Time: " + this.goals[0].time_est +
-    "hrs <br> Deadline: " + deadline+"<br>Value: " + this.goals[0].value + "%";
+    "hrs "+"<br>Value: " + this.goals[0].value + "%";
     
     txt.style.textAlign="left";
     txt.innerHTML= text_display_1;

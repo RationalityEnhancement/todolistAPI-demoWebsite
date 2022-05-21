@@ -166,7 +166,7 @@ import { InitComponent } from './init.component';
     <ul>
         <li *ngFor = "let goal of goals" class="goal-item">
           <div> Goal: <b>{{goal.name}}</b> <br> Value: {{goal.value}} % <br>Time Estimation:  {{goal.time_est}} hr
-          <br> Deadline: / {{goal.deadline}}  
+         <!-- <br> Deadline: / {{goal.deadline}}   -->
           <div>
               <div class="icon plus" (click)="openItem($event, goal)"><div>+</div></div>
               <div class="icon plus" (click)="deleteGoal($event, goal)" id= "hoverText" ><div>-</div></div>
@@ -183,7 +183,7 @@ import { InitComponent } from './init.component';
                         <div> Task: {{task.name}} {{task.time_est}}
                       -->
                       <div> {{task.name}} <br/> Time: {{task.time_est}} hr
-                      <br> Deadline: / {{task.deadline}}  
+                    <!--  <br> Deadline: /> {{task.deadline}}  -->
                        <div class="del-wrapper"> 
                           <div class="del" (click)="deleteItem($event, goal, task)"><div>-</div></div>
                         </div>

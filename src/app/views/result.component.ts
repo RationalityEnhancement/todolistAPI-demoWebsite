@@ -117,7 +117,6 @@ export class ResultComponent implements OnInit {
         this.finalList.push(temp);
       }
     }
-    console.log("final list before shuffle: ", this.finalList)
     this.finalList.sort((a, b) => 0.5 - Math.random());
     console.log("final list shuffle randomly: ", this.finalList)
     this.getGoalname(this.finalList);

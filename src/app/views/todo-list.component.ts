@@ -51,9 +51,6 @@ import { InitComponent } from './init.component';
     <br>How valuable would it be for you to have achieved this goal on a scale from 0 to 100, where 0 means “I couldn’t care less.” and 100 means “Nothing could be more valuable to me.”? Don’t stress about the exact value. What matters most is that you assign higher values to the goals that are more important to you. If your first goal is twice as valuable to you as your second goal, then its value should be twice as high.  
     <br><br><b>Estimated Time</b>
     <br>How many hours will it take to achieve this goal or milestone? 
-    <br><br><b>Deadline</b>
-    <br>If there is a deadline for this goal or milestone, then please fill it in!
-
     <br></span>
 </div>
 <br>
@@ -82,9 +79,9 @@ import { InitComponent } from './init.component';
         <label for="item-time"></label>
         <input [(ngModel)]="task_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)" name="item-time-est" required >
 
-        <label for="item-deadline"></label>
+        <!--<label for="item-deadline"></label>
         <input [(ngModel)]="task_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD) (optional)" name="item-deadline">
-        
+        -->
         <!--
         <label for="item-today"></label>
         <input [(ngModel)]="task_today" type="radio" id="nt" name="item-today" value="Not Today"> <label for = "nt"> Not Today </label>
@@ -117,9 +114,10 @@ import { InitComponent } from './init.component';
         <label for="goal-time"></label>
         <input [(ngModel)]="goal_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)" name="goal-time-est">
 
-        <label for="goal-deadline" style="font-size: 12px; color: gray; margin-left: 6px">Enter a deadline (optional)</label>
-        <input [(ngModel)]="goal_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD)" name="goal-deadline">
-       
+        <!-- <label for="goal-deadline" style="font-size: 12px; color: gray; margin-left: 6px">Enter a deadline (optional)</label>
+         <input [(ngModel)]="goal_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD)" name="goal-deadline">
+        -->
+
         <button type="submit" class="btn add" (click) = "validateForm_goal($event)">Add</button>
         <button type="submit" class="btn cancel" (click)="closeGoal($event)">Cancel</button>
       </form>
@@ -804,17 +802,18 @@ export class ToDoListComponent {
     }
     if (this.goal_val==null)
     {
-      alert("Goal value must be filled out");
+      alert("Goal value must be filled out (without '\%'");
       return false;
     }
     if (this.goal_val> 100 || this.goal_val<1){
-      alert("Goal value needs to be between 1% and 100%")
+      alert("Goal value needs to be a number between 1% and 100%")
       return false;
     }
     if (this.goal_time_est == null) {
       alert("Time estimation must be filled out");
       return false;
     }
+    
 
     //pass validator and add goal
        this.addGoal();
@@ -836,6 +835,10 @@ export class ToDoListComponent {
   
     if (this.task_time_est == null) {
       alert("Time estimation must be filled out");
+      return false;
+    }
+    if (this.task_time_est < 1) {
+      alert("Time estimation must be at least 1 hr");
       return false;
     }
     //pass validator and add item

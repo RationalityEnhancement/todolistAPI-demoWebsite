@@ -69,11 +69,11 @@ export class InitComponent {
 
   }
   condition_validate(){
-    if (this.condition_code == "ai22"){ //treatment condition
+    if (this.condition_code == "11022"){ //treatment condition
       this.ai_method_result = true;
       this.route()
     }else{
-      if(this.condition_code=="control22"){ //random condition 
+      if(this.condition_code=="56022"){ //random condition 
         this.ai_method_result = false;
         this.route()
       }else{

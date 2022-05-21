@@ -26,9 +26,7 @@ import { nextTick } from "process";
         <label for="goal-time"></label>
         <input [(ngModel)]="goal_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)" name="goal-time-est">
 
-        <label for="goal-deadline" style="font-size: 12px; color: gray; margin-left: 6px">Enter a deadline (optional)</label>
-        <input [(ngModel)]="goal_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD)" name="goal-deadline">
-        <button type="submit" class="btn add" (click) = "validateForm_goal()">Add</button>
+       <button type="submit" class="btn add" (click) = "validateForm_goal()">Add</button>
 
       </form>
       

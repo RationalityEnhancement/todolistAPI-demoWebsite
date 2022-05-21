@@ -149,28 +149,31 @@ export class OptimizedListComponent implements OnInit {
   ngOnInit() {
     console.log("In Running Algo");
     this.optList = this.activatedRoute.snapshot.data['optList'];
+    console.log("print: ", this.optList);
     Globals.optTaskList = this.optList;
     console.log('API finished. In optimed page');
     console.log(this.optList);
 
     this.goalname_map = this.itemService.goalname_map
-    console.log("goalname_map: ", this.goalname_map)
+ //   console.log("goalname_map: ", this.goalname_map)
     this.goal_map = this.itemService.goal_map;
-    console.log("goal_map: ", this.goal_map)
+  //  console.log("goal_map: ", this.goal_map)
     this.project_list = this.itemService.project_list;
-    console.log("project list: ", this.project_list)
+ //   console.log("project list: ", this.project_list)
+
+    //turn value into points/hour 
+    this.optList.forEach((task, i) => {
+      console.log(this.optList[i])
+      var hr = parseFloat(task.nm.split("about ")[1].split(" hours")[0]);
+      var val = parseFloat(task.val.toString().split("/h")[0])
+      var new_val = val/hr
+      console.log("est_hr for a task: ", hr, " hrs / original val: ", val);
+      console.log("new val", new_val);
+      this.optList[i].val = new_val; // update new val => points/hr
+    });
+
     //sort optList by task value
-
-    // var val = this.optList[0]["val"]
-    // console.log("val", val, typeof(val));
-    // var val2 = this.optList[0].val
-    // console.log("val2", val2, typeof(val2));
-    // this.optList.sort(function(a,b)){
-    //   return parseFloat(a.val) - parseFloat(b.val)
-    // }
-    console.log("opt List before sortting: ", this.finalList);
-
-    this.optList = this.optList.sort((a, b) => parseFloat(b.val.toString(0)) - parseFloat(a.val.toString()))
+    this.optList = this.optList.sort((a, b) => b.val - a.val)
     console.log("sorted list by value of task: ", this.optList)
 
     //check optList, remove duplicated goals {g2, g1, g1, g2, g1} -> {g2, g1}
@@ -180,7 +183,7 @@ export class OptimizedListComponent implements OnInit {
       if (!this.finalList.includes(temp)) {
         this.finalList.push(temp);
       }
-      console.log("final List: ", this.finalList); // in the suggested order for users to follow
+   //   console.log("final List: ", this.finalList); // in the suggested order for users to follow
     }
     this.getGoalname(this.finalList);
     
@@ -244,7 +247,7 @@ export class OptimizedListComponent implements OnInit {
 
   getGoalname(finalList) {
     //display a prioritized list
-    console.log("finalList (in getGoalname): ", finalList);
+    console.log("finalList: ", finalList);
 
     let final_optList = [];
     for (let i = 0; i < finalList.length; i++) {
@@ -253,14 +256,14 @@ export class OptimizedListComponent implements OnInit {
       final_optList.push(i+1 + ". " +this.goal_map[finalList[i].slice(1,) - 1]);
     }
 
-    console.log("goalname_map: ", this.goalname_map);
-    console.log("goal_map ", this.goal_map);
-    console.log("final opt List: ", final_optList);
-    console.log("type: ",typeof(final_optList));
+  //  console.log("goalname_map: ", this.goalname_map);
+  //  console.log("goal_map ", this.goal_map);
+  //  console.log("final opt List: ", final_optList);
+ //   console.log("type: ",typeof(final_optList));
     // put the list in a string
     let final_optList_br = final_optList.join('\r\n');
-    console.log(final_optList_br)
-    console.log(typeof(final_optList_br))
+ //   console.log(final_optList_br)
+ //   console.log(typeof(final_optList_br))
     
     // other goals (goal 3-5)
     let final_othergoals = [];
@@ -274,12 +277,12 @@ export class OptimizedListComponent implements OnInit {
     //get children nodes in a list with the order of final list
     const top_priority_idx = this.project_list.findIndex(object => { return object.id === this.finalList[0] }) 
     const second_priority_idx = this.project_list.findIndex(object => { return object.id === this.finalList[1] }) 
-    console.log("priority idx: ", top_priority_idx, second_priority_idx)
+ //   console.log("priority idx: ", top_priority_idx, second_priority_idx)
   
-    console.log("get children list - children nodes only:")
+ //   console.log("get children list - children nodes only:")
     var ch_1 = this.project_list[top_priority_idx].ch
     var ch_2 = this.project_list[second_priority_idx].ch
-    console.log("children nodes -- ")
+ //   console.log("children nodes -- ")
     var ch_1list = []
     var ch_2list = []
 
@@ -295,12 +298,12 @@ export class OptimizedListComponent implements OnInit {
     //  console.log("object info of a child without #today: ", ch_2[i].nm.substring(0, ch[i].nm.length-6));
     ch_2list.push("-- " + ch_2[i].nm.substring(0, ch_2[i].nm.length-6).replace("~~", ": This step will take about "));
   }
-    console.log("print temp_arr: ", ch_1list)
-    console.log("print temp_arr: ", ch_2list)
+ //   console.log("print temp_arr: ", ch_1list)
+ //   console.log("print temp_arr: ", ch_2list)
     var ch_1list_str =ch_1list.join("\r\n");
     var ch_2list_str =ch_2list.join("\r\n");
-    console.log("print ch_1list_str: ", ch_1list_str)
-    console.log("print ch_2list_str: ", ch_2list_str)
+ //   console.log("print ch_1list_str: ", ch_1list_str)
+ //   console.log("print ch_2list_str: ", ch_2list_str)
 
 
     //after generating a list
@@ -310,9 +313,7 @@ export class OptimizedListComponent implements OnInit {
     const second_important_goal = document.getElementById("second_important_goal");
     second_important_goal.innerText = final_optList[1] + "\r\n"+ ch_2list_str;
     
-    console.log("final optList", this.final_optList)
     const othergoals = document.getElementById("othergoals");
-    console.log("othergoals", othergoals)
     othergoals.innerText = final_othergoals_str;
 
     return final_optList_br;

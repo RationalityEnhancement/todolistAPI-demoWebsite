@@ -12,13 +12,14 @@ import { InitComponent } from './init.component';
 @Component({
   selector: 'todo-list',
   template: `
-  <div class="btn top-fixed" (click)="openGoal($event)" ><div>Add Goals</div></div>
- 
-   
-   <div style="text-align: left; margin-top:10px; margin-left:20%; margin-right:15%; line-height:1.5; "> - Please add <b>two</b> or more milestones to your most important goal. <br>- Then, please tell us about <b>four</b> more goals of yours and add at least two milestones for each of them.<br> - Please estimate how valuable each of the additional goals is relative to your most valuable gaol on a scale from 0% to 100%.”
+
+  <h2 style="text-align: left; margin-top:10px; margin-left:20%; margin-right:15%;">Please follow the instructions bellow: </h2>
+   <div style="text-align: left; margin-top:10px; margin-left:20%; margin-right:15%; line-height:1.5; "> 1. Please add <b>two</b> or more milestones to your most important goal. <br>2. Then, please tell us about <b>four</b> more goals of yours and add at least two milestones for each of them.<br> 3. Please estimate how valuable each of the additional goals is relative to your most valuable goal on a scale from 0% to 100%.
    </div>
     
     <div style="text-align: left; margin-top:10px; margin-left:20%; margin-right:15%;  line-height:1.5; ">
+    <br>
+    <h2>What are goals and milestones?</h2>
     <b>Goal</b>: Something that you want to achieve. <br>
     <b>Milestones</b>: First steps along your path to achieving the goal that you could realistically accomplish in a few days or hours.<br>
     
@@ -149,7 +150,7 @@ import { InitComponent } from './init.component';
      
     <div class="goal-wrapper" id="goal-display" *ngIf = "goals.length > 0">
    
-    <div class="popup" (click)="myFunction_info()"  id="hoverText" style="text-align: left; margin-top:10px; margin-left:45%;cursor: pointer; color:blue;" ><img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > Icons
+    <div class="popup" (click)="myFunction_info()"  id="hoverText" style="text-align: left; margin-top:10px; margin-left:45%;cursor: pointer; color:blue; padding-bottom:10px;" ><img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > Icons
     <span  class="popuptext_info" id="myPopupInfo">
     
     <div class="icon plus" style="text-align:center;cursor:not-allowed; " ><div> +</div></div>
@@ -161,7 +162,8 @@ import { InitComponent } from './init.component';
    
     </span>
     </div>
-
+    <div class="btn top-fixed" style="padding-bottom:10px;"(click)="openGoal($event)" ><div>Add Goals</div></div>
+ 
 
     <ul>
         <li *ngFor = "let goal of goals" class="goal-item">
@@ -196,7 +198,7 @@ import { InitComponent } from './init.component';
           </div>
         </li>
       </ul>
-      <div id="loader" style="font-size: 20px; color: red; display:none; text-align:center;"> Please wait while the AI computes its recommendation</div> 
+      <div id="loader" style="font-size: 20px; color: red; display:none; text-align:center;"> Please wait while the AI computes its recommendation.</div> 
  
       <div class="btn bottom-fixed" (click)="route()" >Which of these goals should I focus on first?</div>
         </div>
@@ -510,8 +512,7 @@ export class ToDoListComponent {
   public ai_method_result = undefined;
   public route(){
    console.log("Condition - Using AI method? : ", Globals.ai_method_result)
-    const wait_msg = document.getElementById("loader")
-    wait_msg.style.display="block";
+    
     // console.log("Go to Optimized");
     var children_num_validator = true;
     var goals_num_validator = false
@@ -538,6 +539,11 @@ export class ToDoListComponent {
     if(goals_num_validator && children_num_validator){
       //check condition
       //go through each goal and set everything else task
+      Globals.goalList.forEach((goal,i) => {
+        console.log("before", Globals.goalList[i].time_est)
+        Globals.goalList[i].time_est += 1;
+        console.log(Globals.goalList[i].time_est)
+      });
       for (var i=0; i<this.goals.length; i++){
         var sum_task_time = 0;
         for (var j=0; j< this.goals[i].tasks.length; j++){
@@ -556,14 +562,20 @@ export class ToDoListComponent {
 
       }
       console.log("check condition: ", Globals.ai_method_result)
+      
+
       if(Globals.ai_method_result == true){
         console.log("treatment condition, go to optimized page")
         console.log(Globals.goalList);
+        const wait_msg = document.getElementById("loader")
+        wait_msg.style.display="block";
         this.router.navigateByUrl('/optimized')
 
       }else if(Globals.ai_method_result == false){ //random generated suggestion list
         console.log("control condition, go to result page")
         console.log(Globals.goalList);
+        const wait_msg = document.getElementById("loader")
+        wait_msg.style.display="block";
         this.router.navigateByUrl('/result')
 
       }
@@ -748,20 +760,39 @@ export class ToDoListComponent {
     });
     // console.log(item);
     if(this.task_desc != undefined){
-      
+      //check sum of task estimation
       // console.log(goal);
-      
+      var sum_time = 0;
       if('num_children' in goal){
-        // console.log("HAVE CHILD");
+         console.log("HAVE CHILD");
+        goal.tasks.forEach((task, i) => { // sum of existing tasks time estimation
+          console.log(goal.tasks[0])
+          console.log(sum_time, goal.tasks[i].time_est);
+          sum_time+=goal.tasks[i].time_est
+        });
+        var expected_time =  sum_time + this.task_time_est 
+        if (expected_time  > goal.time_est){
+          alert("The sum of your milestones' time estimations should not exceed the time estimation of the goal. \n Please change the time estimation of your milestone or your goal.")
+          this.task_time_est = undefined;
+          return false;
+        }
+        console.log(expected_time,sum_time, this.task_time_est);
         goal.tasks.push(item);
         goal.num_children += 1;
       
       }
       else{
-        // console.log("FIRST CHILD");
+         console.log("FIRST CHILD");
+        if (this.task_time_est > goal.time_est){
+          alert("The time estimation of a milestone should not exceed the time estimation of the goal. \n Please change the time estimation of your milestone or your goal.")
+          this.task_time_est = undefined;
+          return false;
+        }
+         
         goal.tasks = [];
         goal.tasks.push(item);
         goal.num_children = 1;
+        //sum_time = goal.tasks.time_e
        
       }
  
@@ -797,20 +828,20 @@ export class ToDoListComponent {
     }else{
       console.log("there's some input!");
     if (this.goal_desc == "") {
-      alert("Description must be filled out");
+      alert("The description must be filled out.");
       return false;
     }
     if (this.goal_val==null)
     {
-      alert("Goal value must be filled out (without '\%'");
+      alert("The goal value must be filled out (without '\%').");
       return false;
     }
     if (this.goal_val> 100 || this.goal_val<1){
-      alert("Goal value needs to be a number between 1% and 100%")
+      alert("The goal value needs to be a number between 1% and 100%.")
       return false;
     }
     if (this.goal_time_est == null) {
-      alert("Time estimation must be filled out");
+      alert("The time estimation must be filled out.");
       return false;
     }
     

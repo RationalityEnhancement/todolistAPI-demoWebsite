@@ -12,11 +12,11 @@ import { Item, outputItem } from "./item";
 
  
  
-  <h2>You will do best if you first prioritize this goal first:</h2>
+  <h2>You will do best if you you prioritize this goal first:</h2>
   <div id="most_important_goal" style=" font-size: 18px; white-space:pre-wrap;">placeholder for the most important goal</div>
   <br><br>
 
-  <h2>And then tackle your goal</h2>
+  <h2>And then tackle this goal:</h2>
   <div id="second_important_goal" style=" font-size: 18px; white-space:pre-wrap;">placeholder for the second most important goal</div>
 
   <br><br>

@@ -14,7 +14,7 @@ import { InitComponent } from './init.component';
   template: `
 
   <h2 style="text-align: left; margin-top:10px; margin-left:20%; margin-right:15%;">Please follow the instructions bellow: </h2>
-   <div style="text-align: left; margin-top:10px; margin-left:20%; margin-right:15%; line-height:1.5; "> 1. Please add <b>two</b> or more milestones to your most important goal. <br>2. Then, please tell us about <b>four</b> more goals of yours and add at least two milestones for each of them.<br> 3. Please estimate how valuable each of the additional goals is relative to your most valuable goal on a scale from 0% to 100%.
+   <div style="text-align: left; margin-top:10px; margin-left:20%; margin-right:15%; line-height:1.5; "> 1. Please add <b>two</b> or more milestones to your most important goal. <br>2. Then, please tell us about <b>four</b> more goals of yours and add at least two milestones for each of them.<br> 3. Please estimate how valuable each of the additional goals is relative to your most valuable goal on a scale from 1% to 100%.
    </div>
     
     <div style="text-align: left; margin-top:10px; margin-left:20%; margin-right:15%;  line-height:1.5; ">
@@ -49,7 +49,7 @@ import { InitComponent } from './init.component';
     <b>Description</b> 
     <br>Write down what you want to achieve (e.g., “Start my own business”)
     <br><br><b>Value</b>
-    <br>How valuable would it be for you to have achieved this goal on a scale from 0 to 100, where 0 means “I couldn’t care less.” and 100 means “Nothing could be more valuable to me.”? Don’t stress about the exact value. What matters most is that you assign higher values to the goals that are more important to you. If your first goal is twice as valuable to you as your second goal, then its value should be twice as high.  
+    <br>How valuable would it be for you to have achieved this goal on a scale from 1 to 100, where 1 means “I couldn’t care less.” and 100 means “Nothing could be more valuable to me.”? Don’t stress about the exact value. What matters most is that you assign higher values to the goals that are more important to you. If your first goal is twice as valuable to you as your second goal, then its value should be twice as high.  
     <br><br><b>Estimated Time</b>
     <br>How many hours will it take to achieve this goal or milestone? 
     <br></span>
@@ -539,11 +539,6 @@ export class ToDoListComponent {
     if(goals_num_validator && children_num_validator){
       //check condition
       //go through each goal and set everything else task
-      Globals.goalList.forEach((goal,i) => {
-        console.log("before", Globals.goalList[i].time_est)
-        Globals.goalList[i].time_est += 1;
-        console.log(Globals.goalList[i].time_est)
-      });
       for (var i=0; i<this.goals.length; i++){
         var sum_task_time = 0;
         for (var j=0; j< this.goals[i].tasks.length; j++){
@@ -554,12 +549,13 @@ export class ToDoListComponent {
         }
         var temp_time = this.goals[i].time_est - sum_task_time
         console.log("temp time", temp_time)
+        if(temp_time >0){ //add the "everything else" task if there's time left
         var item = <Item>({name: "everything else", time_est: temp_time, deadline: undefined, today: undefined })
         console.log("item", item)
         this.goals[i].tasks.push(item);
         this.goals[i].num_children += 1;
         console.log("show the goal", this.goals[i])
-
+        }
       }
       console.log("check condition: ", Globals.ai_method_result)
       

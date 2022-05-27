@@ -7,7 +7,7 @@ import { Globals } from "../globals";
 @Injectable() 
 export class ItemService {
     // private gamifyUrl: string = 'http:///127.0.0.1:6789/api/constant/basic/30/14/inf/0/7000/0/60/t/2/10/tree/u123/getTasksForToday'
-    private gamifyUrl: string = 'https://aqueous-hollows-34193.herokuapp.com/api/smdp/mdp/30/14/inf/0/inf/0/inf/false/0/max/0.999999/0.1/2/1.39/0.0001/0.01/tree/__test__/getTasksForToday'
+    private gamifyUrl: string = 'https://yellow-tree.herokuapp.com/api/greedy/mdp/45/14/inf/0/inf/0/inf/0/no_scaling/true/0/tree/test/getTasksForToday'
     constructor(private http: HttpClient) {}
 
     public goalname_map = {};//add a goalname map
@@ -64,7 +64,7 @@ export class ItemService {
         let list = [];
         let obj = {
             id: "_",
-            nm: "#HOURS_TYPICAL ==12",
+            nm: "#HOURS_TYPICAL ==10000",
             lm: 0
         };
         list.push(obj);
@@ -77,7 +77,7 @@ export class ItemService {
         let list = [];
         let obj = {
             id: "_",
-            nm: "#HOURS_TODAY ==12",
+            nm: "#HOURS_TODAY ==10000",
             lm: 0
         };
         list.push(obj);

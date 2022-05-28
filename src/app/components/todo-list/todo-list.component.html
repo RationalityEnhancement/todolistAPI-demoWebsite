@@ -1,0 +1,172 @@
+<div class="btn top-fixed" (click)="openGoal($event)" ><div>Add Goals</div></div>
+ 
+   
+<div style="text-align: center; margin-top:10px; color: red;"> Please tell us about <b>5</b> or more of your goals and list at least <b>two</b> subgoals for each of them.</div>
+ 
+ <div style="text-align: left; margin-top:10px; margin-left:20%; margin-right:15%;">
+ <b>Goal</b>: Something that you need to or want to achieve. <br>
+ <b>Subgoal</b>: A milestone along your path to achieving the goal that you could realistically accomplish in a few days or hours.<br>
+ 
+ <div class="popup" (click)="myFunction_example()" id="hoverText" style=" text-align: left; margin-top:10px;  cursor: pointer; color:blue;" >
+ <img src="{{imageUrls['information.png']}}" alt="info icon" width="20px" height="20px" > Example for a good goal
+ <span  class="popuptext" id="myPopup_example">
+ We recommend choosing an ongoing project, such as “write the term paper for my English class”, “start my own business”, “learn programming”, or “get a good job”, that you can work on in the next 7 days.
+ <br><br>
+ In comparison, "cooking dinner on X'mas" isn't a suitable goal. Ideally, your goal can be broken down into a series of subgoals.
+ <br><br>
+
+ 
+ <b>Example</b>:
+ <br>Goal: Write a  term paper for my English class (Value: 5000)
+ <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Brainstorm potential topics [2 hrs]
+ <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Choose a topic [1 hrs]
+ <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Read up on the chosen topic [10 hrs]
+ <br> &nbsp;&nbsp;&nbsp;&nbsp;|----Outline the paper [3hr]
+ <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and so on... 
+ </span>
+ </div>
+
+<br>
+ <div class="popup" (click)="myFunction()" id="hoverText" style=" text-align: left; margin-top:10px; cursor: pointer; color:blue;" >
+ <img src="{{imageUrls['information.png']}}" alt="info icon" width="20px" height="20px" > Which information should I enter?
+ <span  class="popuptext" id="myPopup">
+ <b>Description</b> 
+ <br>Write down what you want to achieve (e.g., “Start my own business”)
+ <br><br><b>Value</b>
+ <br>How valuable would it be for you to have achieved this goal on a scale from 0 to 1000, where 0 means “I couldn’t care less.” and 1000 means “Nothing could be more valuable to me.”? Don’t stress about the exact value. What matters most is that you assign higher values to the goals that are more important to you. If your first goal is twice as valuable to you as your second goal, then its value should be twice as high.  
+ <br><br><b>Estimated Time</b>
+ <br>How many hours will it take to achieve this (sub)goal? 
+ <br><br><b>Deadline</b>
+ <br>If there is a deadline for this (sub)goal, then please fill it in!
+
+ <br></span>
+</div>
+<br>
+<div class="popup" (click)="myFunction_finish()" id="hoverText" style=" text-align: left; margin-top:10px; cursor: pointer; color:blue;" >
+ <img src="{{imageUrls['information.png']}}" alt="info icon" width="20px" height="20px" > What to do when I finish adding goals?
+ 
+ <span  class="popuptext" id="myPopup_finish">
+ <b>Next step</b> 
+ <br>Please click on <b>Which of these goals should I focus on first?</b> button when you finish.
+ You will receive our app’s recommendation in a few seconds.
+ 
+ <br></span>
+</div>
+
+</div>
+
+
+
+ <div class="form-popup" id="task-form" *ngIf = "task_form_open == true">
+   
+   <form class="form-container">
+     <h1>Add Subgoal in Goal {{goal_opened.name}}</h1>
+     <label for="item-desc"></label>
+     <input [(ngModel)]="task_desc" type="text" placeholder="Subgoal Description (*Required)" name="item-desc" required>
+
+     <label for="item-time"></label>
+     <input [(ngModel)]="task_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)" name="item-time-est" required >
+
+     <label for="item-deadline"></label>
+     <input [(ngModel)]="task_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD) (optional)" name="item-deadline">
+    
+     <button type="submit" class="btn add" (click)="validateForm_task($event)">Add</button>
+     <button type="submit" class="btn cancel" (click)="closeItem($event)">Cancel</button>
+   </form>
+ </div>
+
+ <div class="form-popup" id="goal-form" *ngIf = "goal_form_open == true">
+   <form class="form-container">
+     <h1>Add Goal</h1>
+     <label for="goal-desc"></label>
+     <input [(ngModel)]="goal_desc" type="text" placeholder="Goal Description (*Required)" name="goal-desc" required>
+
+     <label for="goal-val"></label>
+     <input [(ngModel)]="goal_val" type="number" placeholder="Goal Value (0-9999) (*Required)" name="goal-val"  min="0" max="9999" required>
+
+     <label for="goal-time"></label>
+     <input [(ngModel)]="goal_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)" name="goal-time-est">
+
+     <label for="goal-deadline" style="font-size: 12px; color: gray; margin-left: 6px">Enter a deadline (optional)</label>
+     <input [(ngModel)]="goal_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD)" name="goal-deadline">
+    
+     <button type="submit" class="btn add" (click) = "validateForm_goal($event)">Add</button>
+     <button type="submit" class="btn cancel" (click)="closeGoal($event)">Cancel</button>
+   </form>
+   </div>
+
+ 
+ <div class="form-popup" id="edit-goal-form" *ngIf = "goal_form_open == true">
+   <form class="form-container">
+     <h1>Edit Goal: {{goal_opened.name.name}}</h1>
+     <h4>Only enter what you want to change.</h4>
+     <label for="goal-desc" style="font-size: 12px; color: gray; margin-left: 6px">Goal Name</label>
+     <input [(ngModel)]="goal_desc"  type="text" placeholder={{goal_opened.name.name}} name="goal-desc" required>
+
+     <label for="goal-val" style="font-size: 12px; color: gray; margin-left: 6px"> Goal Value</label>
+     <input [(ngModel)]="goal_val" type="number" placeholder={{goal_opened.name.value}} name="goal-val"  min="0" max="9999" required>
+
+     <label for="goal-time" style="font-size: 12px; color: gray; margin-left: 6px">Goal Time Estimation (hrs)</label>
+     <input [(ngModel)]="goal_time_est" type="number" placeholder={{goal_opened.name.time_est}} name="goal-time-est">
+
+     <label for="goal-deadline" style="font-size: 12px; color: gray; margin-left: 6px">Enter a deadline (optional)</label>
+     <input [(ngModel)]="goal_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD)" name="goal-deadline">
+    
+     <button type="submit" class="btn add" (click) = "updateGoal($event, goal_opened.name)">Submit</button>
+     <button type="submit" class="btn cancel" (click)="closeGoal($event)">Cancel</button>
+   </form>
+   </div>
+
+
+   <div class="btn bottom-fixed" (click)="route()" >Which of these goals should I focus on first?</div>
+ 
+ 
+ <div class="goal-wrapper" id="goal-display" *ngIf = "goals.length > 0">
+
+ <div class="popup" (click)="myFunction_info()"  id="hoverText" style="text-align: left; margin-top:10px; margin-left:45%;cursor: pointer; color:blue;" ><img src="{{imageUrls['information.png']}}" alt="info icon" width="20px" height="20px" > Icons
+ <span  class="popuptext_info" id="myPopupInfo">
+ 
+ <div class="icon plus" style="text-align:center;cursor:not-allowed; " ><div> +</div></div>
+ <span>Add a subgoal </span><br>
+ <div class="icon plus"  style="text-align:center; cursor:not-allowed"><div> -</div></div>
+ <span>Delete the goal  </span>
+ <div style="cursor:not-allowed; padding-left:5px;  "><img src="{{imageUrls['edit_icon.png']}}" alt="edit icon" width="20px" height="20px" >       Edit the goal</div>
+ 
+
+ </span>
+ </div>
+
+
+ <ul>
+     <li *ngFor = "let goal of goals" class="goal-item">
+       <div> Goal: <b>{{goal.name}}</b> <br> Value: {{goal.value}} <br>Time Estimation:  {{goal.time_est}} hr
+       <br> Deadline: / {{goal.deadline}}  
+       <div>
+           <div class="icon plus" (click)="openItem($event, goal)"><div>+</div></div>
+           <div class="icon plus" (click)="deleteGoal($event, goal)" id= "hoverText" ><div>-</div></div>
+           <div style= "cursor:pointer;" (click)="editGoal($event, goal)" ><img src="{{imageUrls['edit_icon.png']}}" alt="edit icon" width="20px" height="20px" > </div>
+         </div>
+         <div *ngIf = "goal.tasks !== undefined">
+           <div *ngIf = "goal.tasks.length > 0">
+           <!--<div id="goal-sum-time" > Time Estimation:  {{goal.goal_time_est}} </div>-->
+   
+           <div> ------ Subgoals ------
+           <ul>
+               <li *ngFor = "let task of goal.tasks" class="task-item">
+                  <!--
+                   -->
+                   <div> {{task.name}} <br/> Time: {{task.time_est}} hr
+                   <br> Deadline: / {{task.deadline}}  
+                    <div class="del-wrapper"> 
+                       <div class="del" (click)="deleteItem($event, goal, task)"><div>-</div></div>
+                     </div>
+                   </div>
+                 </li>
+               </ul>
+               </div>
+           </div>
+         </div>
+       </div>
+     </li>
+   </ul>
+ </div>

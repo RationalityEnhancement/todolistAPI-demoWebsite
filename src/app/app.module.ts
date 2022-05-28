@@ -1,24 +1,26 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-
-import { InitComponent } from './views/init.component'
-import { ToDoListComponent } from './views/todo-list.component'
-import { LoginComponent } from './views/login.component'
 
 import {MatSliderModule} from '@angular/material/slider';
 import {MatButtonModule} from '@angular/material/button';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+
+import { AppRoutingModule } from './app-routing.module';
+
+import { AppComponent } from './app.component';
+import { InitComponent } from './components/init/init.component'
+import { ToDoListComponent } from './components/todo-list/todo-list.component'
+import { LoginComponent } from './components/login/login.component'
+import { OptimizedListComponent } from './components/optimized-list/optimized-list.component';
+
 import { ItemService } from './provider/item.service';
 import { ImageUrlService } from './provider/image-url.service';
-import { OptimizedListComponent } from './views/optimized-list.component';
 import { ResolveGuard } from './guards/resolve.guard';
 
 

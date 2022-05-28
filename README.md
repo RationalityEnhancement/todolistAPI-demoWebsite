@@ -1,10 +1,10 @@
 # Demo Website for REG ToDo List Gamification Project"
 
 ## Page information
- ```src/app/views/todo-list.component.ts```
+ ```src/app/components/todo-list/todo-list.component.ts```
  is the file which contains the front-end where the user can enter the goals and tasks.
  
- ```src/app/views/optimized-list.component.ts```
+ ```src/app/components/optimized-list/optimized-list.component.ts```
  is the file which contains the front-end where the optimized gamified to-do list is shown.
  
 ```src/app/provder/item.service.ts``` 

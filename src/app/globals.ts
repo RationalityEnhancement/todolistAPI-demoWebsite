@@ -1,4 +1,4 @@
-import { Item, Goal, outputItem } from "./views/item"
+import { Item, Goal, outputItem } from "./interfaces/item"
 
 
 

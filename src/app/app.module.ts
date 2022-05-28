@@ -17,6 +17,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { ItemService } from './provider/item.service';
+import { ImageUrlService } from './provider/image-url.service';
 import { OptimizedListComponent } from './views/optimized-list.component';
 import { ResolveGuard } from './guards/resolve.guard';
 
@@ -53,8 +54,11 @@ const routes: Routes = [
     MatFormFieldModule,
     MatInputModule 
   ],
-  providers: [ ItemService, ResolveGuard],
-  
+  providers: [ 
+    ItemService,
+    ImageUrlService,
+    ResolveGuard
+  ],
   exports: [
     RouterModule
   ],

@@ -1,5 +1,6 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { ImageUrlService } from "../provider/image-url.service";
 @Component({
   selector: "init",
   template: `
@@ -9,7 +10,7 @@ import { Router } from "@angular/router";
 
     <div class="logo-wrapper">
 
-      <img src="./assets/images/logo.png"/>
+      <img src={{logoUrl}}/>
       
     </div>
 
@@ -57,13 +58,18 @@ import { Router } from "@angular/router";
 
     `,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InitComponent {
 
-  constructor(public router: Router) {
-
+  constructor(
+    public router: Router,
+    private imagUrlService: ImageUrlService
+  ) {}
+  
+  public get logoUrl() {
+    return this.imagUrlService.createImageUrl('logo.png');
   }
-
   
   public route(){
 

@@ -1,12 +1,9 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {filter, map, min, startWith} from 'rxjs/operators';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Globals } from '../globals';
-import { Goal, Item} from './item';
-import { getAllLifecycleHooks } from '@angular/compiler/src/lifecycle_reflector';
-import { Timestamp } from 'rxjs/internal/operators/timestamp';
+import { Goal, Item } from './item';
+import { ImageUrlService } from '../provider/image-url.service';
 
 
 @Component({
@@ -22,7 +19,7 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
     <b>Subgoal</b>: A milestone along your path to achieving the goal that you could realistically accomplish in a few days or hours.<br>
     
     <div class="popup" (click)="myFunction_example()" id="hoverText" style=" text-align: left; margin-top:10px;  cursor: pointer; color:blue;" >
-    <img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > Example for a good goal
+    <img src="{{imageUrls['information.png']}}" alt="info icon" width="20px" height="20px" > Example for a good goal
     <span  class="popuptext" id="myPopup_example">
     We recommend choosing an ongoing project, such as “write the term paper for my English class”, “start my own business”, “learn programming”, or “get a good job”, that you can work on in the next 7 days.
     <br><br>
@@ -42,7 +39,7 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
 
 <br>
     <div class="popup" (click)="myFunction()" id="hoverText" style=" text-align: left; margin-top:10px; cursor: pointer; color:blue;" >
-    <img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > Which information should I enter?
+    <img src="{{imageUrls['information.png']}}" alt="info icon" width="20px" height="20px" > Which information should I enter?
     <span  class="popuptext" id="myPopup">
     <b>Description</b> 
     <br>Write down what you want to achieve (e.g., “Start my own business”)
@@ -57,7 +54,7 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
 </div>
 <br>
 <div class="popup" (click)="myFunction_finish()" id="hoverText" style=" text-align: left; margin-top:10px; cursor: pointer; color:blue;" >
-    <img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > What to do when I finish adding goals?
+    <img src="{{imageUrls['information.png']}}" alt="info icon" width="20px" height="20px" > What to do when I finish adding goals?
     
     <span  class="popuptext" id="myPopup_finish">
     <b>Next step</b> 
@@ -152,14 +149,14 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
     
     <div class="goal-wrapper" id="goal-display" *ngIf = "goals.length > 0">
    
-    <div class="popup" (click)="myFunction_info()"  id="hoverText" style="text-align: left; margin-top:10px; margin-left:45%;cursor: pointer; color:blue;" ><img src="assets/images/information.png" alt="info icon" width="20px" height="20px" > Icons
+    <div class="popup" (click)="myFunction_info()"  id="hoverText" style="text-align: left; margin-top:10px; margin-left:45%;cursor: pointer; color:blue;" ><img src="{{imageUrls['information.png']}}" alt="info icon" width="20px" height="20px" > Icons
     <span  class="popuptext_info" id="myPopupInfo">
     
     <div class="icon plus" style="text-align:center;cursor:not-allowed; " ><div> +</div></div>
     <span>Add a subgoal </span><br>
     <div class="icon plus"  style="text-align:center; cursor:not-allowed"><div> -</div></div>
     <span>Delete the goal  </span>
-    <div style="cursor:not-allowed; padding-left:5px;  "><img src="assets/images/Edit_icon.svg.png" alt="edit icon" width="20px" height="20px" >       Edit the goal</div>
+    <div style="cursor:not-allowed; padding-left:5px;  "><img src="{{imageUrls['edit_icon.png']}}" alt="edit icon" width="20px" height="20px" >       Edit the goal</div>
     
    
     </span>
@@ -173,7 +170,7 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
           <div>
               <div class="icon plus" (click)="openItem($event, goal)"><div>+</div></div>
               <div class="icon plus" (click)="deleteGoal($event, goal)" id= "hoverText" ><div>-</div></div>
-              <div style= "cursor:pointer;" (click)="editGoal($event, goal)" ><img src="assets/images/Edit_icon.svg.png" alt="edit icon" width="20px" height="20px" > </div>
+              <div style= "cursor:pointer;" (click)="editGoal($event, goal)" ><img src="{{imageUrls['edit_icon.png']}}" alt="edit icon" width="20px" height="20px" > </div>
             </div>
             <div *ngIf = "goal.tasks !== undefined">
               <div *ngIf = "goal.tasks.length > 0">
@@ -436,7 +433,8 @@ import { Timestamp } from 'rxjs/internal/operators/timestamp';
         background-position: center center;
       }
     `
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ToDoListComponent {
@@ -471,10 +469,19 @@ export class ToDoListComponent {
 
   public items = Globals.taskList
   public goals = Globals.goalList
+
+  private images = ['information.png', 'edit_icon.png'];
   
 
-  constructor(public router: Router) {
+  constructor(
+    public router: Router,
+    private imageUrlService: ImageUrlService
+    ) {
 
+  }
+
+  get imageUrls() {
+    return this.imageUrlService.createImageUrls(this.images);
   }
 
 

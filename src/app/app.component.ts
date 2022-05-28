@@ -1,6 +1,5 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { Globals } from './globals';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +12,8 @@ import { Globals } from './globals';
 
 
   `,
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
 })
 export class AppComponent implements AfterViewInit {
 

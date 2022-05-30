@@ -1,4 +1,4 @@
-<div class="btn top-fixed" (click)="openGoal($event)" ><div>Add Goals</div></div>
+<div class="btn top-fixed" (click)="openGoal()" ><div>Add Goals</div></div>
  
    
 <div style="text-align: center; margin-top:10px; color: red;"> Please tell us about <b>5</b> or more of your goals and list at least <b>two</b> subgoals for each of them.</div>
@@ -7,9 +7,10 @@
  <b>Goal</b>: Something that you need to or want to achieve. <br>
  <b>Subgoal</b>: A milestone along your path to achieving the goal that you could realistically accomplish in a few days or hours.<br>
  
- <div class="popup" (click)="myFunction_example()" id="hoverText" style=" text-align: left; margin-top:10px;  cursor: pointer; color:blue;" >
- <img src="{{imageUrls['information.png']}}" alt="info icon" width="20px" height="20px" > Example for a good goal
- <span  class="popuptext" id="myPopup_example">
+ <div class="popup" (click)="toggleInformationPopup('goalExample')" id="hoverText" style=" text-align: left; margin-top:10px;  cursor: pointer; color:blue;" >
+ <img [src]="imageUrls['information.png']" alt="info icon" width="20px" height="20px" > Example for a good goal
+ 
+ <span class="popuptext" [class.show] = "currentInformationPopup == 'goalExample'">
  We recommend choosing an ongoing project, such as “write the term paper for my English class”, “start my own business”, “learn programming”, or “get a good job”, that you can work on in the next 7 days.
  <br><br>
  In comparison, "cooking dinner on X'mas" isn't a suitable goal. Ideally, your goal can be broken down into a series of subgoals.
@@ -27,9 +28,9 @@
  </div>
 
 <br>
- <div class="popup" (click)="myFunction()" id="hoverText" style=" text-align: left; margin-top:10px; cursor: pointer; color:blue;" >
- <img src="{{imageUrls['information.png']}}" alt="info icon" width="20px" height="20px" > Which information should I enter?
- <span  class="popuptext" id="myPopup">
+ <div (click)="toggleInformationPopup('information')" class="popup" id="hoverText" style=" text-align: left; margin-top:10px; cursor: pointer; color:blue;" >
+ <img [src]="imageUrls['information.png']" alt="info icon" width="20px" height="20px" > Which information should I enter?
+ <span class="popuptext" [class.show] = "currentInformationPopup == 'information'">
  <b>Description</b> 
  <br>Write down what you want to achieve (e.g., “Start my own business”)
  <br><br><b>Value</b>
@@ -42,10 +43,10 @@
  <br></span>
 </div>
 <br>
-<div class="popup" (click)="myFunction_finish()" id="hoverText" style=" text-align: left; margin-top:10px; cursor: pointer; color:blue;" >
- <img src="{{imageUrls['information.png']}}" alt="info icon" width="20px" height="20px" > What to do when I finish adding goals?
+<div class="popup" (click)="toggleInformationPopup('finishGoals')" id="hoverText" style=" text-align: left; margin-top:10px; cursor: pointer; color:blue;" >
+ <img [src]="imageUrls['information.png']" alt="info icon" width="20px" height="20px" > What to do when I finish adding goals?
  
- <span  class="popuptext" id="myPopup_finish">
+ <span class="popuptext" [class.show] = "currentInformationPopup == 'finishGoals'">
  <b>Next step</b> 
  <br>Please click on <b>Which of these goals should I focus on first?</b> button when you finish.
  You will receive our app’s recommendation in a few seconds.
@@ -57,7 +58,7 @@
 
 
 
- <div class="form-popup" id="task-form" *ngIf = "task_form_open == true">
+ <div class="form-popup" id="task-form" *ngIf = "currentGoalForm === 'task'">
    
    <form class="form-container">
      <h1>Add Subgoal in Goal {{goal_opened.name}}</h1>
@@ -71,11 +72,11 @@
      <input [(ngModel)]="task_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD) (optional)" name="item-deadline">
     
      <button type="submit" class="btn add" (click)="validateForm_task($event)">Add</button>
-     <button type="submit" class="btn cancel" (click)="closeItem($event)">Cancel</button>
+     <button type="submit" class="btn cancel" (click)="closeForm()">Cancel</button>
    </form>
  </div>
 
- <div class="form-popup" id="goal-form" *ngIf = "goal_form_open == true">
+ <div class="form-popup" *ngIf = "currentGoalForm === 'goal'">
    <form class="form-container">
      <h1>Add Goal</h1>
      <label for="goal-desc"></label>
@@ -91,60 +92,56 @@
      <input [(ngModel)]="goal_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD)" name="goal-deadline">
     
      <button type="submit" class="btn add" (click) = "validateForm_goal($event)">Add</button>
-     <button type="submit" class="btn cancel" (click)="closeGoal($event)">Cancel</button>
+     <button type="submit" class="btn cancel" (click)="closeForm()">Cancel</button>
    </form>
    </div>
 
  
- <div class="form-popup" id="edit-goal-form" *ngIf = "goal_form_open == true">
+ <div class="form-popup" id="edit-goal-form" *ngIf = "currentGoalForm === 'editGoal'">
    <form class="form-container">
-     <h1>Edit Goal: {{goal_opened.name.name}}</h1>
+     <h1>Edit Goal: {{goal_opened.name}}</h1>
      <h4>Only enter what you want to change.</h4>
      <label for="goal-desc" style="font-size: 12px; color: gray; margin-left: 6px">Goal Name</label>
-     <input [(ngModel)]="goal_desc"  type="text" placeholder={{goal_opened.name.name}} name="goal-desc" required>
+     <input [(ngModel)]="goal_desc"  type="text" placeholder={{goal_opened.name}} name="goal-desc" required>
 
      <label for="goal-val" style="font-size: 12px; color: gray; margin-left: 6px"> Goal Value</label>
-     <input [(ngModel)]="goal_val" type="number" placeholder={{goal_opened.name.value}} name="goal-val"  min="0" max="9999" required>
+     <input [(ngModel)]="goal_val" type="number" placeholder={{goal_opened.value}} name="goal-val"  min="0" max="9999" required>
 
      <label for="goal-time" style="font-size: 12px; color: gray; margin-left: 6px">Goal Time Estimation (hrs)</label>
-     <input [(ngModel)]="goal_time_est" type="number" placeholder={{goal_opened.name.time_est}} name="goal-time-est">
+     <input [(ngModel)]="goal_time_est" type="number" placeholder={{goal_opened.time_est}} name="goal-time-est">
 
      <label for="goal-deadline" style="font-size: 12px; color: gray; margin-left: 6px">Enter a deadline (optional)</label>
-     <input [(ngModel)]="goal_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD)" name="goal-deadline">
+     <input [(ngModel)]="goal_deadline" type="date" placeholder={{goal_opened.deadline}} name="goal-deadline">
     
-     <button type="submit" class="btn add" (click) = "updateGoal($event, goal_opened.name)">Submit</button>
-     <button type="submit" class="btn cancel" (click)="closeGoal($event)">Cancel</button>
+     <button type="submit" class="btn add" (click) = "updateGoal($event)">Submit</button>
+     <button type="submit" class="btn cancel" (click)="closeForm()">Cancel</button>
    </form>
    </div>
 
 
    <div class="btn bottom-fixed" (click)="route()" >Which of these goals should I focus on first?</div>
  
- 
  <div class="goal-wrapper" id="goal-display" *ngIf = "goals.length > 0">
-
- <div class="popup" (click)="myFunction_info()"  id="hoverText" style="text-align: left; margin-top:10px; margin-left:45%;cursor: pointer; color:blue;" ><img src="{{imageUrls['information.png']}}" alt="info icon" width="20px" height="20px" > Icons
- <span  class="popuptext_info" id="myPopupInfo">
- 
- <div class="icon plus" style="text-align:center;cursor:not-allowed; " ><div> +</div></div>
- <span>Add a subgoal </span><br>
- <div class="icon plus"  style="text-align:center; cursor:not-allowed"><div> -</div></div>
- <span>Delete the goal  </span>
- <div style="cursor:not-allowed; padding-left:5px;  "><img src="{{imageUrls['edit_icon.png']}}" alt="edit icon" width="20px" height="20px" >       Edit the goal</div>
- 
-
- </span>
- </div>
-
-
+  <div class="popup" (click)="toggleInformationPopup('legend')"  id="hoverText" style="text-align: left; margin-top:10px; margin-left:45%;cursor: pointer; color:blue;" ><img src="{{imageUrls['information.png']}}" alt="info icon" width="20px" height="20px" > Icons
+    <span  class="popuptext_info" [class.show] = "currentInformationPopup == 'legend'">
+    
+    <div class="icon plus" style="text-align:center;cursor:not-allowed; " ><div> +</div></div>
+    <span>Add a subgoal </span><br>
+    <div class="icon plus"  style="text-align:center; cursor:not-allowed"><div> -</div></div>
+    <span>Delete the goal  </span>
+    <div style="cursor:not-allowed; padding-left:5px;  "><img src="{{imageUrls['edit_icon.png']}}" alt="edit icon" width="20px" height="20px" >       Edit the goal</div>
+    
+   
+    </span>
+    </div>
  <ul>
      <li *ngFor = "let goal of goals" class="goal-item">
        <div> Goal: <b>{{goal.name}}</b> <br> Value: {{goal.value}} <br>Time Estimation:  {{goal.time_est}} hr
        <br> Deadline: / {{goal.deadline}}  
        <div>
-           <div class="icon plus" (click)="openItem($event, goal)"><div>+</div></div>
+           <div class="icon plus" (click)="openTask($event, goal)"><div>+</div></div>
            <div class="icon plus" (click)="deleteGoal($event, goal)" id= "hoverText" ><div>-</div></div>
-           <div style= "cursor:pointer;" (click)="editGoal($event, goal)" ><img src="{{imageUrls['edit_icon.png']}}" alt="edit icon" width="20px" height="20px" > </div>
+           <div style= "cursor:pointer;" (click)="editGoal($event, goal)" ><img [src]="imageUrls['edit_icon.png']" alt="edit icon" width="20px" height="20px" > </div>
          </div>
          <div *ngIf = "goal.tasks !== undefined">
            <div *ngIf = "goal.tasks.length > 0">

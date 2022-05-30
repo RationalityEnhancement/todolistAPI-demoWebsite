@@ -1,0 +1,27 @@
+:host {
+    height: 100%;
+
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: 18px;
+    color: #252525;
+
+
+    .btn {
+        width: 60%;
+        height: 56px;
+        line-height: 56px;
+        margin: 0 auto;
+        background-color: #BE9F89;
+        text-align: center;
+        border-radius: 40px 40px 40px 40px;
+        box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 3px 3px -2px rgba(0, 0, 0, 0.12), 0 1px 8px 0 rgba(0, 0, 0, 0.20);
+        cursor: pointer;
+    }
+
+    .bottom {
+        position: inherit;
+        bottom: 70px;
+        left: 10%;
+        margin-top: 50px
+    }
+}

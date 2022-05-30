@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 
 
   `,
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.scss'],
   encapsulation: ViewEncapsulation.ShadowDom
 })
 export class AppComponent implements AfterViewInit {

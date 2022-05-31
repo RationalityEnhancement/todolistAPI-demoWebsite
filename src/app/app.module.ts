@@ -1,8 +1,7 @@
-import { NgModule } from '@angular/core';
+import { DoBootstrap, Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
 import {MatSliderModule} from '@angular/material/slider';
@@ -11,45 +10,25 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 
-import { AppRoutingModule } from './app-routing.module';
-
 import { AppComponent } from './app.component';
-import { InitComponent } from './components/init/init.component'
 import { ToDoListComponent } from './components/todo-list/todo-list.component'
-import { LoginComponent } from './components/login/login.component'
-import { OptimizedListComponent } from './components/optimized-list/optimized-list.component';
 
 import { ItemService } from './provider/item.service';
 import { ImageUrlService } from './provider/image-url.service';
-import { ResolveGuard } from './guards/resolve.guard';
-
-
-const routes: Routes = [
-  { path: 'intro', component: InitComponent },
-  { path: 'list', component: ToDoListComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'optimized', component: OptimizedListComponent },
-  { path: '**', redirectTo: '/intro', pathMatch: 'full' },
-];
+import { createCustomElement } from '@angular/elements';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    InitComponent,
-    ToDoListComponent,
-    LoginComponent,
-    OptimizedListComponent
+    ToDoListComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    AppRoutingModule,
     HttpClientModule,
-    RouterModule.forRoot(routes),
     BrowserAnimationsModule,
-
     MatSliderModule,
     MatButtonModule,
     MatAutocompleteModule,
@@ -58,12 +37,18 @@ const routes: Routes = [
   ],
   providers: [ 
     ItemService,
-    ImageUrlService,
-    ResolveGuard
+    ImageUrlService  
   ],
-  exports: [
-    RouterModule
-  ],
-  bootstrap: [AppComponent]
+  entryComponents: [AppComponent]
 })
-export class AppModule { }
+export class AppModule implements DoBootstrap {
+
+  constructor(private injector: Injector) {
+    const elementSelector = 'reg-todo-list';
+
+    const webComponent = createCustomElement(AppComponent, {injector: this.injector});
+    customElements.define(elementSelector, webComponent);
+  }
+
+  ngDoBootstrap() {}
+ }

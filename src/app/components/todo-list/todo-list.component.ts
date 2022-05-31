@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ItemService } from 'src/app/provider/item.service';
 import { Globals } from '../../globals';
 import { Goal, Item } from '../../interfaces/item';
 import { ImageUrlService } from '../../provider/image-url.service';
@@ -42,11 +42,9 @@ export class ToDoListComponent {
   private images = ['information.png', 'edit_icon.png'];
 
   constructor(
-    public router: Router,
-    private imageUrlService: ImageUrlService
-  ) {
-
-  }
+    private imageUrlService: ImageUrlService,
+    private itemService: ItemService
+  ) {}
 
   public get taskList() {
     return Globals.taskList;
@@ -62,7 +60,7 @@ export class ToDoListComponent {
 
 
   get itemsList() {
-    return this.items
+    return this.items;
   }
 
   public route() {
@@ -86,7 +84,9 @@ export class ToDoListComponent {
     }
 
     if (goals_num_validator && children_num_validator) {
-      // this.router.navigateByUrl('/optimized')
+      this.itemService.requestOptimalTodoList().subscribe( goals => {
+        this.itemService.setOptimizedGoals(goals);
+      })
     } else {
       alert("Please fulfill the requirements before you continue!");
       return false;
@@ -103,7 +103,7 @@ export class ToDoListComponent {
   }
 
   openGoal() {
-    this.toggleForm('goal')
+    this.toggleForm('goal');
   }
 
   openTask(e?, goal?) {

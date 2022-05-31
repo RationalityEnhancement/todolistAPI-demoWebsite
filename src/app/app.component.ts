@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, Output, EventEmitter, Input, OnInit, OnDestroy } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
 import { outputItem, Goal } from './interfaces/item';
 import { ItemService } from './provider/item.service';
 
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @Output() public optimizedGoalsEvent = new EventEmitter<outputItem[]>();
 
-  private destroy$ = new BehaviorSubject<boolean>(false);
+  private destroy$ = new Subject<boolean>();
 
   constructor(private itemService: ItemService) { }
 

@@ -87,6 +87,10 @@ export class ItemService {
             );
     }
 
+    public listenToGoals(): Observable<Goal[]> {
+        return this.goals$.asObservable();
+    }
+
     public listenToOptimizedGoals(): Observable<outputItem[]> {
         return this.optimizedGoals$.asObservable();
     }

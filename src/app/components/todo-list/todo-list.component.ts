@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ItemService } from 'src/app/provider/item.service';
-import { Globals } from '../../globals';
 import { Goal, Item } from '../../interfaces/item';
 import { ImageUrlService } from '../../provider/image-url.service';
 
@@ -12,7 +12,7 @@ import { ImageUrlService } from '../../provider/image-url.service';
   styleUrls: ['./todo-list.component.scss']
 })
 
-export class ToDoListComponent {
+export class ToDoListComponent implements OnDestroy {
 
   public goal_val: number;
   public goal_desc: string;
@@ -23,44 +23,33 @@ export class ToDoListComponent {
   public task_deadline: string;
   public task_time_est: number;
   public task_today: string;
-  public task_form_open = true;
   public goal_opened = <Goal>({
     name: "DEFAULT",
   });
 
-  public optimalList = []
-  public barFormControl = new FormControl()
-  public validateGoalNum = false;
+  // public goals = Globals.goalList
 
-  public items = Globals.taskList
-  public goals = Globals.goalList
-
-  public currentInformationPopup: 'goalExample' | 'information' | 'finishGoals' | 'legend' |'none';
-
+  public goals: Goal[];
+  public currentInformationPopup: 'goalExample' | 'information' | 'finishGoals' | 'legend' | 'none';
   public currentGoalForm: 'goal' | 'task' | 'editGoal' | 'none';
+  public imageUrls: Record<string, string>;
 
   private images = ['information.png', 'edit_icon.png'];
+
+  private destroy$ = new Subject<boolean>();
 
   constructor(
     private imageUrlService: ImageUrlService,
     private itemService: ItemService
-  ) {}
+  ) {
+    this.listenToGoalChanges();
 
-  public get taskList() {
-    return Globals.taskList;
+    this.imageUrls = this.imageUrlService.createImageUrls(this.images);
   }
 
-  public get taskLength(): number {
-    return this.taskList.length
-  }
-
-  get imageUrls() {
-    return this.imageUrlService.createImageUrls(this.images);
-  }
-
-
-  get itemsList() {
-    return this.items;
+  public ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   public route() {
@@ -68,7 +57,7 @@ export class ToDoListComponent {
     var goals_num_validator = false
 
     for (let i = 0; i < this.goals.length; i++) {
-  
+
       if (this.goals[i].num_children == undefined || this.goals[i].num_children < 2) {
         children_num_validator = false;
         alert("Please add at least 2 subgoals for each goal");
@@ -84,7 +73,7 @@ export class ToDoListComponent {
     }
 
     if (goals_num_validator && children_num_validator) {
-      this.itemService.requestOptimalTodoList().subscribe( goals => {
+      this.itemService.requestOptimalTodoList().subscribe(goals => {
         this.itemService.setOptimizedGoals(goals);
       })
     } else {
@@ -119,20 +108,21 @@ export class ToDoListComponent {
   }
 
   addGoal(event?) {
-    var goal = <Goal>({
+    const newGoal: Goal = {
       name: this.goal_desc,
       time_est: this.goal_time_est,
       deadline: this.goal_deadline,
       value: this.goal_val
-    });
+    };
+
     if (this.goal_desc != undefined) {
-      this.goals.push(goal);
-      this.goal_opened = goal;
+      const goals = this.goals.concat(newGoal);
+      this.goal_opened = newGoal;
+
+      this.setGoals(goals);
     }
-    this.goal_desc = undefined;
-    this.goal_val = undefined;
-    this.goal_deadline = undefined;
-    this.goal_time_est = undefined;
+
+    this.resetGoalForm();
   }
 
   deleteGoal(event, goal) {
@@ -140,6 +130,8 @@ export class ToDoListComponent {
     if (index > -1) {
       this.goals.splice(index, 1);
     }
+
+    this.setGoals(this.goals);
   }
 
   updateGoal(event) {
@@ -162,53 +154,52 @@ export class ToDoListComponent {
     this.goal_opened.value = this.goal_val;
     this.goal_opened.deadline = this.goal_deadline;
 
-    const index = this.goals.findIndex(goal => goal.name === this.goal_opened.name);
+    const updatedGoals = this.updateGoalInGoals(this.goal_opened, this.goals);
 
-    this.goals[index] = { ...this.goals[index], ...this.goal_opened };
+    this.setGoals(updatedGoals);
 
-    this.goal_desc = undefined;
-    this.goal_val = undefined;
-    this.goal_deadline = undefined;
-    this.goal_time_est = undefined;
+    this.resetGoalForm();
   }
 
-  addItem(event, goal) {
-    var item = <Item>({
+  addItem(event, selectedGoal) {
+    const item: Item = {
       name: this.task_desc,
       time_est: this.task_time_est,
       deadline: this.task_deadline,
       today: this.task_today == "Not Today" ? false : true,
+    };
 
-    });
     if (this.task_desc != undefined) {
 
-      if ('num_children' in goal) {
-        goal.tasks.push(item);
-        goal.num_children += 1;
+      if ('num_children' in selectedGoal) {
+        selectedGoal.tasks.push(item);
+        selectedGoal.num_children += 1;
 
       }
       else {
-        goal.tasks = [];
-        goal.tasks.push(item);
-        goal.num_children = 1;
-
+        selectedGoal.tasks = [];
+        selectedGoal.tasks.push(item);
+        selectedGoal.num_children = 1;
       }
-
     }
-    this.task_desc = undefined;
-    this.task_today = undefined;
-    this.task_deadline = undefined;
-    this.task_time_est = undefined;
 
+    const updatedGoals = this.updateGoalInGoals(selectedGoal, this.goals);
+
+    this.setGoals(updatedGoals);
+
+    this.resetTaskForm();
   }
 
   deleteItem(event, goal, item) {
-
     const index = goal.tasks.indexOf(item);
     if (index > -1) {
       goal.tasks.splice(index, 1);
       goal.num_children -= 1;
     }
+
+    const updatedGoals = this.updateGoalInGoals(goal, this.goals);
+
+    this.setGoals(updatedGoals);
   }
 
 
@@ -261,7 +252,42 @@ export class ToDoListComponent {
       this.currentInformationPopup = 'none';
     } else {
       this.currentInformationPopup = popup;
-    } 
+    }
+  }
+
+  private listenToGoalChanges(): void {
+    this.itemService.listenToGoals()
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(goals => {
+        this.goals = goals;
+      });
+  }
+
+  private setGoals(goals: Goal[]): void {
+    this.itemService.setGoals(goals);
+  }
+
+  private updateGoalInGoals(selectedGoal: Goal, goals: Goal[]): Goal[] {
+    return goals.map(goal =>
+      goal.name === selectedGoal.name ? selectedGoal : goal
+    );
+  }
+
+  private resetGoalForm(): void {
+    this.goal_desc = undefined;
+    this.goal_val = undefined;
+    this.goal_deadline = undefined;
+    this.goal_time_est = undefined;
+  }
+
+  private resetTaskForm(): void {
+    this.task_desc = undefined;
+    this.task_today = undefined;
+    this.task_deadline = undefined;
+    this.task_time_est = undefined;
+
   }
 }
 

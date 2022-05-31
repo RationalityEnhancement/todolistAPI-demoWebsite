@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, Output, EventEmitter, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil, tap } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { outputItem, Goal } from './interfaces/item';
 import { ItemService } from './provider/item.service';
 
@@ -14,17 +14,19 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @Input() public set regGoals(goals: string) {
     if (!!goals) {
-      this.setGoals(goals);
+      // this.initializeGoals(goals);
     }
   }
 
   @Output() public optimizedGoalsEvent = new EventEmitter<outputItem[]>();
+  @Output() public goalsEvent = new EventEmitter<Goal[]>();
 
   private destroy$ = new Subject<boolean>();
 
   constructor(private itemService: ItemService) { }
 
   public ngOnInit(): void {
+    this.publishGoals();
     this.publishOptimizedGoals();
   }
 
@@ -34,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   }
 
-  private setGoals(goals: string): void {
+  private initializeGoals(goals: string): void {
     try {
       const parsedGoals: Goal[] = JSON.parse(goals);
 
@@ -58,7 +60,21 @@ export class AppComponent implements OnInit, OnDestroy {
       });
   }
 
+  private publishGoals(): void {
+    this.itemService.listenToGoals()
+    .pipe(
+      takeUntil(this.destroy$)
+    )
+    .subscribe(goals => {
+      this.dispatchGoals(goals);
+    })
+  }
+
   private dispatchOptimizedGoals(goals: outputItem[]): void {
     this.optimizedGoalsEvent.emit(goals);
+  }
+
+  private dispatchGoals(goals: Goal[]): void {
+    this.goalsEvent.emit(goals);
   }
 }

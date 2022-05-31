@@ -11,6 +11,26 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-  <app-root></app-root>
+  <reg-todo-list reg-goals='[   {
+    "name": "123",
+    "time_est": 20,
+    "value": 1321,
+    "tasks": [
+        {
+            "name": "321321",
+            "time_est": 10,
+            "today": true
+        },
+        {
+            "name": "4213215",
+            "time_est": 5,
+            "today": true
+        }
+    ],
+    "num_children": 2
+}]'></reg-todo-list>
 </body>
+
+<script>const el = document.querySelector('reg-todo-list');
+  el.addEventListener('myEvent', (event) => console.log(event.detail));</script>
 </html>

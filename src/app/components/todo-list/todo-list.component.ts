@@ -119,6 +119,7 @@ export class ToDoListComponent implements OnDestroy {
       const goals = this.goals.concat(newGoal);
       this.goal_opened = newGoal;
 
+      this.renumberGoals();
       this.setGoals(goals);
     }
 
@@ -131,6 +132,7 @@ export class ToDoListComponent implements OnDestroy {
       this.goals.splice(index, 1);
     }
 
+    this.renumberGoals();
     this.setGoals(this.goals);
   }
 
@@ -154,10 +156,7 @@ export class ToDoListComponent implements OnDestroy {
     this.goal_opened.value = this.goal_val;
     this.goal_opened.deadline = this.goal_deadline;
 
-    const updatedGoals = this.updateGoalInGoals(this.goal_opened, this.goals);
-
-    this.setGoals(updatedGoals);
-
+    this.adjustGoal(this.goal_opened);
     this.resetGoalForm();
   }
 
@@ -183,10 +182,7 @@ export class ToDoListComponent implements OnDestroy {
       }
     }
 
-    const updatedGoals = this.updateGoalInGoals(selectedGoal, this.goals);
-
-    this.setGoals(updatedGoals);
-
+    this.adjustGoal(selectedGoal);
     this.resetTaskForm();
   }
 
@@ -197,9 +193,7 @@ export class ToDoListComponent implements OnDestroy {
       goal.num_children -= 1;
     }
 
-    const updatedGoals = this.updateGoalInGoals(goal, this.goals);
-
-    this.setGoals(updatedGoals);
+    this.adjustGoal(goal);
   }
 
 
@@ -269,10 +263,21 @@ export class ToDoListComponent implements OnDestroy {
     this.itemService.setGoals(goals);
   }
 
-  private updateGoalInGoals(selectedGoal: Goal, goals: Goal[]): Goal[] {
-    return goals.map(goal =>
+  private renumberGoals(): void {
+    const renumberedGoals = this.goals.map((goal, index) => ({
+      ...goal,
+      code: `${index + 1}`
+    }));
+
+    this.goals = renumberedGoals;
+  }
+
+  private adjustGoal(selectedGoal: Goal): void {
+    const adjustedGoals =  this.goals.map(goal =>
       goal.name === selectedGoal.name ? selectedGoal : goal
     );
+
+    this.setGoals(adjustedGoals);
   }
 
   private resetGoalForm(): void {

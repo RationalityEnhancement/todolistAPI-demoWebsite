@@ -1,7 +1,9 @@
 import { Component, ViewEncapsulation, Output, EventEmitter, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { CompliceGoal } from './interfaces/Complice-Goal';
 import { outputItem, Goal } from './interfaces/item';
+import { AdapterService } from './provider/adapter.service';
 import { ItemService } from './provider/item.service';
 
 @Component({
@@ -14,7 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @Input() public set regGoals(goals: string) {
     if (!!goals) {
-      // this.initializeGoals(goals);
+      this.initializeGoals(goals);
     }
   }
 
@@ -23,7 +25,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<boolean>();
 
-  constructor(private itemService: ItemService) { }
+  constructor(
+    private itemService: ItemService,
+    private adapterService: AdapterService
+    ) { }
 
   public ngOnInit(): void {
     this.publishGoals();
@@ -38,9 +43,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private initializeGoals(goals: string): void {
     try {
-      const parsedGoals: Goal[] = JSON.parse(goals);
+      const compliceGoals = this.adapterService.parseGoals<CompliceGoal>(goals);
+      const regGoals = this.adapterService.toRegGoals(compliceGoals);
 
-      this.itemService.setGoals(parsedGoals);
+      this.itemService.setGoals(regGoals);
     } catch (e) {
       this.handleError();
     }

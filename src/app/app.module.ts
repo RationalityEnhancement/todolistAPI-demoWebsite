@@ -16,6 +16,7 @@ import { ToDoListComponent } from './components/todo-list/todo-list.component'
 import { ItemService } from './provider/item.service';
 import { ImageUrlService } from './provider/image-url.service';
 import { createCustomElement } from '@angular/elements';
+import { AdapterService } from './provider/adapter.service';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { createCustomElement } from '@angular/elements';
   ],
   providers: [ 
     ItemService,
-    ImageUrlService  
+    ImageUrlService,
+    AdapterService
   ],
   entryComponents: [AppComponent]
 })

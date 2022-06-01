@@ -1,12 +1,15 @@
 
 
 export interface Goal{
+    id?: string,
+    code?: string,
     name: string,
     num_children?: number,
     time_est?: number,
     deadline?: string,
     value?: number,
     tasks?: Item[],
+    color?: string,
 }
 
 export interface Item{

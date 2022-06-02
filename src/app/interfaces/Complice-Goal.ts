@@ -1,5 +1,5 @@
 export interface CompliceGoal {
-    _id: string;
+    _id?: string;
     code: string;
     name: string;
     color: string;
@@ -7,7 +7,10 @@ export interface CompliceGoal {
     oneliner: string;
     startdate: string;
     enddate: string;
-    stats: {
+    reviewQuestions?: object,
+    justCreated?: boolean;
+    topPriority: object;
+    stats?: {
         currentStreak: number;
         maxStreak: number;
         totalOutcomes: number;

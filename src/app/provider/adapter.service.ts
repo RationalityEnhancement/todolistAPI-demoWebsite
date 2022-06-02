@@ -15,25 +15,32 @@ export class AdapterService {
         return goals.map(goal => this.toRegGoal(goal)); 
     }
 
-    public toCompliceGoal(goal: Goal) {
-        // return {
-        //     _id: string;
-        //     code: string;
-        //     name: string;
-        //     color: string;
-        //     privacy: number;
-        //     oneliner: string;
-        //     startdate: string;
-        //     enddate: string;
-        //     stats: {
-        //         currentStreak: number;
-        //         maxStreak: number;
-        //         totalOutcomes: number;
-        //         totalPomos: number;
-        //         totalValue: number;
-        //         totalWorktime: number;
-        //     }
-        // }
+    public toCompliceGoals(goals: Goal[]): CompliceGoal[] {
+        return goals.map(goal => this.toCompliceGoal(goal));
+    }
+
+    private toCompliceGoal(goal: Goal): CompliceGoal {
+        const compliceProperties = {
+            "code": "5",
+            "color": "#1f0044",
+            "name": "a new goal",
+            "oneliner": "",
+            "privacy": 20,
+            "justCreated": true,
+            "startdate": "2022-06-01",
+            "enddate": "2061-11-03",
+            "$$hashKey": "object:91",
+            "topPriority": {}
+        }
+
+        const regGoalProperties = {
+            _id: goal.id,
+            code: goal.code,
+            name: goal.name,
+            enddate: goal.deadline
+        }
+
+        return { ...compliceProperties, ...regGoalProperties };
     }
 
     private toRegGoal(compliceGoal: CompliceGoal): Goal {

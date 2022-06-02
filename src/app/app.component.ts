@@ -21,7 +21,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   @Output() public optimizedGoalsEvent = new EventEmitter<outputItem[]>();
-  @Output() public goalsEvent = new EventEmitter<Goal[]>();
+  @Output() public goalsEvent = new EventEmitter<CompliceGoal[]>();
+  @Output() public removedGoalEvent = new EventEmitter<string>();
 
   private destroy$ = new Subject<boolean>();
 
@@ -39,6 +40,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
 
+  }
+
+  public dispatchRemovedGoal(removedGoalId: string) {
+    console.log(removedGoalId)
+    this.removedGoalEvent.emit(removedGoalId);
   }
 
   private initializeGoals(goals: string): void {
@@ -72,7 +78,8 @@ export class AppComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     )
     .subscribe(goals => {
-      this.dispatchGoals(goals);
+      const compliceGoals = this.adapterService.toCompliceGoals(goals);
+      this.dispatchGoals(compliceGoals);
     })
   }
 
@@ -80,7 +87,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.optimizedGoalsEvent.emit(goals);
   }
 
-  private dispatchGoals(goals: Goal[]): void {
+  private dispatchGoals(goals: CompliceGoal[]): void {
     this.goalsEvent.emit(goals);
   }
 }

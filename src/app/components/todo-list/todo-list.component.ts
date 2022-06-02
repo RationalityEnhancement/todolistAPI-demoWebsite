@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ItemService } from 'src/app/provider/item.service';
@@ -13,6 +13,8 @@ import { ImageUrlService } from '../../provider/image-url.service';
 })
 
 export class ToDoListComponent implements OnDestroy {
+
+  @Output() public removedGoalEvent = new EventEmitter<string>();
 
   public goal_val: number;
   public goal_desc: string;
@@ -116,11 +118,11 @@ export class ToDoListComponent implements OnDestroy {
     };
 
     if (this.goal_desc != undefined) {
-      const goals = this.goals.concat(newGoal);
+      this.goals = this.goals.concat(newGoal);
       this.goal_opened = newGoal;
 
       this.renumberGoals();
-      this.setGoals(goals);
+      this.setGoals(this.goals);
     }
 
     this.resetGoalForm();
@@ -134,6 +136,8 @@ export class ToDoListComponent implements OnDestroy {
 
     this.renumberGoals();
     this.setGoals(this.goals);
+
+    this.removedGoalEvent.emit(goal.id)
   }
 
   updateGoal(event) {
@@ -202,7 +206,6 @@ export class ToDoListComponent implements OnDestroy {
     if (this.goal_desc == undefined && this.goal_time_est == undefined && this.goal_val == undefined) {
       alert("please fill the form!")
     } else {
-      console.log("there's some input!");
       if (this.goal_desc == "") {
         alert("Description must be filled out");
         return false;

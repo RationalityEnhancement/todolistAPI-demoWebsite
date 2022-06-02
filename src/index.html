@@ -32,5 +32,8 @@
 </body>
 
 <script>const el = document.querySelector('reg-todo-list');
-  el.addEventListener('optimizedGoalsEvent', (event) => console.log(event.detail));</script>
+  el.addEventListener('optimizedGoalsEvent', (event) => console.log(event.detail));
+  el.addEventListener('goalsEvent', (event) => console.log(event.detail));
+  el.addEventListener('removedGoalEvent', (event) => console.log(event.detail));
+</script>
 </html>

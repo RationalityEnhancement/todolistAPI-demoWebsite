@@ -44,9 +44,10 @@ export class ToDoListComponent implements OnDestroy {
     private imageUrlService: ImageUrlService,
     private itemService: ItemService
   ) {
-    this.listenToGoalChanges();
-
     this.imageUrls = this.imageUrlService.createImageUrls(this.images);
+    
+    this.listenToGoalChanges();
+    
   }
 
   public ngOnDestroy(): void {
@@ -55,37 +56,23 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   public route() {
-    var children_num_validator = true;
-    var goals_num_validator = false
 
-    for (let i = 0; i < this.goals.length; i++) {
-
-      if (this.goals[i].num_children == undefined || this.goals[i].num_children < 2) {
-        children_num_validator = false;
-        alert("Please add at least 2 subgoals for each goal");
-        return false;
-      }
+    if(this.goals.some(goal => goal.tasks?.length < 2)) {
+      alert("Please add at least 2 subgoals for each goal");
+      return;
     }
 
-    if (this.goals.length >= 5) {
-      goals_num_validator = true;
-    } else {
+    if (this.goals.length < 5) {
       alert("Please add at least 5 goals");
-      return false;
+      return;
     }
 
-    if (goals_num_validator && children_num_validator) {
-      this.itemService.requestOptimalTodoList().subscribe(goals => {
-        this.itemService.setOptimizedGoals(goals);
-      })
-    } else {
-      alert("Please fulfill the requirements before you continue!");
-      return false;
-    }
-
+    this.itemService.requestOptimalTodoList().subscribe(goals => {
+      this.itemService.setOptimizedGoals(goals);
+    });
   }
 
-  toggleForm(formType) {
+  toggleForm(formType: 'goal' | 'task' | 'editGoal' | 'none') {
     this.currentGoalForm = formType;
   }
 
@@ -111,18 +98,25 @@ export class ToDoListComponent implements OnDestroy {
 
   addGoal(event?) {
     const newGoal: Goal = {
+      code: `${this.goals.length + 1}`,
       name: this.goal_desc,
       time_est: this.goal_time_est,
       deadline: this.goal_deadline,
-      value: this.goal_val
+      value: this.goal_val,
+      tasks: []
     };
 
     if (this.goal_desc != undefined) {
       this.goals = this.goals.concat(newGoal);
+
+
+      console.log(this.goals)
+      
       this.goal_opened = newGoal;
 
-      this.renumberGoals();
       this.setGoals(this.goals);
+
+      this.itemService.setAddedGoal(newGoal);
     }
 
     this.resetGoalForm();
@@ -137,7 +131,7 @@ export class ToDoListComponent implements OnDestroy {
     this.renumberGoals();
     this.setGoals(this.goals);
 
-    this.removedGoalEvent.emit(goal.id)
+    this.itemService.setDeletedGoal(goal);
   }
 
   updateGoal(event) {
@@ -165,7 +159,7 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   addItem(event, selectedGoal) {
-    const item: Item = {
+    const task: Item = {
       name: this.task_desc,
       time_est: this.task_time_est,
       deadline: this.task_deadline,
@@ -173,17 +167,7 @@ export class ToDoListComponent implements OnDestroy {
     };
 
     if (this.task_desc != undefined) {
-
-      if ('num_children' in selectedGoal) {
-        selectedGoal.tasks.push(item);
-        selectedGoal.num_children += 1;
-
-      }
-      else {
-        selectedGoal.tasks = [];
-        selectedGoal.tasks.push(item);
-        selectedGoal.num_children = 1;
-      }
+      selectedGoal.tasks.push(task);
     }
 
     this.adjustGoal(selectedGoal);
@@ -277,9 +261,10 @@ export class ToDoListComponent implements OnDestroy {
 
   private adjustGoal(selectedGoal: Goal): void {
     const adjustedGoals =  this.goals.map(goal =>
-      goal.name === selectedGoal.name ? selectedGoal : goal
+      goal.code === selectedGoal.code ? selectedGoal : goal
     );
-
+    
+    this.itemService.setAdjustedGoal(selectedGoal);
     this.setGoals(adjustedGoals);
   }
 

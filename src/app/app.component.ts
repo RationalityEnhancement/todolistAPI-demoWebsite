@@ -1,8 +1,8 @@
 import { Component, ViewEncapsulation, Output, EventEmitter, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { CompliceGoal } from './interfaces/Complice-Goal';
-import { outputItem, Goal } from './interfaces/item';
+import { CompliceGoal, NewCompliceGoal, RelevantCompliceGoalAttributes } from './interfaces/Complice-Goal';
+import { outputItem } from './interfaces/item';
 import { AdapterService } from './provider/adapter.service';
 import { ItemService } from './provider/item.service';
 
@@ -21,8 +21,12 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   @Output() public optimizedGoalsEvent = new EventEmitter<outputItem[]>();
-  @Output() public goalsEvent = new EventEmitter<CompliceGoal[]>();
-  @Output() public removedGoalEvent = new EventEmitter<string>();
+  @Output() public goalsEvent = new EventEmitter<RelevantCompliceGoalAttributes[]>();
+  
+  @Output() public addedGoalEvent = new EventEmitter<NewCompliceGoal>();
+  @Output() public deletedGoalEvent = new EventEmitter<RelevantCompliceGoalAttributes>();
+  @Output() public adjustedGoalEvent = new EventEmitter<RelevantCompliceGoalAttributes>();
+  
 
   private destroy$ = new Subject<boolean>();
 
@@ -32,19 +36,13 @@ export class AppComponent implements OnInit, OnDestroy {
     ) { }
 
   public ngOnInit(): void {
-    this.publishGoals();
-    this.publishOptimizedGoals();
+    this.publishEvents();
   }
 
   public ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
 
-  }
-
-  public dispatchRemovedGoal(removedGoalId: string) {
-    console.log(removedGoalId)
-    this.removedGoalEvent.emit(removedGoalId);
   }
 
   private initializeGoals(goals: string): void {
@@ -72,14 +70,59 @@ export class AppComponent implements OnInit, OnDestroy {
       });
   }
 
+  private publishEvents(): void {
+    this.publishGoals();
+    this.publishOptimizedGoals();
+
+    this.publishAddedGoal();
+    this.publishDeletedGoal();
+    this.publishAdjustedGoal();
+  }
+
   private publishGoals(): void {
     this.itemService.listenToGoals()
     .pipe(
       takeUntil(this.destroy$)
     )
     .subscribe(goals => {
-      const compliceGoals = this.adapterService.toCompliceGoals(goals);
+      const compliceGoals = goals.map(goal => 
+        this.adapterService.toRelevantCompliceGoalAttributes(goal)
+      );
+
       this.dispatchGoals(compliceGoals);
+    })
+  }
+
+  private publishAddedGoal(): void {
+    this.itemService.listenToAddedGoal()
+    .pipe(
+      takeUntil(this.destroy$)
+    )
+    .subscribe(goal => {
+      const compliceGoal = this.adapterService.toNewCompliceGoal(goal);
+      this.dispatchAddedGoal(compliceGoal);
+    })
+  }
+
+  private publishDeletedGoal(): void {
+    this.itemService.listenToDeletedGoal()
+    .pipe(
+      takeUntil(this.destroy$)
+    )
+    .subscribe(goal => {
+      const compliceGoal = this.adapterService.toRelevantCompliceGoalAttributes(goal);
+      this.dispatchDeletedGoal(compliceGoal);
+    })
+  }
+
+  private publishAdjustedGoal(): void {
+    this.itemService.listenToAdjustedGoal()
+    .pipe(
+      takeUntil(this.destroy$)
+    )
+    .subscribe(goal => {
+      const compliceGoal = this.adapterService.toRelevantCompliceGoalAttributes(goal);
+      this.dispatchAdjustedGoal(compliceGoal);
     })
   }
 
@@ -87,7 +130,19 @@ export class AppComponent implements OnInit, OnDestroy {
     this.optimizedGoalsEvent.emit(goals);
   }
 
-  private dispatchGoals(goals: CompliceGoal[]): void {
+  private dispatchGoals(goals: RelevantCompliceGoalAttributes[]): void {
     this.goalsEvent.emit(goals);
+  }
+
+  private dispatchAddedGoal(goal: NewCompliceGoal): void {
+    this.addedGoalEvent.emit(goal);
+  }
+
+  private dispatchDeletedGoal(goal: RelevantCompliceGoalAttributes): void {
+    this.deletedGoalEvent.emit(goal);
+  }
+
+  private dispatchAdjustedGoal(goal: RelevantCompliceGoalAttributes): void {
+    this.adjustedGoalEvent.emit(goal);
   }
 }

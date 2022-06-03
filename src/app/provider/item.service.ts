@@ -18,6 +18,10 @@ export class ItemService {
     private goals$ = new ReplaySubject<Goal[]>();
     private optimizedGoals$ = new ReplaySubject<outputItem[]>();
 
+    private addedGoal$ = new ReplaySubject<Goal>();
+    private adjustedGoal$ = new ReplaySubject<Goal>();
+    private deletedGoal$ = new ReplaySubject<Goal>();
+
     constructor(private http: HttpClient) {
         this.setGoals(Globals.goalList);
      }
@@ -52,6 +56,20 @@ export class ItemService {
         }
         return project;
     }
+
+    public setAddedGoal(goal: Goal): void {
+        this.addedGoal$.next(goal);
+    }
+
+    public setDeletedGoal(goal: Goal): void {
+        this.deletedGoal$.next(goal);
+    }
+
+    public setAdjustedGoal(goal: Goal): void {
+        this.adjustedGoal$.next(goal);
+    }
+
+
     public setOptimizedGoals(optimizedGoals: outputItem[]) {
         this.optimizedGoals$.next(optimizedGoals);
     }
@@ -72,6 +90,18 @@ export class ItemService {
             .pipe(
                 first()
             );
+    }
+
+    public listenToAddedGoal(): Observable<Goal> {
+        return this.addedGoal$.asObservable();
+    }
+
+    public listenToDeletedGoal(): Observable<Goal> {
+        return this.deletedGoal$.asObservable();
+    }
+
+    public listenToAdjustedGoal(): Observable<Goal> {
+        return this.adjustedGoal$.asObservable();
     }
 
     public listenToGoals(): Observable<Goal[]> {

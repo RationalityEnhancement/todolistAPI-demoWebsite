@@ -17,6 +17,7 @@ import { ItemService } from './provider/item.service';
 import { ImageUrlService } from './provider/image-url.service';
 import { createCustomElement } from '@angular/elements';
 import { AdapterService } from './provider/adapter.service';
+import { WorkflowyService } from './provider/workflowy.service';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { AdapterService } from './provider/adapter.service';
   providers: [ 
     ItemService,
     ImageUrlService,
-    AdapterService
+    AdapterService,
+    WorkflowyService
   ],
   entryComponents: [AppComponent]
 })

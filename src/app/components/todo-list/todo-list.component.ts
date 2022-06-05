@@ -109,9 +109,6 @@ export class ToDoListComponent implements OnDestroy {
     if (this.goal_desc != undefined) {
       this.goals = this.goals.concat(newGoal);
 
-
-      console.log(this.goals)
-      
       this.goal_opened = newGoal;
 
       this.setGoals(this.goals);
@@ -158,12 +155,13 @@ export class ToDoListComponent implements OnDestroy {
     this.resetGoalForm();
   }
 
-  addItem(event, selectedGoal) {
+  addItem(event, selectedGoal: Goal) {
     const task: Item = {
       name: this.task_desc,
       time_est: this.task_time_est,
       deadline: this.task_deadline,
       today: this.task_today == "Not Today" ? false : true,
+      workflowyId: `g${selectedGoal.code}-t${selectedGoal.tasks.length + 1}-${Date.now()}`
     };
 
     if (this.task_desc != undefined) {
@@ -260,10 +258,10 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   private adjustGoal(selectedGoal: Goal): void {
-    const adjustedGoals =  this.goals.map(goal =>
+    const adjustedGoals = this.goals.map(goal =>
       goal.code === selectedGoal.code ? selectedGoal : goal
     );
-    
+
     this.itemService.setAdjustedGoal(selectedGoal);
     this.setGoals(adjustedGoals);
   }

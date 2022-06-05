@@ -17,7 +17,10 @@ export interface Item{
     time_est?: number,
     deadline?: string,
     value?: number,
-    today?: boolean
+    today?: boolean,
+    completed?: boolean
+    workflowyId?: string,
+    scheduled?: boolean
 }
 
 export interface outputItem{

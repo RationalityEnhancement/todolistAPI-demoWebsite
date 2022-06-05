@@ -10,7 +10,7 @@ import { WorkflowyService } from "./workflowy.service";
 @Injectable()
 export class ItemService {
 
-    private gamifyUrl: string = 'https://yellow-tree.herokuapp.com/api/greedy/mdp/45/14/inf/0/inf/0/inf/0/no_scaling/true/0/tree/test/getTasksForToday'
+    private gamifyUrl: string = 'https://yellow-tree.herokuapp.com/api/greedy/mdp/45/14/inf/0/inf/0/inf/0/no_scaling/false/0/tree/test/getTasksForToday'
     private userKey: string;
     private currentIntentions: string;
 

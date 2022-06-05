@@ -21,6 +21,16 @@ export class WorkflowyService {
         return this.makeHoursNode(value);
     }
 
+    private makeHoursNode(value: string) {
+        return [
+            {
+                id: "_",
+                nm: value,
+                lm: 0
+            }
+        ];
+    }
+
     private makeWorkflowyProject(goal: Goal) {
         const goalNode = this.makeWorkflowyGoal(goal);
         const goalTasks = this.makeWorkflowyTasks(goal.tasks, goal.code);
@@ -54,17 +64,14 @@ export class WorkflowyService {
     }
 
     private makeWorkflowyTasks(tasks: Item[], parentId: string) {
-        return tasks.map((task, index) => 
-            this.makeWorkflowyTask(task, parentId, index)
+        return tasks.map((task) => 
+            this.makeWorkflowyTask(task, parentId)
         );
     }
 
-    private makeWorkflowyTask(task: Item, goalId: string, taskIndex: number){
-        const td = task.today ? " #today" : " #future";
-
-        const taskId = this.makeTaskId(goalId, taskIndex);
+    private makeWorkflowyTask(task: Item, goalId: string){
+        const taskId = task.workflowyId;
         const taskName = this.makeTaskName(task);
-
         const lastModified = 0;
         const parentId = goalId;
 
@@ -76,23 +83,9 @@ export class WorkflowyService {
         };
     }
 
-    private makeTaskId(goalId: string, taskIndex: number) {
-        return `g${goalId}-t${taskIndex}`;
-    }
-
     private makeTaskName(task: Item) {
         const today = task.today ? '#today' : '';
 
         return `${task.name}~~${task.time_est}h ${today}`;
-    }
-
-    private makeHoursNode(value: string) {
-        return [
-            {
-                id: "_",
-                nm: value,
-                lm: 0
-            }
-        ];
     }
 }

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, ReplaySubject } from 'rxjs';
-import { filter, map, switchMap, take } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 
 import { Goal, outputItem } from "../interfaces/item";
 import { WorkflowyService } from "./workflowy.service";
@@ -12,10 +12,9 @@ export class ItemService {
 
     private gamifyUrl: string = 'https://yellow-tree.herokuapp.com/api/greedy/mdp/45/14/inf/0/inf/0/inf/0/no_scaling/false/0/tree/test/getTasksForToday'
     private userKey: string;
-    private currentIntentions: string;
 
-    private goals$ = new ReplaySubject<Goal[]>();
-    private optimizedGoals$ = new ReplaySubject<outputItem[]>();
+    private goals$ = new ReplaySubject<Goal[]>(1);
+    private optimizedGoals$ = new ReplaySubject<outputItem[]>(1);
 
     private addedGoal$ = new ReplaySubject<Goal>();
     private adjustedGoal$ = new ReplaySubject<Goal>();
@@ -40,11 +39,9 @@ export class ItemService {
         this.adjustedGoal$.next(goal);
     }
 
-
     public setOptimizedGoals(optimizedGoals: outputItem[]) {
         this.optimizedGoals$.next(optimizedGoals);
     }
-
     public setGoals(goals: Goal[]) {
         this.goals$.next(goals);
     }
@@ -52,16 +49,14 @@ export class ItemService {
     public getGoals(): Observable<Goal[]> {
         return this.goals$
         .pipe(
-            filter(goals => !!goals.length),
-            take(1)
+            filter(goals => !!goals.length)
         );
     }
 
     public getOptimizedGoals(): Observable<outputItem[]> {
         return this.optimizedGoals$
             .pipe(
-                filter(goals => !!goals.length),
-                take(1)
+                filter(goals => !!goals.length)
             );
     }
 
@@ -103,8 +98,8 @@ export class ItemService {
 
     private createRequestOptions() {
         const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-        })
+            'Content-Type': 'application/json'
+        });
 
         return { headers };
     }
@@ -112,7 +107,7 @@ export class ItemService {
     private createRequestBody(goals: Goal[]) {
         const defaultParameters = {
             timezoneOffsetMinutes: 0,
-            updated: 0,
+            updated: Date.now(),
             time_frame: 480
         };
 
@@ -134,10 +129,10 @@ export class ItemService {
     }
 
     private makeUserKey() {
-        return this.userKey || '__test__';
+        return this.userKey || '__testss__';
     }
 
     private makeCurrentIntentions() {
-        return this.currentIntentions || [];
+        return [];
     }
 }

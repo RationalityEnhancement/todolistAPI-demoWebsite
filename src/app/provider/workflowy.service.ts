@@ -74,13 +74,21 @@ export class WorkflowyService {
         const taskName = this.makeTaskName(task);
         const lastModified = 0;
         const parentId = goalId;
+        const completed = Date.now();
 
-        return {
+        const baseTask = {
             id: taskId,
             nm: taskName,
             lm: lastModified,
             parentId: parentId
         };
+
+        const completeTask = {
+            ...baseTask,
+            cp: completed
+        };
+
+        return task.completed || task.scheduled ? completeTask : baseTask;
     }
 
     private makeTaskName(task: Item) {

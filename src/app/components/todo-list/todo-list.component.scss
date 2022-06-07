@@ -85,8 +85,8 @@ cursor: pointer;
 .popup .popuptext {
 visibility: hidden;
 width: 500px;
-background-color: rgb(168, 210, 214);
-color: rgb(105, 92, 92);
+background-color: rgb(230, 226, 251);
+color: #222;
 text-align: left;
 border-radius: 6px;
 padding: 8px 0;
@@ -307,35 +307,58 @@ to {opacity:1 ;}
       min-height: 300px;
       display: inline-block;
       text-align: center;
-      background: #E4E6C3;
-      border-radius: 25px;
+      color: #222;
+      background: #8d44ad36;;
+      border-radius: 20px;
       padding: 10px;
       margin: 10px;
       
     }
+
     .task-wrapper{
       display: grid;
     }
     .task-item{
+      color: #222;
       width: 80%;
       min-height: 100px;
       min-width: 50%;
       display: block;
       text-align: center;
-      background: #F7F7E3;
-      border-radius: 25px;
+      background: #8d44ad7c;
+      border: 2px solid #8d44ad;
+      border-radius: 10px;
       margin: 5px;
       justify-content: space-between;
       padding: 8px;
   }
-     
+
+    .scheduled {
+      border: none;
+      background: #8d44ad7c;
+      opacity: 0.8;
+
+    }
+      
+    .completed {
+      background: #94b596;
+      opacity: 0.8;
+    }
+
+    .btn.top-fixed {
+      color: #fff;
+      background: rgb(230, 226, 251);
+      background: #8e44ad;
+    }
     
     .btn.bottom-fixed {
       position: relative;
       margin-top: 30px;
       bottom: 10px;
       width: 55%;
-      background-color: #BE9F9C;
+      color: #fff;
+      background: rgb(230, 226, 251);
+      background: #8e44ad;
     }
    
    

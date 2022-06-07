@@ -23,9 +23,7 @@ export class ItemService {
     constructor(
         private http: HttpClient,
         private workflowyService: WorkflowyService
-    ) {
-        this.setGoals([])
-    }
+    ) {}
 
     public setAddedGoal(goal: Goal): void {
         this.addedGoal$.next(goal);

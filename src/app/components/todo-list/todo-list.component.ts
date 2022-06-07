@@ -29,11 +29,15 @@ export class ToDoListComponent implements OnDestroy {
     name: "DEFAULT",
   });
 
-  // public goals = Globals.goalList
+  public goals: Goal[] = [];
+  public todayTasks: Item[] = [];
+  public completedTasks: Item[] = [];
 
-  public goals: Goal[];
+  public newTaskAdded: boolean;
+
   public currentInformationPopup: 'goalExample' | 'information' | 'finishGoals' | 'legend' | 'none';
   public currentGoalForm: 'goal' | 'task' | 'editGoal' | 'none';
+
   public imageUrls: Record<string, string>;
 
   private images = ['information.png', 'edit_icon.png'];
@@ -45,9 +49,9 @@ export class ToDoListComponent implements OnDestroy {
     private itemService: ItemService
   ) {
     this.imageUrls = this.imageUrlService.createImageUrls(this.images);
-    
+
     this.listenToGoalChanges();
-    
+
   }
 
   public ngOnDestroy(): void {
@@ -57,14 +61,18 @@ export class ToDoListComponent implements OnDestroy {
 
   public route() {
 
-    if(this.goals.some(goal => goal.tasks?.length < 2)) {
-      alert("Please add at least 2 subgoals for each goal");
+    if (this.goals.some(goal => goal.tasks?.length < 2)) {
+      alert("Please add at least 2 tasks for each goal!");
       return;
     }
 
-    if (this.goals.length < 5) {
-      alert("Please add at least 5 goals");
+    if (this.goals.length < 1) {
+      alert("Please add at least one goal!");
       return;
+    }
+
+    if (!this.newTaskAdded) {
+      alert('All your tasks are scheduled already. Please add new tasks before you create a new todo list!')
     }
 
     this.itemService.requestOptimalTodoList().subscribe(goals => {
@@ -241,7 +249,29 @@ export class ToDoListComponent implements OnDestroy {
       )
       .subscribe(goals => {
         this.goals = goals;
+
+        this.todayTasks = this.getTodayTasks(goals);
+        this.completedTasks = this.getCompletedTasks(goals);
+        this.newTaskAdded = this.getTaskAddedStatus(goals);
       });
+  }
+
+  private getTodayTasks(goals: Goal[]): Item[] {
+    return goals.reduce((todayTasks, goal) =>
+      todayTasks.concat(goal.tasks.filter(task => task.scheduled && !task.completed))
+      , [] as Item[]);
+  }
+
+  private getCompletedTasks(goals: Goal[]): Item[] {
+    return goals.reduce((todayTasks, goal) =>
+      todayTasks.concat(goal.tasks.filter(task => task.completed))
+      , [] as Item[]);
+  }
+
+  private getTaskAddedStatus(goals: Goal[]): boolean {
+    return goals
+      .reduce((allTasks, goal) => allTasks.concat(goal.tasks), [] as Item[])
+      .some(task => !task.scheduled);
   }
 
   private setGoals(goals: Goal[]): void {

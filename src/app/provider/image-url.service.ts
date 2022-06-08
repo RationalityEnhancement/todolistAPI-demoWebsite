@@ -7,7 +7,7 @@ export class ImageUrlService {
     constructor() { }
 
     public createImageUrl(image: string) {
-        const imgDirectory = `${environment.host}/assets/images`;
+        const imgDirectory = `${environment.assetPath}/images`;
 
         return `${imgDirectory}/${image}`;
     }

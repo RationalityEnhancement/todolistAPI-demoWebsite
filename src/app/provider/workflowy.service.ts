@@ -92,8 +92,11 @@ export class WorkflowyService {
     }
 
     private makeTaskName(task: Item) {
+        const name = task.name;
+        const estimate = `~~${task.time_est}h`;
         const today = task.today ? '#today' : '';
+        const deadline = task.deadline ? `DUE:${task.deadline}` : '';
 
-        return `${task.name}~~${task.time_est}h ${today}`;
+        return `${name} ${estimate} ${deadline} ${today}`;
     }
 }

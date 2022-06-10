@@ -2,7 +2,6 @@ import { Component, ViewEncapsulation, Output, EventEmitter, Input, OnInit, OnDe
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { CompliceGoal, NewCompliceGoal, RelevantCompliceGoalAttributes } from './interfaces/Complice-Goal';
-import { outputItem } from './interfaces/item';
 import { AdapterService } from './provider/adapter.service';
 import { ItemService } from './provider/item.service';
 
@@ -20,7 +19,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  @Output() public optimizedGoalsEvent = new EventEmitter<string>();
+  @Output() public optimizedTodoListEvent = new EventEmitter<string>();
   @Output() public goalsEvent = new EventEmitter<RelevantCompliceGoalAttributes[]>();
   
   @Output() public addedGoalEvent = new EventEmitter<NewCompliceGoal>();
@@ -42,7 +41,6 @@ export class AppComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
-
   }
 
   private initializeGoals(goals: string): void {
@@ -62,21 +60,21 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private publishEvents(): void {
     this.publishGoals();
-    this.publishOptimizedGoals();
+    this.publishoptimizedTodoList();
 
     this.publishAddedGoal();
     this.publishDeletedGoal();
     this.publishAdjustedGoal();
   }
 
-  private publishOptimizedGoals(): void {
-    this.itemService.listenToOptimizedGoals()
+  private publishoptimizedTodoList(): void {
+    this.itemService.listenTooptimizedTodoList()
       .pipe(
         takeUntil(this.destroy$)
       )
-      .subscribe((optimizedGoals) => {
-        const rawCompliceIntentions = this.adapterService.toRawCompliceIntentions(optimizedGoals)
-        this.dispatchOptimizedGoals(rawCompliceIntentions);
+      .subscribe((optimizedTodoList) => {
+        const rawCompliceIntentions = this.adapterService.toRawCompliceIntentions(optimizedTodoList)
+        this.dispatchoptimizedTodoList(rawCompliceIntentions);
       });
   }
 
@@ -124,8 +122,8 @@ export class AppComponent implements OnInit, OnDestroy {
     })
   }
 
-  private dispatchOptimizedGoals(rawIntentions: string): void {
-    this.optimizedGoalsEvent.emit(rawIntentions);
+  private dispatchoptimizedTodoList(rawIntentions: string): void {
+    this.optimizedTodoListEvent.emit(rawIntentions);
   }
 
   private dispatchGoals(goals: RelevantCompliceGoalAttributes[]): void {

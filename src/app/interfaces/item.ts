@@ -23,7 +23,7 @@ export interface Item {
     scheduled?: boolean
 }
 
-export interface outputItem {
+export interface OptimizedTodo {
     id: string,
     nm: string,
     lm: number,

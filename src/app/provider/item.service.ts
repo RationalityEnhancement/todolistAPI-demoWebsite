@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 
-import { Goal, outputItem } from "../interfaces/item";
+import { Goal, OptimizedTodo } from "../interfaces/item";
 import { WorkflowyService } from "./workflowy.service";
 
 @Injectable()
@@ -14,7 +14,7 @@ export class ItemService {
     private userKey: string;
 
     private goals$ = new ReplaySubject<Goal[]>(1);
-    private optimizedGoals$ = new ReplaySubject<outputItem[]>(1);
+    private optimizedTodoList$ = new ReplaySubject<OptimizedTodo[]>(1);
 
     private addedGoal$ = new ReplaySubject<Goal>();
     private adjustedGoal$ = new ReplaySubject<Goal>();
@@ -37,8 +37,8 @@ export class ItemService {
         this.adjustedGoal$.next(goal);
     }
 
-    public setOptimizedGoals(optimizedGoals: outputItem[]) {
-        this.optimizedGoals$.next(optimizedGoals);
+    public setoptimizedTodoList(optimizedTodoList: OptimizedTodo[]) {
+        this.optimizedTodoList$.next(optimizedTodoList);
     }
     public setGoals(goals: Goal[]) {
         this.goals$.next(goals);
@@ -52,8 +52,8 @@ export class ItemService {
         );
     }
 
-    public getOptimizedGoals(): Observable<outputItem[]> {
-        return this.optimizedGoals$
+    public getoptimizedTodoList(): Observable<OptimizedTodo[]> {
+        return this.optimizedTodoList$
             .pipe(
                 filter(goals => !!goals.length),
                 take(1)
@@ -76,8 +76,8 @@ export class ItemService {
         return this.goals$.asObservable();
     }
 
-    public listenToOptimizedGoals(): Observable<outputItem[]> {
-        return this.optimizedGoals$.asObservable();
+    public listenTooptimizedTodoList(): Observable<OptimizedTodo[]> {
+        return this.optimizedTodoList$.asObservable();
     }
 
     public requestOptimalTodoList(): Observable<any> {

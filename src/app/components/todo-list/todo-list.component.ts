@@ -74,8 +74,8 @@ export class ToDoListComponent implements OnDestroy {
     }
 
     this.itemService.requestOptimalTodoList()
-      .subscribe((optimizedGoals) => {
-        this.itemService.setOptimizedGoals(optimizedGoals);
+      .subscribe((optimizedTodoList) => {
+        this.itemService.setoptimizedTodoList(optimizedTodoList);
       });
   }
 

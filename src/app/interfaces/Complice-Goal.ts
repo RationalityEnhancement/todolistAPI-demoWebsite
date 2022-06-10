@@ -1,4 +1,4 @@
-import { Item } from "./item";
+import { Item, WorkflowyProject } from "./item";
 
 export interface CompliceGoal {
     _id: string;
@@ -42,5 +42,6 @@ export interface RelevantCompliceGoalAttributes {
     estimate?: number;
     tasks: Item[];
     color?: string;
+    workflowyProject?: WorkflowyProject
 }
     

@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-
 import { Goal, Item } from "../interfaces/item";
 
 @Injectable()
@@ -9,14 +8,21 @@ export class WorkflowyService {
         return goals.map(goal => this.makeWorkflowyProject(goal));
     }
 
+    public makeWorkflowyProject(goal: Goal) {
+        const goalNode = this.makeWorkflowyGoal(goal);
+        const goalTasks = this.makeWorkflowyTasks(goal.tasks, goal.code);
+        
+        return { ...goalNode, ch: goalTasks };
+    }
+
     public makeTypicalHours() {
-        const value = "#HOURS_TYPICAL ==10000";
+        const value = "#HOURS_TYPICAL ==8";
 
         return this.makeHoursNode(value);
     }
 
     public makeTodayHours() {
-        const value = "#HOURS_TODAY ==10000";
+        const value = "#HOURS_TODAY ==8";
 
         return this.makeHoursNode(value);
     }
@@ -29,13 +35,6 @@ export class WorkflowyService {
                 lm: 0
             }
         ];
-    }
-
-    private makeWorkflowyProject(goal: Goal) {
-        const goalNode = this.makeWorkflowyGoal(goal);
-        const goalTasks = this.makeWorkflowyTasks(goal.tasks, goal.code);
-        
-        return { ...goalNode, ch: goalTasks };
     }
 
     private makeWorkflowyGoal(goal: Goal) {

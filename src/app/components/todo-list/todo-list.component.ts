@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ItemService } from 'src/app/provider/item.service';
@@ -13,8 +13,6 @@ import { ImageUrlService } from '../../provider/image-url.service';
 })
 
 export class ToDoListComponent implements OnDestroy {
-
-  @Output() public removedGoalEvent = new EventEmitter<string>();
 
   public goal_val: number;
   public goal_desc: string;
@@ -75,9 +73,10 @@ export class ToDoListComponent implements OnDestroy {
       alert('All your tasks are scheduled already. Please add new tasks before you create a new todo list!')
     }
 
-    this.itemService.requestOptimalTodoList().subscribe(goals => {
-      this.itemService.setOptimizedGoals(goals);
-    });
+    this.itemService.requestOptimalTodoList()
+      .subscribe((optimizedGoals) => {
+        this.itemService.setOptimizedGoals(optimizedGoals);
+      });
   }
 
   toggleForm(formType: 'goal' | 'task' | 'editGoal' | 'none') {
@@ -168,7 +167,6 @@ export class ToDoListComponent implements OnDestroy {
       name: this.task_desc,
       time_est: this.task_time_est,
       deadline: this.task_deadline,
-      today: this.task_today == "Not Today" ? false : true,
       workflowyId: `g${selectedGoal.code}-t${selectedGoal.tasks.length + 1}-${Date.now()}`
     };
 

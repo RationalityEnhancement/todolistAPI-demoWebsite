@@ -1,8 +1,8 @@
 import { Component, ViewEncapsulation, Output, EventEmitter, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, withLatestFrom } from 'rxjs/operators';
 import { CompliceGoal, NewCompliceGoal, RelevantCompliceGoalAttributes } from './interfaces/Complice-Goal';
-import { outputItem } from './interfaces/item';
+import { Goal, optimizedGoalEventData, outputItem } from './interfaces/item';
 import { AdapterService } from './provider/adapter.service';
 import { ItemService } from './provider/item.service';
 
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  @Output() public optimizedGoalsEvent = new EventEmitter<outputItem[]>();
+  @Output() public optimizedGoalsEvent = new EventEmitter<optimizedGoalEventData>();
   @Output() public goalsEvent = new EventEmitter<RelevantCompliceGoalAttributes[]>();
   
   @Output() public addedGoalEvent = new EventEmitter<NewCompliceGoal>();
@@ -60,16 +60,6 @@ export class AppComponent implements OnInit, OnDestroy {
     console.warn('invalid goals: Please check again input string');
   }
 
-  private publishOptimizedGoals(): void {
-    this.itemService.listenToOptimizedGoals()
-      .pipe(
-        takeUntil(this.destroy$)
-      )
-      .subscribe(optimizedGoals => {
-        this.dispatchOptimizedGoals(optimizedGoals);
-      });
-  }
-
   private publishEvents(): void {
     this.publishGoals();
     this.publishOptimizedGoals();
@@ -77,6 +67,19 @@ export class AppComponent implements OnInit, OnDestroy {
     this.publishAddedGoal();
     this.publishDeletedGoal();
     this.publishAdjustedGoal();
+  }
+
+  private publishOptimizedGoals(): void {
+    this.itemService.listenToOptimizedGoals()
+      .pipe(
+        withLatestFrom(this.itemService.listenToGoals()),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(([optimizedGoals, goals]) => {
+        const compliceGoals = this.adapterService.toCompliceGoals(goals)
+
+        this.dispatchOptimizedGoals(optimizedGoals, compliceGoals);
+      });
   }
 
   private publishGoals(): void {
@@ -126,8 +129,8 @@ export class AppComponent implements OnInit, OnDestroy {
     })
   }
 
-  private dispatchOptimizedGoals(goals: outputItem[]): void {
-    this.optimizedGoalsEvent.emit(goals);
+  private dispatchOptimizedGoals(todoList: outputItem[], goalsWithWorkflowyTree: Goal[]): void {
+    this.optimizedGoalsEvent.emit({todoList, goalsWithWorkflowyTree });
   }
 
   private dispatchGoals(goals: RelevantCompliceGoalAttributes[]): void {

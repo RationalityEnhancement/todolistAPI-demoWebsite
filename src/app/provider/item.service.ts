@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, ReplaySubject } from 'rxjs';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 
 import { Goal, outputItem } from "../interfaces/item";
 import { WorkflowyService } from "./workflowy.service";
@@ -47,14 +47,16 @@ export class ItemService {
     public getGoals(): Observable<Goal[]> {
         return this.goals$
         .pipe(
-            filter(goals => !!goals.length)
+            filter(goals => !!goals.length),
+            take(1)
         );
     }
 
     public getOptimizedGoals(): Observable<outputItem[]> {
         return this.optimizedGoals$
             .pipe(
-                filter(goals => !!goals.length)
+                filter(goals => !!goals.length),
+                take(1)
             );
     }
 
@@ -82,8 +84,18 @@ export class ItemService {
         return this.getGoals()
             .pipe(
                 map(goals => this.makeTodoListRequest(goals)),
-                switchMap(request => this.http.post(request.url, request.body, request.options))
+                switchMap(request => this.fetchOptimalTodoList(request))
             );
+    }
+    
+    public getGoalsWithWorkflowyProjects(goals: Goal[]): Goal[] {
+        return goals.map(goal => this.getGoalWithWorkflowyProject(goal));
+    }
+
+    private getGoalWithWorkflowyProject(goal: Goal): Goal {
+        const workflowyProject = this.workflowyService.makeWorkflowyProject(goal);
+
+        return {...goal, workflowyProject};
     }
 
     private makeTodoListRequest(goals: Goal[]) {
@@ -92,6 +104,10 @@ export class ItemService {
            body: this.createRequestBody(goals),
            url: this.gamifyUrl
         };
+    }
+
+    private fetchOptimalTodoList(request) {
+        return this.http.post(request.url, request.body, request.options);
     }
 
     private createRequestOptions() {

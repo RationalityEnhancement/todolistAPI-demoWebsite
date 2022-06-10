@@ -1,6 +1,6 @@
 
 
-export interface Goal{
+export interface Goal {
     id?: string,
     code?: string,
     name: string,
@@ -10,9 +10,10 @@ export interface Goal{
     value?: number,
     tasks?: Item[],
     color?: string,
+    workflowyProject?: WorkflowyProject
 }
 
-export interface Item{
+export interface Item {
     name: string
     time_est?: number,
     deadline?: string,
@@ -23,7 +24,7 @@ export interface Item{
     scheduled?: boolean
 }
 
-export interface outputItem{
+export interface outputItem {
     id: string,
     nm: string,
     lm: number,
@@ -33,9 +34,30 @@ export interface outputItem{
     val: number
 }
 
-export interface Node{
+export interface WorkflowyTask {
+    id: string,
+    nm: string,
+    lm: number,
+    parentId: string,
+    cp?: number
+}
+
+export interface WorkflowyProject {
+    id: string,
+    nm: string,
+    lm: number,
+    ch: WorkflowyTask[],
+    parentId: string
+}
+
+export interface Node {
     id: string,
     nm: string,
     lm: number,
     ch?: Node[]
+}
+
+export interface optimizedGoalEventData {
+    todoList: outputItem[],
+    goalsWithWorkflowyTree: Goal[]
 }

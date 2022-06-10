@@ -9,8 +9,7 @@ export interface Goal {
     deadline?: string,
     value?: number,
     tasks?: Item[],
-    color?: string,
-    workflowyProject?: WorkflowyProject
+    color?: string
 }
 
 export interface Item {
@@ -55,9 +54,4 @@ export interface Node {
     nm: string,
     lm: number,
     ch?: Node[]
-}
-
-export interface optimizedGoalEventData {
-    todoList: outputItem[],
-    goalsWithWorkflowyTree: Goal[]
 }

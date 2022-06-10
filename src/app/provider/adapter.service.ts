@@ -1,12 +1,11 @@
 import { Injectable } from "@angular/core";
 import { NewCompliceGoal, RelevantCompliceGoalAttributes } from "../interfaces/Complice-Goal";
 import { Goal } from "../interfaces/item";
-import { WorkflowyService } from "./workflowy.service";
 
 @Injectable()
 export class AdapterService {
 
-    constructor(private workflowyService: WorkflowyService) { }
+    constructor() { }
 
     public parseGoals<T>(input: string): T[] {
         return JSON.parse(input);
@@ -21,7 +20,6 @@ export class AdapterService {
     }
 
     public toRelevantCompliceGoalAttributes(goal: Goal): RelevantCompliceGoalAttributes {
-        const workflowyProject = this.workflowyService.makeWorkflowyProject(goal);
 
         return {
             _id: goal.id,
@@ -30,8 +28,7 @@ export class AdapterService {
             value: goal.value,
             estimate: goal.time_est,
             deadline: goal.deadline,
-            tasks: goal.tasks,
-            workflowyProject: workflowyProject
+            tasks: goal.tasks
         };
     }
 
@@ -44,8 +41,7 @@ export class AdapterService {
             time_est: compliceGoal.estimate,
             deadline: compliceGoal.deadline,
             tasks: compliceGoal.tasks,
-            color: compliceGoal.color,
-            workflowyProject: compliceGoal.workflowyProject
+            color: compliceGoal.color
         };
     }
 

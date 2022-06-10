@@ -87,16 +87,6 @@ export class ItemService {
                 switchMap(request => this.fetchOptimalTodoList(request))
             );
     }
-    
-    public getGoalsWithWorkflowyProjects(goals: Goal[]): Goal[] {
-        return goals.map(goal => this.getGoalWithWorkflowyProject(goal));
-    }
-
-    private getGoalWithWorkflowyProject(goal: Goal): Goal {
-        const workflowyProject = this.workflowyService.makeWorkflowyProject(goal);
-
-        return {...goal, workflowyProject};
-    }
 
     private makeTodoListRequest(goals: Goal[]) {
         return {

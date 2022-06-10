@@ -1,8 +1,8 @@
 import { Component, ViewEncapsulation, Output, EventEmitter, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil, withLatestFrom } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { CompliceGoal, NewCompliceGoal, RelevantCompliceGoalAttributes } from './interfaces/Complice-Goal';
-import { Goal, optimizedGoalEventData, outputItem } from './interfaces/item';
+import { outputItem } from './interfaces/item';
 import { AdapterService } from './provider/adapter.service';
 import { ItemService } from './provider/item.service';
 
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  @Output() public optimizedGoalsEvent = new EventEmitter<optimizedGoalEventData>();
+  @Output() public optimizedGoalsEvent = new EventEmitter<outputItem[]>();
   @Output() public goalsEvent = new EventEmitter<RelevantCompliceGoalAttributes[]>();
   
   @Output() public addedGoalEvent = new EventEmitter<NewCompliceGoal>();
@@ -72,13 +72,10 @@ export class AppComponent implements OnInit, OnDestroy {
   private publishOptimizedGoals(): void {
     this.itemService.listenToOptimizedGoals()
       .pipe(
-        withLatestFrom(this.itemService.listenToGoals()),
         takeUntil(this.destroy$)
       )
-      .subscribe(([optimizedGoals, goals]) => {
-        const compliceGoals = this.adapterService.toCompliceGoals(goals)
-
-        this.dispatchOptimizedGoals(optimizedGoals, compliceGoals);
+      .subscribe((optimizedGoals) => {
+        this.dispatchOptimizedGoals(optimizedGoals);
       });
   }
 
@@ -129,8 +126,8 @@ export class AppComponent implements OnInit, OnDestroy {
     })
   }
 
-  private dispatchOptimizedGoals(todoList: outputItem[], goalsWithWorkflowyTree: Goal[]): void {
-    this.optimizedGoalsEvent.emit({todoList, goalsWithWorkflowyTree });
+  private dispatchOptimizedGoals(todoList: outputItem[]): void {
+    this.optimizedGoalsEvent.emit(todoList);
   }
 
   private dispatchGoals(goals: RelevantCompliceGoalAttributes[]): void {

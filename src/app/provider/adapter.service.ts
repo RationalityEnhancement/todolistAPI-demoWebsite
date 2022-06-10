@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { NewCompliceGoal, RelevantCompliceGoalAttributes } from "../interfaces/Complice-Goal";
-import { Goal } from "../interfaces/item";
+import { Goal, outputItem } from "../interfaces/item";
 
 @Injectable()
 export class AdapterService {
@@ -12,7 +12,7 @@ export class AdapterService {
     }
 
     public toRegGoals(goals: RelevantCompliceGoalAttributes[]): Goal[] {
-        return goals.map(goal => this.toRelevantRegGoalAttributes(goal)); 
+        return goals.map(goal => this.toRelevantRegGoalAttributes(goal));
     }
 
     public toCompliceGoals(goals: Goal[]): RelevantCompliceGoalAttributes[] {
@@ -59,5 +59,20 @@ export class AdapterService {
         const relevantCompliceAttributes = this.toRelevantCompliceGoalAttributes(goal);
 
         return { ...defaultCompliceAttributes, ...relevantCompliceAttributes };
+    }
+
+    public toRawCompliceIntentions(todoList: outputItem[]): string {
+        return todoList
+            .map(task => this.getRawCompliceIntentionName(task))
+            .join('\n')
+            .replace(/ ?#today/g, '');
+    }
+
+    private getRawCompliceIntentionName(task: outputItem): string {
+        const taskName = task.nm;
+        const taskValue = `=${task.val}`;
+        const workflowyId = `$wf:${task.id}`;
+
+        return `${taskName} ${taskValue} ${workflowyId}`;
     }
 }

@@ -20,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  @Output() public optimizedGoalsEvent = new EventEmitter<outputItem[]>();
+  @Output() public optimizedGoalsEvent = new EventEmitter<string>();
   @Output() public goalsEvent = new EventEmitter<RelevantCompliceGoalAttributes[]>();
   
   @Output() public addedGoalEvent = new EventEmitter<NewCompliceGoal>();
@@ -75,7 +75,8 @@ export class AppComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe((optimizedGoals) => {
-        this.dispatchOptimizedGoals(optimizedGoals);
+        const rawCompliceIntentions = this.adapterService.toRawCompliceIntentions(optimizedGoals)
+        this.dispatchOptimizedGoals(rawCompliceIntentions);
       });
   }
 
@@ -126,8 +127,8 @@ export class AppComponent implements OnInit, OnDestroy {
     })
   }
 
-  private dispatchOptimizedGoals(todoList: outputItem[]): void {
-    this.optimizedGoalsEvent.emit(todoList);
+  private dispatchOptimizedGoals(rawIntentions: string): void {
+    this.optimizedGoalsEvent.emit(rawIntentions);
   }
 
   private dispatchGoals(goals: RelevantCompliceGoalAttributes[]): void {

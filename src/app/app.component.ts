@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, Output, EventEmitter, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { CompliceGoal, NewCompliceGoal, RelevantCompliceGoalAttributes } from './interfaces/Complice-Goal';
 import { outputItem } from './interfaces/item';
 import { AdapterService } from './provider/adapter.service';
@@ -83,13 +83,10 @@ export class AppComponent implements OnInit, OnDestroy {
   private publishGoals(): void {
     this.itemService.listenToGoals()
     .pipe(
+      map(goals => this.adapterService.toCompliceGoals(goals)),
       takeUntil(this.destroy$)
     )
-    .subscribe(goals => {
-      const compliceGoals = goals.map(goal => 
-        this.adapterService.toRelevantCompliceGoalAttributes(goal)
-      );
-
+    .subscribe(compliceGoals => {
       this.dispatchGoals(compliceGoals);
     })
   }
@@ -97,10 +94,10 @@ export class AppComponent implements OnInit, OnDestroy {
   private publishAddedGoal(): void {
     this.itemService.listenToAddedGoal()
     .pipe(
+      map(goal => this.adapterService.toNewCompliceGoal(goal)),
       takeUntil(this.destroy$)
     )
-    .subscribe(goal => {
-      const compliceGoal = this.adapterService.toNewCompliceGoal(goal);
+    .subscribe(compliceGoal => {
       this.dispatchAddedGoal(compliceGoal);
     })
   }
@@ -108,10 +105,10 @@ export class AppComponent implements OnInit, OnDestroy {
   private publishDeletedGoal(): void {
     this.itemService.listenToDeletedGoal()
     .pipe(
+      map(goal => this.adapterService.toRelevantCompliceGoalAttributes(goal)),
       takeUntil(this.destroy$)
     )
-    .subscribe(goal => {
-      const compliceGoal = this.adapterService.toRelevantCompliceGoalAttributes(goal);
+    .subscribe(compliceGoal => {
       this.dispatchDeletedGoal(compliceGoal);
     })
   }
@@ -119,10 +116,10 @@ export class AppComponent implements OnInit, OnDestroy {
   private publishAdjustedGoal(): void {
     this.itemService.listenToAdjustedGoal()
     .pipe(
+      map(goal => this.adapterService.toRelevantCompliceGoalAttributes(goal)),
       takeUntil(this.destroy$)
     )
-    .subscribe(goal => {
-      const compliceGoal = this.adapterService.toRelevantCompliceGoalAttributes(goal);
+    .subscribe(compliceGoal => {
       this.dispatchAdjustedGoal(compliceGoal);
     })
   }

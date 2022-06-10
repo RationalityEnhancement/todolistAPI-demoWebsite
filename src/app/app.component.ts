@@ -45,7 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private initializeGoals(goals: string): void {
     try {
-      const compliceGoals = this.adapterService.parseGoals<CompliceGoal>(goals);
+      const compliceGoals = this.adapterService.parseEntities<CompliceGoal>(goals);
       const regGoals = this.adapterService.toRegGoals(compliceGoals);
 
       this.itemService.setGoals(regGoals);

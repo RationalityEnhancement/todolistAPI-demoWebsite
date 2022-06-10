@@ -7,7 +7,7 @@ export class AdapterService {
 
     constructor() { }
 
-    public parseGoals<T>(input: string): T[] {
+    public parseEntities<T>(input: string): T[] {
         return JSON.parse(input);
     }
 

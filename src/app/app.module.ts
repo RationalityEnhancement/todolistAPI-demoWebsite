@@ -18,6 +18,7 @@ import { ImageUrlService } from './provider/image-url.service';
 import { createCustomElement } from '@angular/elements';
 import { AdapterService } from './provider/adapter.service';
 import { WorkflowyService } from './provider/workflowy.service';
+import { TodoListService } from './provider/todo-list.service';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { WorkflowyService } from './provider/workflowy.service';
   ],
   providers: [ 
     ItemService,
+    TodoListService,
     ImageUrlService,
     AdapterService,
     WorkflowyService

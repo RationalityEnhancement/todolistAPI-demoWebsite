@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ItemService } from 'src/app/provider/item.service';
+import { TodoListService } from 'src/app/provider/todo-list.service';
 import { Goal, Item } from '../../interfaces/item';
 import { ImageUrlService } from '../../provider/image-url.service';
 
@@ -44,7 +45,8 @@ export class ToDoListComponent implements OnDestroy {
 
   constructor(
     private imageUrlService: ImageUrlService,
-    private itemService: ItemService
+    private itemService: ItemService,
+    private todoListService: TodoListService
   ) {
     this.imageUrls = this.imageUrlService.createImageUrls(this.images);
 
@@ -73,9 +75,9 @@ export class ToDoListComponent implements OnDestroy {
       alert('All your tasks are scheduled already. Please add new tasks before you create a new todo list!')
     }
 
-    this.itemService.requestOptimalTodoList()
+    this.todoListService.requestOptimalTodoList()
       .subscribe((optimizedTodoList) => {
-        this.itemService.setoptimizedTodoList(optimizedTodoList);
+        this.todoListService.setoptimizedTodoList(optimizedTodoList);
       });
   }
 

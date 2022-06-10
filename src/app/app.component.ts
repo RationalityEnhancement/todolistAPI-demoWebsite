@@ -4,6 +4,7 @@ import { map, takeUntil } from 'rxjs/operators';
 import { CompliceGoal, NewCompliceGoal, RelevantCompliceGoalAttributes } from './interfaces/Complice-Goal';
 import { AdapterService } from './provider/adapter.service';
 import { ItemService } from './provider/item.service';
+import { TodoListService } from './provider/todo-list.service';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private itemService: ItemService,
+    private todoListService: TodoListService,
     private adapterService: AdapterService
     ) { }
 
@@ -68,13 +70,13 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private publishoptimizedTodoList(): void {
-    this.itemService.listenTooptimizedTodoList()
+    this.todoListService.listenTooptimizedTodoList()
       .pipe(
+        map(todoList => this.adapterService.toRawCompliceIntentions(todoList)),
         takeUntil(this.destroy$)
       )
-      .subscribe((optimizedTodoList) => {
-        const rawCompliceIntentions = this.adapterService.toRawCompliceIntentions(optimizedTodoList)
-        this.dispatchoptimizedTodoList(rawCompliceIntentions);
+      .subscribe((rawTodoList) => {
+        this.dispatchoptimizedTodoList(rawTodoList);
       });
   }
 

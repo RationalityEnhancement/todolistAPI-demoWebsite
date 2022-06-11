@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ItemService } from 'src/app/provider/item.service';
+import { GoalService } from 'src/app/provider/goal.service';
 import { TodoListService } from 'src/app/provider/todo-list.service';
 import { Goal, Item } from '../../interfaces/item';
 import { ImageUrlService } from '../../provider/image-url.service';
@@ -45,7 +45,7 @@ export class ToDoListComponent implements OnDestroy {
 
   constructor(
     private imageUrlService: ImageUrlService,
-    private itemService: ItemService,
+    private goalService: GoalService,
     private todoListService: TodoListService
   ) {
     this.imageUrls = this.imageUrlService.createImageUrls(this.images);
@@ -122,7 +122,7 @@ export class ToDoListComponent implements OnDestroy {
 
       this.setGoals(this.goals);
 
-      this.itemService.setAddedGoal(newGoal);
+      this.goalService.setAddedGoal(newGoal);
     }
 
     this.resetGoalForm();
@@ -137,7 +137,7 @@ export class ToDoListComponent implements OnDestroy {
     this.renumberGoals();
     this.setGoals(this.goals);
 
-    this.itemService.setDeletedGoal(goal);
+    this.goalService.setDeletedGoal(goal);
   }
 
   updateGoal(event) {
@@ -243,7 +243,7 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   private listenToGoalChanges(): void {
-    this.itemService.listenToGoals()
+    this.goalService.listenToGoals()
       .pipe(
         takeUntil(this.destroy$)
       )
@@ -275,7 +275,7 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   private setGoals(goals: Goal[]): void {
-    this.itemService.setGoals(goals);
+    this.goalService.setGoals(goals);
   }
 
   private renumberGoals(): void {
@@ -292,7 +292,7 @@ export class ToDoListComponent implements OnDestroy {
       goal.code === selectedGoal.code ? selectedGoal : goal
     );
 
-    this.itemService.setAdjustedGoal(selectedGoal);
+    this.goalService.setAdjustedGoal(selectedGoal);
     this.setGoals(adjustedGoals);
   }
 

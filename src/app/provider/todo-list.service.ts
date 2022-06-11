@@ -6,7 +6,7 @@ import { filter, map, switchMap, take } from 'rxjs/operators';
 
 import { Goal, OptimizedTodo } from "../interfaces/item";
 import { WorkflowyService } from "./workflowy.service";
-import { ItemService } from "./item.service";
+import { GoalService } from "./goal.service";
 
 @Injectable()
 export class TodoListService {
@@ -18,7 +18,7 @@ export class TodoListService {
 
     constructor(
         private http: HttpClient,
-        private itemService: ItemService,
+        private goalService: GoalService,
         private workflowyService: WorkflowyService
     ) {}
 
@@ -39,7 +39,7 @@ export class TodoListService {
     }
 
     public requestOptimalTodoList(): Observable<any> {
-        return this.itemService.getGoals()
+        return this.goalService.getGoals()
             .pipe(
                 map(goals => this.makeTodoListRequest(goals)),
                 switchMap(request => this.fetchOptimalTodoList(request))

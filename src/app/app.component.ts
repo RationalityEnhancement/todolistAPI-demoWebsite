@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { CompliceGoal, NewCompliceGoal, RelevantCompliceGoalAttributes } from './interfaces/Complice-Goal';
 import { AdapterService } from './provider/adapter.service';
-import { ItemService } from './provider/item.service';
+import { GoalService } from './provider/goal.service';
 import { TodoListService } from './provider/todo-list.service';
 
 @Component({
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
 
   constructor(
-    private itemService: ItemService,
+    private goalService: GoalService,
     private todoListService: TodoListService,
     private adapterService: AdapterService
     ) { }
@@ -50,7 +50,7 @@ export class AppComponent implements OnInit, OnDestroy {
       const compliceGoals = this.adapterService.parseEntities<CompliceGoal>(goals);
       const regGoals = this.adapterService.toRegGoals(compliceGoals);
 
-      this.itemService.setGoals(regGoals);
+      this.goalService.setGoals(regGoals);
     } catch (e) {
       this.handleError();
     }
@@ -81,7 +81,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private publishGoals(): void {
-    this.itemService.listenToGoals()
+    this.goalService.listenToGoals()
     .pipe(
       map(goals => this.adapterService.toCompliceGoals(goals)),
       takeUntil(this.destroy$)
@@ -92,7 +92,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private publishAddedGoal(): void {
-    this.itemService.listenToAddedGoal()
+    this.goalService.listenToAddedGoal()
     .pipe(
       map(goal => this.adapterService.toNewCompliceGoal(goal)),
       takeUntil(this.destroy$)
@@ -103,7 +103,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private publishDeletedGoal(): void {
-    this.itemService.listenToDeletedGoal()
+    this.goalService.listenToDeletedGoal()
     .pipe(
       map(goal => this.adapterService.toRelevantCompliceGoalAttributes(goal)),
       takeUntil(this.destroy$)
@@ -114,7 +114,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private publishAdjustedGoal(): void {
-    this.itemService.listenToAdjustedGoal()
+    this.goalService.listenToAdjustedGoal()
     .pipe(
       map(goal => this.adapterService.toRelevantCompliceGoalAttributes(goal)),
       takeUntil(this.destroy$)

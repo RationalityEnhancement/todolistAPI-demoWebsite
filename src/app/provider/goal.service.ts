@@ -6,7 +6,7 @@ import { filter, take } from 'rxjs/operators';
 import { Goal } from "../interfaces/item";
 
 @Injectable()
-export class ItemService {
+export class GoalService {
 
     private goals$ = new ReplaySubject<Goal[]>(1);
 

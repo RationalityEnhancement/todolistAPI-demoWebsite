@@ -13,7 +13,7 @@ import {MatInputModule} from '@angular/material/input';
 import { AppComponent } from './app.component';
 import { ToDoListComponent } from './components/todo-list/todo-list.component'
 
-import { ItemService } from './provider/item.service';
+import { GoalService } from './provider/goal.service';
 import { ImageUrlService } from './provider/image-url.service';
 import { createCustomElement } from '@angular/elements';
 import { AdapterService } from './provider/adapter.service';
@@ -39,7 +39,7 @@ import { TodoListService } from './provider/todo-list.service';
     MatInputModule 
   ],
   providers: [ 
-    ItemService,
+    GoalService,
     TodoListService,
     ImageUrlService,
     AdapterService,

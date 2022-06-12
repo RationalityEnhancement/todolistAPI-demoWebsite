@@ -107,6 +107,7 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   openGoal() {
+    this.resetGoalForm();
     this.toggleForm('goal');
   }
 
@@ -118,6 +119,9 @@ export class ToDoListComponent implements OnDestroy {
 
   editGoal(event, goal) {
     this.goal_opened = goal;
+    
+    this.resetGoalForm();
+    this.hydrateFormWithSelectedGoal()
 
     this.toggleForm('editGoal');
   }
@@ -145,8 +149,6 @@ export class ToDoListComponent implements OnDestroy {
 
       this.goalService.setAddedGoal(newGoal);
     }
-
-    this.resetGoalForm();
   }
 
   deleteGoal(event, goal) {
@@ -162,27 +164,14 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   updateGoal(event) {
-
-    if (this.goal_desc == undefined || this.goal_desc == "") {
-      this.goal_desc = this.goal_opened.name;
-    }
-    if (this.goal_time_est == null) {
-      this.goal_time_est = this.goal_opened.time_est;
-    }
-    if (this.goal_val == null) {
-      this.goal_val = this.goal_opened.value;
-    }
-    if (this.goal_deadline == undefined || this.goal_deadline == "") {
-      this.goal_deadline = this.goal_opened.deadline;
-    }
-
     this.goal_opened.name = this.goal_desc;
     this.goal_opened.time_est = this.goal_time_est;
     this.goal_opened.value = this.goal_val;
     this.goal_opened.deadline = this.goal_deadline;
 
     this.adjustGoal(this.goal_opened);
-    this.resetGoalForm();
+
+    this.goal_deadline = this.goal_opened.deadline;
   }
 
   addItem(event, selectedGoal: Goal) {
@@ -338,8 +327,16 @@ export class ToDoListComponent implements OnDestroy {
   private resetGoalForm(): void {
     this.goal_desc = undefined;
     this.goal_val = undefined;
-    this.goal_deadline = undefined;
     this.goal_time_est = undefined;
+
+    this.setDefaultGoalDeadline();
+  }
+
+  private hydrateFormWithSelectedGoal(): void {
+    this.goal_desc = this.goal_opened?.name;
+    this.goal_time_est = this.goal_opened?.time_est;
+    this.goal_val = this.goal_opened?.value;
+    this.goal_deadline = this.goal_opened?.deadline;
   }
 
   private resetTaskForm(): void {
@@ -347,7 +344,6 @@ export class ToDoListComponent implements OnDestroy {
     this.task_today = undefined;
     this.task_deadline = undefined;
     this.task_time_est = undefined;
-
   }
 }
 

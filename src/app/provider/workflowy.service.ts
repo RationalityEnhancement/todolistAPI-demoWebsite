@@ -10,8 +10,8 @@ export class WorkflowyService {
 
     public makeWorkflowyProject(goal: Goal) {
         const goalNode = this.makeWorkflowyGoal(goal);
-        const goalTasks = this.makeWorkflowyTasks(goal.tasks, goal.code);
-        
+        const goalTasks = this.makeWorkflowyTasks(goal.tasks, goal);
+
         return { ...goalNode, ch: goalTasks };
     }
 
@@ -62,13 +62,31 @@ export class WorkflowyService {
         return `#CG${goal.code}_${goal.name} ==${goal.value} DUE:${goal.deadline}`;
     }
 
-    private makeWorkflowyTasks(tasks: Item[], parentId: string) {
-        return tasks.map((task) => 
-            this.makeWorkflowyTask(task, parentId)
+    private makeWorkflowyTasks(tasks: Item[], goal: Goal) {
+        const goalEstimate = goal.time_est;
+        const totalTasksEstimate = tasks.reduce((estimate, task) => estimate + task.time_est, 0);
+
+        const workflowyTasks = tasks.map((task) =>
+            this.makeWorkflowyTask(task, goal.code)
         );
+
+        if (goalEstimate > totalTasksEstimate) {
+            const everyThingElseEstimate = goalEstimate - totalTasksEstimate;
+
+            const everyThingElseTask = {
+                id: 'everything-else',
+                nm: `Everything Else ~~${everyThingElseEstimate}h`,
+                lm: 0,
+                parentId: goal.code
+            };
+
+            workflowyTasks.push(everyThingElseTask);
+        }
+
+        return workflowyTasks;
     }
 
-    private makeWorkflowyTask(task: Item, goalId: string){
+    private makeWorkflowyTask(task: Item, goalId: string) {
         const taskId = task.workflowyId;
         const taskName = this.makeTaskName(task);
         const lastModified = 0;

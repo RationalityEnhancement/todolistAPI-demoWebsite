@@ -36,6 +36,7 @@ export class ToDoListComponent implements OnDestroy {
 
   public currentInformationPopup: 'goalExample' | 'information' | 'finishGoals' | 'legend' | 'none';
   public currentGoalForm: 'goal' | 'task' | 'editGoal' | 'none';
+  public currentView: 'initialGoal' | 'goalExplanation' | 'goalEditor' | 'none';
 
   public imageUrls: Record<string, string>;
 
@@ -85,6 +86,22 @@ export class ToDoListComponent implements OnDestroy {
     this.currentGoalForm = formType;
   }
 
+  toggleView(view: 'initialGoal' | 'goalExplanation' | 'goalEditor' | 'none') {
+    this.currentView = view;
+  }
+
+  toggleGoalExplanation() {
+    if (!this.validateForm_goal()) {
+      return;
+    }
+    this.toggleView('goalExplanation');
+  }
+
+  toggleGoalEditor() {
+    this.addGoal();
+    this.toggleView('goalEditor');
+  }
+
   closeForm() {
     this.toggleForm('none');
   }
@@ -106,6 +123,10 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   addGoal(event?) {
+    if (!this.validateForm_goal()) {
+      return
+    };
+
     const newGoal: Goal = {
       code: `${this.goals.length + 1}`,
       name: this.goal_desc,
@@ -191,30 +212,42 @@ export class ToDoListComponent implements OnDestroy {
   }
 
 
-  validateForm_goal() {
+  validateForm_goal(): boolean {
 
     if (this.goal_desc == undefined && this.goal_time_est == undefined && this.goal_val == undefined) {
       alert("please fill the form!")
     } else {
-      if (this.goal_desc == "") {
+      if (!this.goal_desc || this.goal_desc == "") {
         alert("Description must be filled out");
         return false;
       }
       if (this.goal_val == null) {
         alert("Goal value must be filled out");
+      }
+      if ( this.goal_val <1 || this.goal_val > 100 ) {
+        alert("Please enter a percentage between 1 and 100 percent")
         return false;
       }
       if (this.goal_time_est == null) {
         alert("Time estimation must be filled out");
         return false;
       }
+      if (this.goal_time_est < 0) {
+        alert("Plese enter a valid estimate for your goal!");
+        return false;
+      }
 
-      //pass validator and add goal
-      this.addGoal();
+      const deadlineValidator = (deadline: string) => new Date(deadline) < new Date();
 
+      if (deadlineValidator(this.goal_deadline)) {
+        alert("Please enter a deadline that is not in the past");
+        return false;
+      }
 
+      return true;
     }
   }
+
   validateForm_task() {
     if (this.task_desc == undefined && this.task_time_est == undefined) {
       alert("please fill the form!")
@@ -250,22 +283,28 @@ export class ToDoListComponent implements OnDestroy {
       .subscribe(goals => {
         this.goals = goals;
 
-        this.todayTasks = this.getTodayTasks(goals);
-        this.completedTasks = this.getCompletedTasks(goals);
+        this.goals.length ? this.toggleView('goalEditor') : this.toggleView('initialGoal');
+
+        this.setDefaultGoalParameters();
+
         this.newTaskAdded = this.getTaskAddedStatus(goals);
       });
   }
 
-  private getTodayTasks(goals: Goal[]): Item[] {
-    return goals.reduce((todayTasks, goal) =>
-      todayTasks.concat(goal.tasks.filter(task => task.scheduled && !task.completed))
-      , [] as Item[]);
+  private setDefaultGoalValue() {
+    this.goals.length ? this.goal_val = null : this.goal_val = 100;
   }
 
-  private getCompletedTasks(goals: Goal[]): Item[] {
-    return goals.reduce((todayTasks, goal) =>
-      todayTasks.concat(goal.tasks.filter(task => task.completed))
-      , [] as Item[]);
+  private setDefaultGoalDeadline() {
+    const dateInTwoWeeks = new Date(Date.now() + 12096e5);
+    const defaultDeadline = dateInTwoWeeks.toISOString().substring(0, 10);
+
+    this.goal_deadline = defaultDeadline;
+  }
+
+  private setDefaultGoalParameters() {
+    this.setDefaultGoalValue();
+    this.setDefaultGoalDeadline();
   }
 
   private getTaskAddedStatus(goals: Goal[]): boolean {

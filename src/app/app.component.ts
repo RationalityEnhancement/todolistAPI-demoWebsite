@@ -65,7 +65,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private initializeApiConfiguration(configuration: string): void {
     try {
-      console.log(configuration)
       const apiConfiguration = this.adapterService.parseEntity<ApiConfiguration>(configuration);
 
       this.todoListService.setApiConfiguration(apiConfiguration);

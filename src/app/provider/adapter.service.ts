@@ -8,6 +8,10 @@ export class AdapterService {
     constructor() { }
 
     public parseEntities<T>(input: string): T[] {
+        return this.parseEntity<T[]>(input);
+    }
+
+    public parseEntity<T>(input: string): T {
         return JSON.parse(input);
     }
 

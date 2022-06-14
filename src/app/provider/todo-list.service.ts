@@ -2,19 +2,20 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, ReplaySubject } from 'rxjs';
-import { filter, map, switchMap, take } from 'rxjs/operators';
+import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 
 import { Goal, OptimizedTodo } from "../interfaces/item";
 import { WorkflowyService } from "./workflowy.service";
 import { GoalService } from "./goal.service";
+import { ApiConfiguration } from "../interfaces/Api-Configuration";
 
 @Injectable()
 export class TodoListService {
 
     private gamifyUrl: string = 'https://yellow-tree.herokuapp.com/api/greedy/mdp/45/14/inf/0/inf/0/inf/0/no_scaling/false/0/tree/test/getTasksForToday'
-    private userKey: string;
 
     private optimizedTodoList$ = new ReplaySubject<OptimizedTodo[]>(1);
+    private apiConfiguration$ = new ReplaySubject<ApiConfiguration>(1);
 
     constructor(
         private http: HttpClient,
@@ -25,11 +26,27 @@ export class TodoListService {
     public setoptimizedTodoList(optimizedTodoList: OptimizedTodo[]) {
         this.optimizedTodoList$.next(optimizedTodoList);
     }
+
+    public setApiConfiguration(apiConfiguration: ApiConfiguration) {
+        console.log(apiConfiguration)
+        this.apiConfiguration$.next(apiConfiguration);
+    }
     
     public getoptimizedTodoList(): Observable<OptimizedTodo[]> {
         return this.optimizedTodoList$
             .pipe(
                 filter(todoList => !!todoList.length),
+                take(1)
+            );
+    }
+
+    public listenToApiConfiguration(): Observable<ApiConfiguration> {
+        return this.apiConfiguration$.asObservable();
+    }
+        
+    public getApiConfiguration(): Observable<ApiConfiguration> {
+        return this.apiConfiguration$
+            .pipe(
                 take(1)
             );
     }
@@ -41,15 +58,16 @@ export class TodoListService {
     public requestOptimalTodoList(): Observable<any> {
         return this.goalService.getGoals()
             .pipe(
-                map(goals => this.makeTodoListRequest(goals)),
+                withLatestFrom(this.getApiConfiguration()),
+                map(([goals, apiConfiguration]) => this.makeTodoListRequest(goals, apiConfiguration)),
                 switchMap(request => this.fetchOptimalTodoList(request))
             );
     }
 
-    private makeTodoListRequest(goals: Goal[]) {
+    private makeTodoListRequest(goals: Goal[], apiConfiguration: ApiConfiguration) {
         return {
            options: this.createRequestOptions(),
-           body: this.createRequestBody(goals),
+           body: this.createRequestBody(goals, apiConfiguration),
            url: this.gamifyUrl
         };
     }
@@ -66,16 +84,16 @@ export class TodoListService {
         return { headers };
     }
 
-    private createRequestBody(goals: Goal[]) {
+    private createRequestBody(goals: Goal[], apiConfiguration: ApiConfiguration) {
         const defaultParameters = {
-            timezoneOffsetMinutes: 0,
-            updated: Date.now(),
-            time_frame: 480
+            ymd: apiConfiguration.ymd,
+            hourOfYmd: apiConfiguration.hourOfYmd,
+            timezoneOffsetMinutes: apiConfiguration.timezoneOffsetMinutes || 0,
+            userkey: apiConfiguration.userkey || 'test',
+            updated: Date.now()
         };
 
         const currentIntentions = this.makeCurrentIntentions();
-        const userKey = this.makeUserKey();
-
         const projects = this.workflowyService.makeWorkflowyProjects(goals);
         const typicalHours = this.workflowyService.makeTypicalHours();
         const todayHours = this.workflowyService.makeTodayHours();
@@ -85,13 +103,8 @@ export class TodoListService {
             currentIntentionsList: currentIntentions,
             projects: projects,
             today_hours: todayHours,
-            typical_hours: typicalHours,
-            userkey: userKey
+            typical_hours: typicalHours
         };
-    }
-
-    private makeUserKey() {
-        return this.userKey || '__testss__';
     }
 
     private makeCurrentIntentions() {

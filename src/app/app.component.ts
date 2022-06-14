@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation, Output, EventEmitter, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+import { ApiConfiguration } from './interfaces/Api-Configuration';
 import { CompliceGoal, NewCompliceGoal, RelevantCompliceGoalAttributes } from './interfaces/Complice-Goal';
 import { AdapterService } from './provider/adapter.service';
 import { GoalService } from './provider/goal.service';
@@ -17,6 +18,12 @@ export class AppComponent implements OnInit, OnDestroy {
   @Input() public set regGoals(goals: string) {
     if (!!goals) {
       this.initializeGoals(goals);
+    }
+  }
+
+  @Input() public set regApiConfiguration(configuration: string) {
+    if (!!configuration) {
+      this.initializeApiConfiguration(configuration);
     }
   }
 
@@ -51,6 +58,17 @@ export class AppComponent implements OnInit, OnDestroy {
       const regGoals = this.adapterService.toRegGoals(compliceGoals);
 
       this.goalService.setGoals(regGoals);
+    } catch (e) {
+      this.handleError();
+    }
+  }
+
+  private initializeApiConfiguration(configuration: string): void {
+    try {
+      console.log(configuration)
+      const apiConfiguration = this.adapterService.parseEntity<ApiConfiguration>(configuration);
+
+      this.todoListService.setApiConfiguration(apiConfiguration);
     } catch (e) {
       this.handleError();
     }

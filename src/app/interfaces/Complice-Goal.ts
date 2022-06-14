@@ -41,7 +41,7 @@ export interface RelevantCompliceGoalAttributes {
     deadline?: string;
     estimate?: number;
     tasks: Item[];
-    color?: string;
+    color: string;
     workflowyProject?: WorkflowyProject
 }
     

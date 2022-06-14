@@ -1,6 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ColorConfig, COLOR_CONFIG } from 'src/app/constants/colors';
 import { GoalService } from 'src/app/provider/goal.service';
 import { TodoListService } from 'src/app/provider/todo-list.service';
 import { Goal, Item } from '../../interfaces/item';
@@ -45,9 +46,11 @@ export class ToDoListComponent implements OnDestroy {
   private destroy$ = new Subject<boolean>();
 
   constructor(
+    @Inject(COLOR_CONFIG) 
+    private colors: ColorConfig,
     private imageUrlService: ImageUrlService,
     private goalService: GoalService,
-    private todoListService: TodoListService
+    private todoListService: TodoListService,
   ) {
     this.imageUrls = this.imageUrlService.createImageUrls(this.images);
 
@@ -119,7 +122,7 @@ export class ToDoListComponent implements OnDestroy {
 
   editGoal(event, goal) {
     this.goal_opened = goal;
-    
+
     this.resetGoalForm();
     this.hydrateFormWithSelectedGoal()
 
@@ -133,6 +136,7 @@ export class ToDoListComponent implements OnDestroy {
 
     const newGoal: Goal = {
       code: `${this.goals.length + 1}`,
+      color: this.getColor(),
       name: this.goal_desc,
       time_est: this.goal_time_est,
       deadline: this.goal_deadline,
@@ -213,7 +217,7 @@ export class ToDoListComponent implements OnDestroy {
       if (this.goal_val == null) {
         alert("Goal value must be filled out");
       }
-      if ( this.goal_val <1 || this.goal_val > 100 ) {
+      if (this.goal_val < 1 || this.goal_val > 100) {
         alert("Please enter a percentage between 1 and 100 percent")
         return false;
       }
@@ -344,6 +348,15 @@ export class ToDoListComponent implements OnDestroy {
     this.task_today = undefined;
     this.task_deadline = undefined;
     this.task_time_est = undefined;
+  }
+
+  private getColor(): string {
+    const alreadyUsedColors = this.goals.map(goal => goal.color);
+    const availableColors = this.colors.filter(color => !alreadyUsedColors.includes(color));
+
+    const randomColor = availableColors[Math.floor(Math.random() * availableColors.length)];
+
+    return randomColor;
   }
 }
 

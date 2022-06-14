@@ -31,7 +31,8 @@ export class AdapterService {
             value: goal.value,
             estimate: goal.time_est,
             deadline: goal.deadline,
-            tasks: goal.tasks
+            tasks: goal.tasks,
+            color: goal.color
         };
     }
 
@@ -50,7 +51,6 @@ export class AdapterService {
 
     public toNewCompliceGoal(goal: Goal): NewCompliceGoal {
         const defaultCompliceAttributes = {
-            color: "#6600cc",
             oneliner: "",
             privacy: 10,
             justCreated: true,

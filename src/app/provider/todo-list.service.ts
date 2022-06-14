@@ -12,8 +12,6 @@ import { ApiConfiguration } from "../interfaces/Api-Configuration";
 @Injectable()
 export class TodoListService {
 
-    private gamifyUrl: string = 'https://yellow-tree.herokuapp.com/api/greedy/mdp/45/14/inf/0/inf/0/inf/0/no_scaling/false/0/tree/test/getTasksForToday'
-
     private optimizedTodoList$ = new ReplaySubject<OptimizedTodo[]>(1);
     private apiConfiguration$ = new ReplaySubject<ApiConfiguration>(1);
 
@@ -28,7 +26,6 @@ export class TodoListService {
     }
 
     public setApiConfiguration(apiConfiguration: ApiConfiguration) {
-        console.log(apiConfiguration)
         this.apiConfiguration$.next(apiConfiguration);
     }
     
@@ -68,7 +65,7 @@ export class TodoListService {
         return {
            options: this.createRequestOptions(),
            body: this.createRequestBody(goals, apiConfiguration),
-           url: this.gamifyUrl
+           url: apiConfiguration.apiUrl
         };
     }
 

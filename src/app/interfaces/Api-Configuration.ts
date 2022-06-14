@@ -3,4 +3,5 @@ export interface ApiConfiguration {
     timezoneOffsetMinutes: number,
     userkey: string
     ymd: string,
+    apiUrl: string
 }

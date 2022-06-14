@@ -75,7 +75,7 @@ export class WorkflowyService {
 
             const everyThingElseTask = {
                 id: 'everything-else',
-                nm: `Everything Else ~~${everyThingElseEstimate}h`,
+                nm: `All tasks that are not clearly specified, but necesssary for your goal ~~${everyThingElseEstimate}h`,
                 lm: 0,
                 parentId: goal.code
             };

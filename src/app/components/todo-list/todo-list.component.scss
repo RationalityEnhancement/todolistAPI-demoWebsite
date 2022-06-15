@@ -118,6 +118,7 @@ li {
     box-shadow: none;
     font-family: Roboto, "Helvetica Neue", sans-serif;
     font-size: 18px;
+    border: none;
   }
 
 }
@@ -160,12 +161,13 @@ li {
   }
 
   button {
-    width: 20%;
+    width: 300px;
     margin-top: 25px;
 
     background: #8e44ad !important;
     color: #FFF;
     box-shadow: none;
+    border: none;
 
     font-family: Roboto, "Helvetica Neue", sans-serif;
     font-size: 18px;

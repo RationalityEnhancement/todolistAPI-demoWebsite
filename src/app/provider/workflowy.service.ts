@@ -10,7 +10,7 @@ export class WorkflowyService {
 
     public makeWorkflowyProject(goal: Goal) {
         const goalNode = this.makeWorkflowyGoal(goal);
-        const goalTasks = !!goal.tasks.length ? this.makeWorkflowyTasks(goal.tasks, goal) : [this.makeEverythingElseTask(goal, 0)];
+        const goalTasks = this.makeWorkflowyTasks(goal.tasks, goal);
 
         return { ...goalNode, ch: goalTasks };
     }
@@ -63,20 +63,9 @@ export class WorkflowyService {
     }
 
     private makeWorkflowyTasks(tasks: Item[], goal: Goal) {
-        const goalEstimate = goal.time_est;
-        const totalTasksEstimate = tasks.reduce((estimate, task) => estimate + task.time_est, 0);
-
-        const workflowyTasks = tasks.map((task) =>
+        return tasks.map((task) =>
             this.makeWorkflowyTask(task, goal.code)
         );
-
-        if (goalEstimate > totalTasksEstimate) {
-            const everyThingElseTask = this.makeEverythingElseTask(goal, totalTasksEstimate);
-
-            workflowyTasks.push(everyThingElseTask);
-        }
-
-        return workflowyTasks;
     }
 
     private makeWorkflowyTask(task: Item, goalId: string) {
@@ -99,19 +88,6 @@ export class WorkflowyService {
         };
 
         return task.completed || task.scheduled ? completeTask : baseTask;
-    }
-
-    private makeEverythingElseTask(goal: Goal, totalTasksEstimate: number) {
-        const everyThingElseEstimate = goal.time_est - totalTasksEstimate;
-
-        const everyThingElseTask = {
-            id: 'everything-else',
-            nm: `All tasks that are not clearly specified, but necesssary for your goal. (It might be a good idea to divide this goal into smaller, more actionable tasks) ~~${everyThingElseEstimate}h`,
-            lm: 0,
-            parentId: goal.code
-        };
-
-        return everyThingElseTask;
     }
 
     private makeTaskName(task: Item) {

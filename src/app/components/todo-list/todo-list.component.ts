@@ -46,11 +46,11 @@ export class ToDoListComponent implements OnDestroy {
   private destroy$ = new Subject<boolean>();
 
   constructor(
-    @Inject(COLOR_CONFIG) 
+    @Inject(COLOR_CONFIG)
     private colors: ColorConfig,
     private imageUrlService: ImageUrlService,
     private goalService: GoalService,
-    private todoListService: TodoListService,
+    private todoListService: TodoListService
   ) {
     this.imageUrls = this.imageUrlService.createImageUrls(this.images);
 
@@ -77,6 +77,7 @@ export class ToDoListComponent implements OnDestroy {
 
     if (!this.newTaskAdded) {
       alert('All your tasks are scheduled already. Please add new tasks before you create a new todo list!')
+      return;
     }
 
     this.todoListService.requestOptimalTodoList()
@@ -143,6 +144,15 @@ export class ToDoListComponent implements OnDestroy {
       value: this.goal_val,
       tasks: []
     };
+
+    const everythingElseTask: Item = {
+      name: 'All tasks that are not clearly specified, but necesssary for your goal. It might be a good idea to divide this goal into smaller, more actionable tasks.',
+      time_est: newGoal.time_est,
+      deadline: newGoal.deadline,
+      workflowyId: `g${newGoal.code}-everything-else-${Date.now()}`
+    };
+
+    newGoal.tasks.push(everythingElseTask);
 
     if (this.goal_desc != undefined) {
       this.goals = this.goals.concat(newGoal);
@@ -268,6 +278,10 @@ export class ToDoListComponent implements OnDestroy {
     }
   }
 
+  public getDisplayedTasks(tasks: Item[]) {
+    return tasks.filter(task => !task.workflowyId.includes('everything-else'));
+  }
+
   private listenToGoalChanges(): void {
     this.goalService.listenToGoals()
       .pipe(
@@ -303,7 +317,7 @@ export class ToDoListComponent implements OnDestroy {
   private getTaskAddedStatus(goals: Goal[]): boolean {
     return goals
       .reduce((allTasks, goal) => allTasks.concat(goal.tasks), [] as Item[])
-      .some(task => !task.scheduled);
+      .some(task => !(task.scheduled || task.completed));
   }
 
   private setGoals(goals: Goal[]): void {
@@ -320,13 +334,48 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   private adjustGoal(selectedGoal: Goal): void {
-    const adjustedGoals = this.goals.map(goal =>
-      goal.code === selectedGoal.code ? selectedGoal : goal
-    );
+    selectedGoal = this.getGoalWithUpdatedTasks(selectedGoal);
+
+    const adjustedGoals = this.goals
+      .map(goal =>goal.code === selectedGoal.code ? selectedGoal : goal);
 
     this.goalService.setAdjustedGoal(selectedGoal);
     this.setGoals(adjustedGoals);
   }
+
+  private getGoalWithUpdatedTasks(goal: Goal): Goal {
+    const tasksWithUpdatedEverythingElseTask = this.getTasksWithUpdatedEverythingElseTask(goal);
+
+    goal.tasks = tasksWithUpdatedEverythingElseTask;
+    
+    return goal;
+  }
+
+  private getTasksWithUpdatedEverythingElseTask(goal: Goal): Item[] {
+    return goal.tasks.map(task => {
+      if (task.workflowyId.includes('everything-else')) {
+        task = this.getUpdatedEverythingElseTask(task, goal);
+      }
+      return task;
+    });
+  }
+
+  private getUpdatedEverythingElseTask(task: Item, goal: Goal): Item {
+    const goalEstimate = goal.time_est;
+    const totalTaskEstimate = this.getTotalEstimateOfRelevantTasks(goal);
+
+    if (goalEstimate > totalTaskEstimate) {
+      task.time_est = goalEstimate - totalTaskEstimate;
+    }
+
+    return task;
+  }
+
+  private getTotalEstimateOfRelevantTasks(goal: Goal) {
+    return goal.tasks
+      .filter(task => !task.workflowyId.includes('everything-else'))
+      .reduce((estimate, task) => estimate + task.time_est, 0);
+  } 
 
   private resetGoalForm(): void {
     this.goal_desc = undefined;
@@ -354,7 +403,7 @@ export class ToDoListComponent implements OnDestroy {
     const alreadyUsedColors = this.goals.map(goal => goal.color);
     const availableColors = this.colors.filter(color => !alreadyUsedColors.includes(color));
 
-    const randomColor = availableColors[Math.floor(Math.random() * availableColors.length)];
+    const randomColor = availableColors[Math.floor(Math.random() * availableColors.length)] || '#8e44ad';
 
     return randomColor;
   }

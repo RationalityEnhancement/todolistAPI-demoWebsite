@@ -248,8 +248,11 @@
 
               <div> ------ Subgoals ------
                 <ul>
-                  <li *ngFor="let task of goal.tasks">
-                    <div class="task-item" [ngClass]="{'completed': task.completed, 'scheduled': (task.scheduled || task.completed)}">
+                  <li *ngFor="let task of getDisplayedTasks(goal.tasks)">
+                    <div class="task-item" [ngClass]="{
+                      'completed': task.completed, 
+                      'scheduled': (task.scheduled || task.completed)
+                    }">
                       {{task.name}} <br /> Time: {{task.time_est}} hr
                       <br> Deadline: / {{task.deadline}}
                       <div *ngIf="!(task.scheduled || task.completed)" class="del-wrapper">

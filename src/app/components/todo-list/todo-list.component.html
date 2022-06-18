@@ -82,7 +82,7 @@
           business”, “learn programming”, or “get a good job”, that you can work on in the next 7 days.
           <br><br>
           In comparison, "cooking dinner on X'mas" isn't a suitable goal. Ideally, your goal can be broken down into a
-          series of subgoals.
+          series of smaller tasks.
           <br><br>
 
 
@@ -246,7 +246,7 @@
             <div *ngIf="goal.tasks.length > 0">
               <!--<div id="goal-sum-time" > Time Estimation:  {{goal.goal_time_est}} </div>-->
 
-              <div> ------ Subgoals ------
+              <div> ------ Tasks ------
                 <ul>
                   <li *ngFor="let task of getDisplayedTasks(goal.tasks)">
                     <div class="task-item" [ngClass]="{

@@ -76,7 +76,7 @@ export class ToDoListComponent implements OnDestroy {
     }
 
     if (!this.newTaskAdded) {
-      alert('All your tasks are scheduled already. Please add new tasks before you create a new todo list!')
+      alert('All your tasks are scheduled already. Please add new tasks before you create a new to-do list!')
       return;
     }
 

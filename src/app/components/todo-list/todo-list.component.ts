@@ -70,8 +70,8 @@ export class ToDoListComponent implements OnDestroy {
       return;
     }
 
-    if (this.goals.length < 1) {
-      alert("Please add at least one goal!");
+    if (this.goals.length < 3) {
+      alert("Please add at least three goals!");
       return;
     }
 

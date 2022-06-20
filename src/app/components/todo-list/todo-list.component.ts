@@ -65,8 +65,8 @@ export class ToDoListComponent implements OnDestroy {
 
   public route() {
 
-    if (this.goals.some(goal => goal.tasks?.length < 2)) {
-      alert("Please add at least 2 tasks for each goal!");
+    if (this.goals.some(goal => goal.tasks?.length < 3)) {
+      alert("Please add at least 3 tasks for each goal!");
       return;
     }
 

@@ -178,6 +178,10 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   updateGoal(event) {
+    if (!this.validateForm_goal()) {
+      return
+    };
+
     this.goal_opened.name = this.goal_desc;
     this.goal_opened.time_est = this.goal_time_est;
     this.goal_opened.value = this.goal_val;
@@ -185,7 +189,7 @@ export class ToDoListComponent implements OnDestroy {
 
     this.adjustGoal(this.goal_opened);
 
-    this.goal_deadline = this.goal_opened.deadline;
+    this.hydrateFormWithSelectedGoal();
   }
 
   addItem(event, selectedGoal: Goal) {
@@ -226,6 +230,7 @@ export class ToDoListComponent implements OnDestroy {
       }
       if (this.goal_val == null) {
         alert("Goal value must be filled out");
+        return false;
       }
       if (this.goal_val < 1 || this.goal_val > 100) {
         alert("Please enter a percentage between 1 and 100 percent")
@@ -279,7 +284,7 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   public getDisplayedTasks(tasks: Item[]) {
-    return tasks.filter(task => !task.workflowyId.includes('everything-else'));
+    return tasks.filter(task => !task.workflowyId?.includes('everything-else'));
   }
 
   private listenToGoalChanges(): void {
@@ -353,7 +358,7 @@ export class ToDoListComponent implements OnDestroy {
 
   private getTasksWithUpdatedEverythingElseTask(goal: Goal): Item[] {
     return goal.tasks.map(task => {
-      if (task.workflowyId.includes('everything-else')) {
+      if (task.workflowyId?.includes('everything-else')) {
         task = this.getUpdatedEverythingElseTask(task, goal);
       }
       return task;
@@ -373,7 +378,7 @@ export class ToDoListComponent implements OnDestroy {
 
   private getTotalEstimateOfRelevantTasks(goal: Goal) {
     return goal.tasks
-      .filter(task => !task.workflowyId.includes('everything-else'))
+      .filter(task => !task.workflowyId?.includes('everything-else'))
       .reduce((estimate, task) => estimate + task.time_est, 0);
   } 
 

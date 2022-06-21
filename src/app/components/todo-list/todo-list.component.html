@@ -137,7 +137,7 @@
           <div class="icon plus" style="text-align:center;cursor:not-allowed; ">
             <div> +</div>
           </div>
-          <span>Add a subgoal </span><br>
+          <span>Add a task </span><br>
           <div class="icon plus" style="text-align:center; cursor:not-allowed">
             <div> -</div>
           </div>
@@ -156,9 +156,9 @@
   <div class="form-popup" id="task-form" *ngIf="currentGoalForm === 'task'">
 
     <form class="form-container">
-      <h1>Add Subgoal in Goal {{goal_opened.name}}</h1>
+      <h1>Add a task to your goal {{goal_opened.name}}</h1>
       <label for="item-desc"></label>
-      <input [(ngModel)]="task_desc" type="text" placeholder="Subgoal Description (*Required)" name="item-desc"
+      <input [(ngModel)]="task_desc" type="text" placeholder="Task Description (*Required)" name="item-desc"
         required>
 
       <label for="item-time"></label>

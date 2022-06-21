@@ -65,7 +65,10 @@ export class ToDoListComponent implements OnDestroy {
 
   public route() {
 
-    if (this.goals.some(goal => goal.tasks?.length < 4)) {
+    if (this.goals
+      .map(goal => this.getDisplayedTasks(goal.tasks))
+      .some(tasks => tasks?.length < 3)
+    ) {
       alert("Please add at least 3 tasks for each goal!");
       return;
     }
@@ -342,7 +345,7 @@ export class ToDoListComponent implements OnDestroy {
     selectedGoal = this.getGoalWithUpdatedTasks(selectedGoal);
 
     const adjustedGoals = this.goals
-      .map(goal =>goal.code === selectedGoal.code ? selectedGoal : goal);
+      .map(goal => goal.code === selectedGoal.code ? selectedGoal : goal);
 
     this.goalService.setAdjustedGoal(selectedGoal);
     this.setGoals(adjustedGoals);
@@ -352,7 +355,7 @@ export class ToDoListComponent implements OnDestroy {
     const tasksWithUpdatedEverythingElseTask = this.getTasksWithUpdatedEverythingElseTask(goal);
 
     goal.tasks = tasksWithUpdatedEverythingElseTask;
-    
+
     return goal;
   }
 
@@ -380,7 +383,7 @@ export class ToDoListComponent implements OnDestroy {
     return goal.tasks
       .filter(task => !task.workflowyId?.includes('everything-else'))
       .reduce((estimate, task) => estimate + task.time_est, 0);
-  } 
+  }
 
   private resetGoalForm(): void {
     this.goal_desc = undefined;

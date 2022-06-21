@@ -374,6 +374,10 @@ export class ToDoListComponent implements OnDestroy {
 
     if (goalEstimate > totalTaskEstimate) {
       task.time_est = goalEstimate - totalTaskEstimate;
+      task.deadline = goal.deadline;
+      task.completed = false;
+    } else {
+      task.completed = true;
     }
 
     return task;

@@ -86,6 +86,8 @@ export class ToDoListComponent implements OnDestroy {
     this.todoListService.requestOptimalTodoList()
       .subscribe((optimizedTodoList) => {
         this.todoListService.setoptimizedTodoList(optimizedTodoList);
+      }, error => {
+        alert(error?.error || 'An unexpected error occured. If you continue to encounter this issue, please contact us at reg.experiments@tuebingen.mpg.de.');
       });
   }
 

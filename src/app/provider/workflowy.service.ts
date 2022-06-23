@@ -59,7 +59,7 @@ export class WorkflowyService {
     }
 
     private makeGoalName(goal: Goal) {
-        return `#CG${goal.code}_${goal.name} ==${goal.value} DUE:${goal.deadline}`;
+        return `#CG${goal.code}_${goal.name} ==${goal.value * 10} DUE:${goal.deadline}`;
     }
 
     private makeWorkflowyTasks(tasks: Item[], goal: Goal) {

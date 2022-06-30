@@ -169,7 +169,7 @@
       <input [(ngModel)]="task_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD) (optional)"
         name="item-deadline">
 
-      <button type="submit" class="btn add" (click)="validateForm_task($event)">Add</button>
+      <button type="submit" class="btn add" (click)="this.addItem();">Add</button>
       <button type="submit" class="btn cancel" (click)="closeForm()">Cancel</button>
     </form>
   </div>
@@ -269,5 +269,5 @@
     </ul>
   </div>
 
-  <div class="btn bottom-fixed" (click)="route()">Create To-Do List</div>
+  <div class="btn bottom-fixed" (click)="createTodoList()">Create To-Do List</div>
 </div>

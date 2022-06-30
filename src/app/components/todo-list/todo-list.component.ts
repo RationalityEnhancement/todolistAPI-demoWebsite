@@ -63,23 +63,8 @@ export class ToDoListComponent implements OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  public route() {
-
-    if (this.goals
-      .map(goal => this.getDisplayedTasks(goal.tasks))
-      .some(tasks => tasks?.length < 3)
-    ) {
-      alert("Please add at least 3 tasks for each goal!");
-      return;
-    }
-
-    if (this.goals.length < 3) {
-      alert("Please add at least three goals!");
-      return;
-    }
-
-    if (!this.newTaskAdded) {
-      alert('All your tasks are scheduled already. Please add new tasks before you create a new to-do list!')
+  public createTodoList() {
+    if (!this.validateTodolistData()) {
       return;
     }
 
@@ -91,8 +76,20 @@ export class ToDoListComponent implements OnDestroy {
       });
   }
 
+  public toggleInformationPopup(popup) {
+    if (this.currentInformationPopup === popup) {
+      this.currentInformationPopup = 'none';
+    } else {
+      this.currentInformationPopup = popup;
+    }
+  }
+
   toggleForm(formType: 'goal' | 'task' | 'editGoal' | 'none') {
     this.currentGoalForm = formType;
+  }
+
+  closeForm() {
+    this.toggleForm('none');
   }
 
   toggleView(view: 'initialGoal' | 'goalExplanation' | 'goalEditor' | 'none') {
@@ -109,10 +106,6 @@ export class ToDoListComponent implements OnDestroy {
   toggleGoalEditor() {
     this.addGoal();
     this.toggleView('goalEditor');
-  }
-
-  closeForm() {
-    this.toggleForm('none');
   }
 
   openGoal() {
@@ -197,19 +190,21 @@ export class ToDoListComponent implements OnDestroy {
     this.hydrateFormWithSelectedGoal();
   }
 
-  addItem(event, selectedGoal: Goal) {
+  addItem() {
+    if (!this.validateForm_task()) {
+      return;
+    }
+
     const task: Item = {
       name: this.task_desc,
       time_est: this.task_time_est,
       deadline: this.task_deadline,
-      workflowyId: `g${selectedGoal.code}-t${selectedGoal.tasks.length + 1}-${Date.now()}`
+      workflowyId: `g${this.goal_opened.code}-t${this.goal_opened.tasks.length + 1}-${Date.now()}`
     };
 
-    if (this.task_desc != undefined) {
-      selectedGoal.tasks.push(task);
-    }
+    this.goal_opened.tasks.push(task);
 
-    this.adjustGoal(selectedGoal);
+    this.adjustGoal(this.goal_opened);
     this.resetTaskForm();
   }
 
@@ -223,9 +218,11 @@ export class ToDoListComponent implements OnDestroy {
     this.adjustGoal(goal);
   }
 
+  public getDisplayedTasks(tasks: Item[]) {
+    return tasks.filter(task => !task.workflowyId?.includes('everything-else'));
+  }
 
-  validateForm_goal(): boolean {
-
+  private validateForm_goal(): boolean {
     if (this.goal_desc == undefined && this.goal_time_est == undefined && this.goal_val == undefined) {
       alert("please fill the form!")
     } else {
@@ -250,10 +247,8 @@ export class ToDoListComponent implements OnDestroy {
         return false;
       }
 
-      const deadlineValidator = (deadline: string) => new Date(deadline) < new Date();
-
-      if (deadlineValidator(this.goal_deadline)) {
-        alert("Please enter a deadline that is not in the past");
+      if (this.deadlineInPast(this.goal_deadline)) {
+        alert("Please enter a deadline that is not in the past!");
         return false;
       }
 
@@ -261,35 +256,76 @@ export class ToDoListComponent implements OnDestroy {
     }
   }
 
-  validateForm_task() {
+  private validateForm_task(): boolean {
     if (this.task_desc == undefined && this.task_time_est == undefined) {
       alert("please fill the form!")
-    } else {
-      if (this.task_desc == "") {
-        alert("Description must be filled out");
-        return false;
-      }
-
-      if (this.task_time_est == null) {
-        alert("Time estimation must be filled out");
-        return false;
-      }
-      //pass validator and add item
-      this.addItem(event, this.goal_opened);
+      return false;
     }
+
+    if (this.task_desc == "") {
+      alert("Description must be filled out");
+      return false;
+    }
+
+    if (this.task_time_est == null) {
+      alert("Time estimation must be filled out");
+      return false;
+    }
+
+    if (this.task_time_est < 0) {
+      alert("Plese enter a valid estimate for your task");
+      return false;
+    }
+
+    if (this.task_time_est > 4) {
+      alert("Please enter a time estimate that is less than 4 hours. Your tasks should be actionable and specific, so you could achieve them in one day. Ideally your task's estimate is between 1 - 2 hours.");
+      return false;
+    }
+
+    if (this.deadlineInPast(this.task_deadline) ) {
+      alert("Please enter a deadline that is not in the past!");
+      return false;
+    }
+
+    if (this.taskDeadlineAfterGoalDeadline(this.task_deadline, this.goal_opened.deadline)) {
+      alert("Please enter a deadline that is before your goal's deadline!");
+      return false;
+    }
+
+    return true;
   }
 
-  public toggleInformationPopup(popup) {
-
-    if (this.currentInformationPopup === popup) {
-      this.currentInformationPopup = 'none';
-    } else {
-      this.currentInformationPopup = popup;
+  private validateTodolistData(): boolean {
+    if (this.goals
+      .map(goal => this.getDisplayedTasks(goal.tasks))
+      .some(tasks => tasks?.length < 3)
+    ) {
+      alert("Please add at least 3 tasks for each goal!");
+      return false;
     }
+
+    if (this.goals.length < 3) {
+      alert("Please add at least three goals!");
+      return false;
+    }
+
+    if (!this.newTaskAdded) {
+      alert('All your tasks are scheduled already. Please add new tasks before you create a new to-do list!')
+      return false;
+    }
+
+    return true;
   }
 
-  public getDisplayedTasks(tasks: Item[]) {
-    return tasks.filter(task => !task.workflowyId?.includes('everything-else'));
+  private deadlineInPast(deadline: string): boolean {
+    const deadlineDate = new Date(deadline);
+    const todayDate = new Date(new Date().toISOString().substring(0, 10));
+
+    return deadlineDate < todayDate;
+  }
+
+  private taskDeadlineAfterGoalDeadline(taskDeadline: string, goalDeadline: string): boolean {
+    return new Date(taskDeadline) > new Date(goalDeadline);
   }
 
   private listenToGoalChanges(): void {
@@ -391,19 +427,19 @@ export class ToDoListComponent implements OnDestroy {
       .reduce((estimate, task) => estimate + task.time_est, 0);
   }
 
+  private hydrateFormWithSelectedGoal(): void {
+    this.goal_desc = this.goal_opened?.name;
+    this.goal_time_est = this.goal_opened?.time_est;
+    this.goal_val = this.goal_opened?.value;
+    this.goal_deadline = this.goal_opened?.deadline;
+  }
+
   private resetGoalForm(): void {
     this.goal_desc = undefined;
     this.goal_val = undefined;
     this.goal_time_est = undefined;
 
     this.setDefaultGoalDeadline();
-  }
-
-  private hydrateFormWithSelectedGoal(): void {
-    this.goal_desc = this.goal_opened?.name;
-    this.goal_time_est = this.goal_opened?.time_est;
-    this.goal_val = this.goal_opened?.value;
-    this.goal_deadline = this.goal_opened?.deadline;
   }
 
   private resetTaskForm(): void {

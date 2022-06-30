@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { takeLast } from "rxjs/operators";
 import { Goal, Item } from "../interfaces/item";
 
 @Injectable()
@@ -16,13 +17,13 @@ export class WorkflowyService {
     }
 
     public makeTypicalHours() {
-        const value = "#HOURS_TYPICAL ==8";
+        const value = "#HOURS_TYPICAL ==4";
 
         return this.makeHoursNode(value);
     }
 
     public makeTodayHours() {
-        const value = "#HOURS_TODAY ==8";
+        const value = "#HOURS_TODAY ==4";
 
         return this.makeHoursNode(value);
     }
@@ -63,9 +64,26 @@ export class WorkflowyService {
     }
 
     private makeWorkflowyTasks(tasks: Item[], goal: Goal) {
-        return tasks.map((task) =>
-            this.makeWorkflowyTask(task, goal.code)
-        );
+        return tasks
+            .map((task) => this.setDeadlineForOverdueTask(task))
+            .map((task) => this.removeDeadlineForCompletedTask(task))
+            .map((task) => this.makeWorkflowyTask(task, goal.code));
+    }
+
+    private setDeadlineForOverdueTask(task) {
+        if (!task.deadline) {
+            return task;
+        }
+
+        const taskDueDate = new Date(task.deadline);
+        const nowDate = new Date();
+        const todayIsoDate = nowDate.toISOString().substring(0, 10);
+
+        return taskDueDate < nowDate ? { ...task, deadline: todayIsoDate } : task;
+    }
+
+    private removeDeadlineForCompletedTask(task) {
+        return task.completed || task.scheduled ? { ...task, deadline: null } : task;
     }
 
     private makeWorkflowyTask(task: Item, goalId: string) {

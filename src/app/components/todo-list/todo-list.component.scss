@@ -98,11 +98,8 @@ li {
   form {
     text-align: left;
     padding: 15px 15px;
-    // border: 1px solid #222;
     border: 2px solid #8e44ad;
-    // background: #8d44ad0c;
     border-radius: 15px;
-    // box-shadow: 5px 5px 20px 0px rgba(0,0,0,0.2);
 
     input {
       margin: 10px 0;
@@ -124,9 +121,6 @@ li {
 }
 
 .initial-goal-explanation {
-  width: 80%;
-  margin: 0 auto;
-
   text-align: center;
 
   h2 {
@@ -175,9 +169,6 @@ li {
 }
 
 .goal-editor-wrapper {
-  width: 80%;
-  margin: 0 auto;
-
   h2 {
     font-weight: lighter;
   }
@@ -470,10 +461,8 @@ input:checked+.slider:before {
   min-height: 300px;
   display: inline-block;
   text-align: center;
-  color: #222;
-  background: #8d44ad36;
-  ;
-  border-radius: 20px;
+  background: #8d44ad22;
+  border-radius: 15px;
   padding: 10px;
   margin: 10px;
 
@@ -484,7 +473,6 @@ input:checked+.slider:before {
 }
 
 .task-item {
-  color: #222;
   width: 80%;
   min-height: 100px;
   min-width: 50%;

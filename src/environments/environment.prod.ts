@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  assetPath: '/web-components/assets/'
+  assetPath: '/web-components/todo-list/assets'
 };

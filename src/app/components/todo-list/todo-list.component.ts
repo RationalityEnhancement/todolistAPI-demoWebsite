@@ -349,8 +349,10 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   private setDefaultGoalDeadline() {
-    const dateInTwoWeeks = new Date(Date.now() + 12096e5);
-    const defaultDeadline = dateInTwoWeeks.toISOString().substring(0, 10);
+    // const dateInTwoWeeks = new Date(Date.now() + 12096e5);
+    const dateInOneWeek = new Date(Date.now() + 12096e5 / 2);
+    // const defaultDeadline = dateInTwoWeeks.toISOString().substring(0, 10);
+    const defaultDeadline = dateInOneWeek.toISOString().substring(0, 10);
 
     this.goal_deadline = defaultDeadline;
   }

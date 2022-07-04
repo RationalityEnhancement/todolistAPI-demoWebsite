@@ -2,7 +2,7 @@
   <div class="initial-goal-introduction">
 
     <h2>
-      What is the most important goal you want to achieve in the next months?
+      What is the most important goal you want to achieve this week?
     </h2>
 
     <p>
@@ -21,7 +21,7 @@
         name="goal-time-est">
 
       <label for="goal-deadline" style="font-size: 12px; color: gray; margin-left: 6px">Enter a deadline
-        (defaults to 14 days)</label>
+        (defaults to 7 days)</label>
       <input [(ngModel)]="goal_deadline" type="date" name="goal-deadline">
 
       <button type="submit" class="btn add" (click)="toggleGoalExplanation()">Next</button>
@@ -103,8 +103,8 @@
           <b>Description</b>
           <br>Write down what you want to achieve (e.g., “Start my own business”)
           <br><br><b>Value</b>
-          <br>How valuable would it be for you to have achieved this goal on a scale from 0 to 1000, where 0 means “I
-          couldn’t care less.” and 1000 means “Nothing could be more valuable to me.”? Don’t stress about the exact
+          <br>How valuable would it be for you to have achieved this goal on a scale from 1 to 100, where 1 means “I
+          couldn’t care less.” and 100 means “Nothing could be more valuable to me.”? Don’t stress about the exact
           value.
           What matters most is that you assign higher values to the goals that are more important to you. If your first
           goal

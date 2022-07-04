@@ -164,15 +164,17 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   deleteGoal(event, goal) {
-    const index = this.goals.indexOf(goal);
-    if (index > -1) {
-      this.goals.splice(index, 1);
+    if (confirm('Do you really want to delete this goal?')) {
+      const index = this.goals.indexOf(goal);
+      if (index > -1) {
+        this.goals.splice(index, 1);
+      }
+  
+      this.renumberGoals();
+      this.setGoals(this.goals);
+  
+      this.goalService.setDeletedGoal(goal);
     }
-
-    this.renumberGoals();
-    this.setGoals(this.goals);
-
-    this.goalService.setDeletedGoal(goal);
   }
 
   updateGoal(event) {

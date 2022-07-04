@@ -156,7 +156,7 @@
   <div class="form-popup" id="task-form" *ngIf="currentGoalForm === 'task'">
 
     <form class="form-container">
-      <h1>Add a task to your goal <i>{{goal_opened.name}}</i></h1>
+      <h1>Add a task to your goal <b>{{goal_opened.name}}</b></h1>
       <label for="item-desc"></label>
       <input [(ngModel)]="task_desc" type="text" placeholder="Task Description (*Required)" name="item-desc"
         required>
@@ -204,8 +204,7 @@
 
   <div class="form-popup" id="edit-goal-form" *ngIf="currentGoalForm === 'editGoal'">
     <form class="form-container">
-      <h1>Edit Goal <i>{{goal_opened.name}}</i></h1>
-      <h4>Only enter what you want to change.</h4>
+      <h1>Edit Goal <b>{{goal_opened.name}}</b></h1>
       <label for="goal-desc" style="font-size: 12px; color: gray; margin-left: 6px">Goal Name</label>
       <input [(ngModel)]="goal_desc" type="text" placeholder={{goal_opened.name}} name="goal-desc" required>
 

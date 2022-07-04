@@ -298,8 +298,43 @@ li {
   position: fixed;
   bottom: 10%;
   right: 15px;
-  border: 3px solid #f1f1f1;
   z-index: 9;
+
+  padding: 20px;
+
+  border: 2px solid #8e44ad;
+  border-radius: 15px;
+  box-shadow: 5px 5px 20px 0px rgba(0, 0, 0, 0.2);
+
+  background-color: #fff;
+
+  form {
+    text-align: left;
+
+    h1 {
+      font-weight: lighter;
+
+      b {
+        font-weight: 500;
+      }
+    }
+
+    input {
+      margin: 10px 0;
+      border-radius: 15px;
+      background: #8d44ad0c;
+      border: 2px solid #8d44ad4a;
+    }
+  }
+
+  button {
+    background: #8e44ad !important;
+    color: #FFF;
+    box-shadow: none;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: 18px;
+    border: none;
+  }
 }
 
 /* Add styles to the form container */

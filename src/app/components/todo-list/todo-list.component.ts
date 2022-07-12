@@ -56,6 +56,7 @@ export class ToDoListComponent implements OnDestroy {
 
     this.listenToGoalChanges();
 
+    setTimeout(() => this.checkOverdueGoals(), 1000)
   }
 
   public ngOnDestroy(): void {
@@ -362,6 +363,14 @@ export class ToDoListComponent implements OnDestroy {
   private setDefaultGoalParameters() {
     this.setDefaultGoalValue();
     this.setDefaultGoalDeadline();
+  }
+
+  private checkOverdueGoals() {
+    this.goals.forEach(goal => {
+      if (this.deadlineInPast(goal.deadline)) {
+        alert(`Your goal ${goal.name} is overdue! Please think about a new deadline and adjust it properly.`);
+      }
+    })
   }
 
   private getTaskAddedStatus(goals: Goal[]): boolean {

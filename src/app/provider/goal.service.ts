@@ -1,10 +1,10 @@
-import { Inject, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
-import { ColorConfig, COLOR_CONFIG } from "../constants/colors";
 
 import { Goal, Item } from "../interfaces/item";
+import { ColorService } from "./color.service";
 import { TaskService } from "./task.service";
 
 @Injectable()
@@ -17,10 +17,9 @@ export class GoalService {
     private deletedGoal$ = new ReplaySubject<Goal>();
 
     constructor(
-        @Inject(COLOR_CONFIG)
-        private colors: ColorConfig,
-        private taskService: TaskService
-    ) { }
+        private taskService: TaskService,
+        private colorService: ColorService
+        ) { }
 
     public setAddedGoal(goal: Goal): void {
         this.addedGoal$.next(goal);
@@ -111,7 +110,7 @@ export class GoalService {
     }
 
     private createNewGoal(goal: Goal, goals: Goal[]): [Goal, Goal[]] {
-        const color = this.getColor(goals);
+        const color = this.colorService.getGoalColor(goals);
         const everythinElseTask = this.taskService.getEverythingElseTask(goal);
         const code = `${goals.length + 1}`;
 
@@ -132,25 +131,10 @@ export class GoalService {
         return [deletedGoal, renumberedGoals];
     }
 
-    private getColor(goals: Goal[]): string {
-        const alreadyUsedColors = goals.map(goal => goal.color);
-        const availableColors = this.colors.filter(color => !alreadyUsedColors.includes(color));
-
-        const randomColor = availableColors.length ? this.chooseRandomColor(availableColors) : '#8e44ad';
-
-        return randomColor;
-    }
-
-    private chooseRandomColor(colors: string[]) {
-        return colors[Math.floor(Math.random() * colors.length)];
-    }
-
     private renumberGoals(goals): Goal[] {
-        const renumberedGoals = goals.map((goal, index) => ({
+        return goals.map((goal, index) => ({
             ...goal,
             code: `${index + 1}`
         }));
-
-        return renumberedGoals;
     }
 }

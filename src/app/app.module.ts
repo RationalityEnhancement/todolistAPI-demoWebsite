@@ -19,6 +19,7 @@ import { AddGoalFormComponent } from './components/add-goal-form/add-goal-form.c
 import { InitialGoalFormComponent } from './components/initial-goal-form/initial-goal-form.component';
 import { AddTaskFormComponent } from './components/add-task-form/add-task-form.component';
 import { TaskService } from './provider/task.service';
+import { ColorService } from './provider/color.service';
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import { TaskService } from './provider/task.service';
     ImageUrlService,
     AdapterService,
     WorkflowyService,
+    ColorService,
     { provide: COLOR_CONFIG, useValue: COLORS }
   ],
   entryComponents: [AppComponent]

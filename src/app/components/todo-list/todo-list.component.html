@@ -12,31 +12,18 @@
   <br>
 
   <div class="initial-goal-form">
-    <form class="form-container">
-      <label for="goal-desc"></label>
-      <input [(ngModel)]="goal_desc" type="text" placeholder="Goal Description (*Required)" name="goal-desc" required>
-
-      <label for="goal-time"></label>
-      <input [(ngModel)]="goal_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)"
-        name="goal-time-est">
-
-      <label for="goal-deadline" style="font-size: 12px; color: gray; margin-left: 6px">Enter a deadline
-        (defaults to 7 days)</label>
-      <input [(ngModel)]="goal_deadline" type="date" name="goal-deadline">
-
-      <button type="submit" class="btn add" (click)="toggleGoalExplanation()">Next</button>
-    </form>
+   <initial-goal-form (submitGoal)="toggleGoalExplanation($event)"></initial-goal-form>  
   </div>
 </div>
 
 <div class="initial-goal-explanation" *ngIf="currentView === 'goalExplanation'">
   <h2>Here is your most important goal!</h2>
   <div class="initial-goal-preview">
-    <h3>{{goal_desc}}</h3>
+    <h3>{{goal_opened.name}}</h3>
     <ul>
-      <li class="goal-info-elelement">Value: <span><b>{{goal_val}}%</b></span></li>
-      <li class="goal-info-elelement"> Estimation: <span><b>{{goal_time_est}} hr</b></span></li>
-      <li class="goal-info-elelement">Deadline: <span><b>{{goal_deadline}}</b></span></li>
+      <li class="goal-info-elelement">Value: <span><b>{{goal_opened.value}}%</b></span></li>
+      <li class="goal-info-elelement"> Estimation: <span><b>{{goal_opened.time_est}} hr</b></span></li>
+      <li class="goal-info-elelement">Deadline: <span><b>{{goal_opened.deadline}}</b></span></li>
     </ul>
   </div>
 

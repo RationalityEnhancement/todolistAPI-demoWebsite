@@ -1,0 +1,33 @@
+<form [formGroup]="form" (ngSubmit)="submitForm()" class="form-container">
+    <label for="goal-desc">Goal Name</label>
+    <input id="goal-desc" type="text" required placeholder="Goal Description" formControlName="name">
+  
+    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="feedback-message">
+      <div *ngIf="name.errors?.required">
+        Please enter a name for your goal.
+      </div>
+    </div>
+  
+    <label for="goal-time">Goal Time Estimation</label>
+    <input id="goal-time" type="number" placeholder="Enter Time Estimate (Hours)" required formControlName="time_est">
+  
+    <div *ngIf="estimate.invalid && (estimate.dirty || estimate.touched)" class="feedback-message">
+      <div *ngIf="estimate.errors?.required">
+        Please enter an estimate for your goal.
+      </div>
+      <div *ngIf="(estimate.errors?.min)">
+        Please enter a valid estimate for your goal.
+      </div>
+    </div>
+  
+    <label for="goal-deadline">Enter a deadline (defaults to 7 days)</label>
+    <input id="goal-deadline" type="date" required formControlName="deadline">
+  
+    <div *ngIf="deadline.invalid && (deadline.dirty || deadline.touched)" class="feedback-message">
+      <div *ngIf="(deadline.errors?.invalidDeadline)">
+        Please enter a deadline that is not in the past.
+      </div>
+    </div>
+  
+    <button [disabled]="form.invalid" type="submit" class="btn">Submit</button>
+  </form>

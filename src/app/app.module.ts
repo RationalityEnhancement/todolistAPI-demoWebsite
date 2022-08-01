@@ -16,6 +16,7 @@ import { TodoListService } from './provider/todo-list.service';
 import { COLORS, COLOR_CONFIG } from './constants/colors';
 import { GoalFormComponent } from './components/goal-form/goal-form.component';
 import { AddGoalFormComponent } from './components/add-goal-form/add-goal-form.component';
+import { InitialGoalFormComponent } from './components/initial-goal-form/initial-goal-form.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { AddGoalFormComponent } from './components/add-goal-form/add-goal-form.c
     AppComponent,
     ToDoListComponent,
     GoalFormComponent,
-    AddGoalFormComponent
+    AddGoalFormComponent,
+    InitialGoalFormComponent
   ],
   imports: [
     BrowserModule,

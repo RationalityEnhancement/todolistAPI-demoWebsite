@@ -138,7 +138,7 @@
   </div>
 
 
-  <div class="btn" (click)="openGoal()">
+  <div class="btn" (click)="openGoalForm()">
     <div>Add Goals</div>
   </div>
 
@@ -159,13 +159,13 @@
         <div> Goal: <b>{{goal.name}}</b> <br> Value: {{goal.value}}% <br>Time Estimation: {{goal.time_est}} hr
           <br> Deadline: / {{goal.deadline}}
           <div>
-            <div class="icon plus" (click)="openTask($event, goal)">
+            <div class="icon plus" (click)="openTaskForm($event, goal)">
               <div>+</div>
             </div>
             <div class="icon plus" (click)="deleteGoal($event, goal)" id="hoverText">
               <div>-</div>
             </div>
-            <div style="cursor:pointer;" (click)="editGoal($event, goal)"><img [src]="imageUrls['edit_icon.png']"
+            <div style="cursor:pointer;" (click)="openEditGoalForm($event, goal)"><img [src]="imageUrls['edit_icon.png']"
                 alt="edit icon" width="20px" height="20px"> </div>
           </div>
           <div *ngIf="goal.tasks !== undefined">

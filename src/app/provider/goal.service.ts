@@ -1,7 +1,8 @@
-import { Injectable } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 
 import { from, Observable, ReplaySubject } from 'rxjs';
 import { filter, map, mergeMap, take, toArray } from 'rxjs/operators';
+import { ColorConfig, COLOR_CONFIG } from "../constants/colors";
 
 import { Goal, Item } from "../interfaces/item";
 
@@ -14,7 +15,10 @@ export class GoalService {
     private adjustedGoal$ = new ReplaySubject<Goal>();
     private deletedGoal$ = new ReplaySubject<Goal>();
 
-    constructor() { }
+    constructor(
+        @Inject(COLOR_CONFIG)
+        private colors: ColorConfig,
+    ) { }
 
     public setAddedGoal(goal: Goal): void {
         this.addedGoal$.next(goal);
@@ -56,6 +60,22 @@ export class GoalService {
         return this.goals$.asObservable();
     }
 
+    public addGoal(goal: Goal, goals: Goal[]): void {
+        const color = this.getColor(goals);
+        const everythinElseTask = this.getEverythingElseTask(goal);
+        const code = `${goals.length + 1}`;
+
+        const newGoal: Goal = {
+            ...goal,
+            code: code,
+            color: color,
+            tasks: [everythinElseTask]
+        };
+
+        this.setAddedGoal(newGoal);
+        this.setGoals(goals.concat(newGoal));
+    }
+
     public editGoal(goal: Goal): void {
         const updatedGoal = this.getGoalWithUpdatedTasks(goal);
 
@@ -68,6 +88,58 @@ export class GoalService {
                 this.setAdjustedGoal(updatedGoal);
                 this.setGoals(updatedGoals);
             });
+    }
+
+    public deleteGoal(goal: Goal, goals: Goal[]): void {
+        const index = goals.indexOf(goal);
+        goals.splice(index, 1);
+
+        const renumberedGoals = this.renumberGoals(goals);
+
+        this.setGoals(renumberedGoals);
+        this.setDeletedGoal(goal);
+    }
+
+    public addTask(task: Item, goal: Goal) {
+        const newTask: Item = {
+            ...task,
+            workflowyId: `g${goal.code}-t${goal.tasks.length + 1}-${Date.now()}`
+          };
+      
+          goal.tasks.push(newTask);
+          this.editGoal(goal);
+    }
+
+    public deleteTask(task, goal: Goal) {
+        const index = goal.tasks.indexOf(task);
+
+        goal.tasks.splice(index, 1);
+    
+        this.editGoal(goal);
+    }
+
+    private getColor(goals: Goal[]): string {
+        const alreadyUsedColors = goals.map(goal => goal.color);
+        const availableColors = this.colors.filter(color => !alreadyUsedColors.includes(color));
+
+        const randomColor = availableColors.length ? this.chooseRandomColor(availableColors) : '#8e44ad';
+
+        return randomColor;
+    }
+
+    private chooseRandomColor(colors: string[]) {
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    private getEverythingElseTask(goal: Goal): Item {
+        const everythingElseTask: Item = {
+            name: 'All tasks that are not clearly specified, but necesssary for your goal. It might be a good idea to divide this goal into smaller, more actionable tasks.',
+            time_est: goal.time_est,
+            deadline: goal.deadline,
+            workflowyId: `g${goal.code}-everything-else-${Date.now()}`
+        };
+
+        return everythingElseTask;
     }
 
     private getGoalWithUpdatedTasks(goal: Goal): Goal {
@@ -96,6 +168,7 @@ export class GoalService {
             task.completed = false;
         } else {
             task.completed = true;
+            task.time_est = 0;
         }
 
         return task;
@@ -105,5 +178,15 @@ export class GoalService {
         return tasks
             .filter(task => !task.workflowyId?.includes('everything-else'))
             .reduce((estimate, task) => estimate + task.time_est, 0);
+    }
+
+
+    private renumberGoals(goals): Goal[] {
+        const renumberedGoals = goals.map((goal, index) => ({
+            ...goal,
+            code: `${index + 1}`
+        }));
+
+        return renumberedGoals;
     }
 }

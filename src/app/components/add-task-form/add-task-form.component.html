@@ -19,6 +19,9 @@
       <div *ngIf="(estimate.errors?.min)">
         Please enter a valid estimate for your task.
       </div>
+      <div *ngIf="(estimate.errors?.max)">
+        Please enter a time estimate that is less than 4 hours. Your tasks should be actionable and specific, so you could achieve them in one day. Ideally your task's estimate is between 1 - 2 hours.
+      </div>
     </div>
   
     <label for="task-deadline">Enter a deadline (optional)</label>

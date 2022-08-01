@@ -51,7 +51,7 @@ export class AddTaskFormComponent implements OnInit {
 
   private initForm(): void {
     const nameValidators = [Validators.required];
-    const estimateValidators = [Validators.required, Validators.min(0.1)];
+    const estimateValidators = [Validators.required, Validators.min(0.1), Validators.max(4)];
     const deadlineValidators = [this.deadlineValidator()];
 
     this.form = this.formBuilder.group({

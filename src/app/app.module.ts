@@ -17,6 +17,7 @@ import { COLORS, COLOR_CONFIG } from './constants/colors';
 import { GoalFormComponent } from './components/goal-form/goal-form.component';
 import { AddGoalFormComponent } from './components/add-goal-form/add-goal-form.component';
 import { InitialGoalFormComponent } from './components/initial-goal-form/initial-goal-form.component';
+import { AddTaskFormComponent } from './components/add-task-form/add-task-form.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { InitialGoalFormComponent } from './components/initial-goal-form/initial
     ToDoListComponent,
     GoalFormComponent,
     AddGoalFormComponent,
-    InitialGoalFormComponent
+    InitialGoalFormComponent,
+    AddTaskFormComponent
   ],
   imports: [
     BrowserModule,

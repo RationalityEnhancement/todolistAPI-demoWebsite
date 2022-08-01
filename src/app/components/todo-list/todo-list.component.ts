@@ -154,22 +154,14 @@ export class ToDoListComponent implements OnDestroy {
     }
   }
 
-  addItem() {
-    if (!this.validateForm_task()) {
-      return;
-    }
-
-    const task: Item = {
-      name: this.task_desc,
-      time_est: this.task_time_est,
-      deadline: this.task_deadline,
-      workflowyId: `g${this.goal_opened.code}-t${this.goal_opened.tasks.length + 1}-${Date.now()}`
+  addTask(task: Item, goal: Goal) {
+    const newTask: Item = {
+      ...task,
+      workflowyId: `g${goal.code}-t${goal.tasks.length + 1}-${Date.now()}`
     };
 
-    this.goal_opened.tasks.push(task);
-
-    this.adjustGoal(this.goal_opened);
-    this.resetTaskForm();
+    goal.tasks.push(newTask);
+    this.adjustGoal(goal);
   }
 
   deleteItem(event, goal, item) {
@@ -184,45 +176,6 @@ export class ToDoListComponent implements OnDestroy {
 
   public getDisplayedTasks(tasks: Item[]) {
     return tasks.filter(task => !task.workflowyId?.includes('everything-else'));
-  }
-
-  private validateForm_task(): boolean {
-    if (this.task_desc == undefined && this.task_time_est == undefined) {
-      alert("please fill the form!")
-      return false;
-    }
-
-    if (this.task_desc == "") {
-      alert("Description must be filled out");
-      return false;
-    }
-
-    if (this.task_time_est == null) {
-      alert("Time estimation must be filled out");
-      return false;
-    }
-
-    if (this.task_time_est < 0) {
-      alert("Plese enter a valid estimate for your task");
-      return false;
-    }
-
-    if (this.task_time_est > 4) {
-      alert("Please enter a time estimate that is less than 4 hours. Your tasks should be actionable and specific, so you could achieve them in one day. Ideally your task's estimate is between 1 - 2 hours.");
-      return false;
-    }
-
-    if (this.deadlineInPast(this.task_deadline) ) {
-      alert("Please enter a deadline that is not in the past!");
-      return false;
-    }
-
-    if (this.taskDeadlineAfterGoalDeadline(this.task_deadline, this.goal_opened.deadline)) {
-      alert("Please enter a deadline that is before your goal's deadline!");
-      return false;
-    }
-
-    return true;
   }
 
   private validateTodolistData(): boolean {
@@ -252,10 +205,6 @@ export class ToDoListComponent implements OnDestroy {
     const todayDate = new Date(new Date().toISOString().substring(0, 10));
 
     return deadlineDate < todayDate;
-  }
-
-  private taskDeadlineAfterGoalDeadline(taskDeadline: string, goalDeadline: string): boolean {
-    return new Date(taskDeadline) > new Date(goalDeadline);
   }
 
   private listenToGoalChanges(): void {

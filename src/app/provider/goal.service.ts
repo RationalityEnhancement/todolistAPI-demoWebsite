@@ -1,10 +1,11 @@
 import { Inject, Injectable } from "@angular/core";
 
-import { from, Observable, ReplaySubject } from 'rxjs';
-import { filter, map, mergeMap, take, toArray } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
+import { filter, map, take } from 'rxjs/operators';
 import { ColorConfig, COLOR_CONFIG } from "../constants/colors";
 
 import { Goal, Item } from "../interfaces/item";
+import { TaskService } from "./task.service";
 
 @Injectable()
 export class GoalService {
@@ -18,6 +19,7 @@ export class GoalService {
     constructor(
         @Inject(COLOR_CONFIG)
         private colors: ColorConfig,
+        private taskService: TaskService
     ) { }
 
     public setAddedGoal(goal: Goal): void {
@@ -62,7 +64,7 @@ export class GoalService {
 
     public addGoal(goal: Goal, goals: Goal[]): void {
         const color = this.getColor(goals);
-        const everythinElseTask = this.getEverythingElseTask(goal);
+        const everythinElseTask = this.taskService.getEverythingElseTask(goal);
         const code = `${goals.length + 1}`;
 
         const newGoal: Goal = {
@@ -72,50 +74,47 @@ export class GoalService {
             tasks: [everythinElseTask]
         };
 
+        const updatedGoals = goals.concat(newGoal);
+
         this.setAddedGoal(newGoal);
-        this.setGoals(goals.concat(newGoal));
+        this.setGoals(updatedGoals);
     }
 
     public editGoal(goal: Goal): void {
-        const updatedGoal = this.getGoalWithUpdatedTasks(goal);
+        const updatedGoal = this.taskService.updateTasksForGoal(goal);
 
         this.getGoals()
             .pipe(
-                mergeMap(goals => from(goals)),
-                map(goal => goal.code === updatedGoal.code ? updatedGoal : goal),
-                toArray()
+                map(goals => this.updateGoal(updatedGoal, goals))
             ).subscribe(updatedGoals => {
                 this.setAdjustedGoal(updatedGoal);
                 this.setGoals(updatedGoals);
             });
     }
 
-    public deleteGoal(goal: Goal, goals: Goal[]): void {
-        const index = goals.indexOf(goal);
-        goals.splice(index, 1);
-
-        const renumberedGoals = this.renumberGoals(goals);
+    public deleteGoal(deletedGoal: Goal, goals: Goal[]): void {
+        const updatedGoals = goals.filter(goal => goal.code !== deletedGoal.code);
+        const renumberedGoals = this.renumberGoals(updatedGoals);
 
         this.setGoals(renumberedGoals);
-        this.setDeletedGoal(goal);
+        this.setDeletedGoal(deletedGoal);
     }
 
     public addTask(task: Item, goal: Goal) {
-        const newTask: Item = {
-            ...task,
-            workflowyId: `g${goal.code}-t${goal.tasks.length + 1}-${Date.now()}`
-          };
-      
-          goal.tasks.push(newTask);
-          this.editGoal(goal);
+        const updatedGoal = this.taskService.addTaskToGoal(task, goal);
+        this.editGoal(updatedGoal);
     }
 
     public deleteTask(task, goal: Goal) {
-        const index = goal.tasks.indexOf(task);
+        const updatedGoal = this.taskService.deleteTaskFromGoal(task, goal);
 
-        goal.tasks.splice(index, 1);
-    
-        this.editGoal(goal);
+        this.editGoal(updatedGoal);
+    }
+
+    private updateGoal(updatedGoal: Goal, goals: Goal[]) {
+        return goals.map(goal =>
+            goal.code === updatedGoal.code ? updatedGoal : goal
+        );
     }
 
     private getColor(goals: Goal[]): string {
@@ -130,56 +129,6 @@ export class GoalService {
     private chooseRandomColor(colors: string[]) {
         return colors[Math.floor(Math.random() * colors.length)];
     }
-
-    private getEverythingElseTask(goal: Goal): Item {
-        const everythingElseTask: Item = {
-            name: 'All tasks that are not clearly specified, but necesssary for your goal. It might be a good idea to divide this goal into smaller, more actionable tasks.',
-            time_est: goal.time_est,
-            deadline: goal.deadline,
-            workflowyId: `g${goal.code}-everything-else-${Date.now()}`
-        };
-
-        return everythingElseTask;
-    }
-
-    private getGoalWithUpdatedTasks(goal: Goal): Goal {
-        const tasks = this.getTasksWithUpdatedEverythingElseTask(goal);
-
-        return { ...goal, tasks };
-    }
-
-    private getTasksWithUpdatedEverythingElseTask(goal: Goal): Item[] {
-        return goal.tasks.map(task => {
-            if (task.workflowyId?.includes('everything-else')) {
-                task = this.getUpdatedEverythingElseTask(task, goal);
-            }
-
-            return task;
-        });
-    }
-
-    private getUpdatedEverythingElseTask(task: Item, goal: Goal): Item {
-        const goalEstimate = goal.time_est;
-        const totalTaskEstimate = this.getTotalEstimateOfRelevantTasks(goal.tasks);
-
-        if (goalEstimate > totalTaskEstimate) {
-            task.time_est = goalEstimate - totalTaskEstimate;
-            task.deadline = goal.deadline;
-            task.completed = false;
-        } else {
-            task.completed = true;
-            task.time_est = 0;
-        }
-
-        return task;
-    }
-
-    private getTotalEstimateOfRelevantTasks(tasks: Item[]) {
-        return tasks
-            .filter(task => !task.workflowyId?.includes('everything-else'))
-            .reduce((estimate, task) => estimate + task.time_est, 0);
-    }
-
 
     private renumberGoals(goals): Goal[] {
         const renumberedGoals = goals.map((goal, index) => ({

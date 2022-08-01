@@ -16,11 +16,6 @@ import { ImageUrlService } from '../../provider/image-url.service';
 
 export class ToDoListComponent implements OnDestroy {
 
-  public goal_val: number;
-  public goal_desc: string;
-  public goal_deadline: string;
-  public goal_time_est: number;
-
   public task_desc: string;
   public task_deadline: string;
   public task_time_est: number;
@@ -109,22 +104,16 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   openGoal() {
-    this.resetGoalForm();
     this.toggleForm('goal');
   }
 
   openTask(e?, goal?) {
     this.goal_opened = goal;
-
     this.toggleForm('task');
   }
 
   editGoal(event, goal) {
     this.goal_opened = goal;
-
-    this.resetGoalForm();
-    this.hydrateFormWithSelectedGoal()
-
     this.toggleForm('editGoal');
   }
 
@@ -149,8 +138,6 @@ export class ToDoListComponent implements OnDestroy {
     
     this.setGoals(this.goals);
     this.goalService.setAddedGoal(newGoal);
-
-    this.goal_opened = newGoal;
   }
 
   deleteGoal(event, goal) {
@@ -165,21 +152,6 @@ export class ToDoListComponent implements OnDestroy {
   
       this.goalService.setDeletedGoal(goal);
     }
-  }
-
-  updateGoal(event) {
-    if (!this.validateForm_goal()) {
-      return
-    };
-
-    this.goal_opened.name = this.goal_desc;
-    this.goal_opened.time_est = this.goal_time_est;
-    this.goal_opened.value = this.goal_val;
-    this.goal_opened.deadline = this.goal_deadline;
-
-    this.adjustGoal(this.goal_opened);
-
-    this.hydrateFormWithSelectedGoal();
   }
 
   addItem() {
@@ -212,40 +184,6 @@ export class ToDoListComponent implements OnDestroy {
 
   public getDisplayedTasks(tasks: Item[]) {
     return tasks.filter(task => !task.workflowyId?.includes('everything-else'));
-  }
-
-  private validateForm_goal(): boolean {
-    if (this.goal_desc == undefined && this.goal_time_est == undefined && this.goal_val == undefined) {
-      alert("please fill the form!")
-    } else {
-      if (!this.goal_desc || this.goal_desc == "") {
-        alert("Description must be filled out");
-        return false;
-      }
-      if (this.goal_val == null) {
-        alert("Goal value must be filled out");
-        return false;
-      }
-      if (this.goal_val < 1 || this.goal_val > 100) {
-        alert("Please enter a percentage between 1 and 100 percent")
-        return false;
-      }
-      if (this.goal_time_est == null) {
-        alert("Time estimation must be filled out");
-        return false;
-      }
-      if (this.goal_time_est < 0) {
-        alert("Plese enter a valid estimate for your goal!");
-        return false;
-      }
-
-      if (this.deadlineInPast(this.goal_deadline)) {
-        alert("Please enter a deadline that is not in the past!");
-        return false;
-      }
-
-      return true;
-    }
   }
 
   private validateForm_task(): boolean {
@@ -330,28 +268,8 @@ export class ToDoListComponent implements OnDestroy {
 
         this.goals.length ? this.toggleView('goalEditor') : this.toggleView('initialGoal');
 
-        this.setDefaultGoalParameters();
-
         this.newTaskAdded = this.getTaskAddedStatus(goals);
       });
-  }
-
-  private setDefaultGoalValue() {
-    this.goals.length ? this.goal_val = null : this.goal_val = 100;
-  }
-
-  private setDefaultGoalDeadline() {
-    // const dateInTwoWeeks = new Date(Date.now() + 12096e5);
-    const dateInOneWeek = new Date(Date.now() + 12096e5 / 2);
-    // const defaultDeadline = dateInTwoWeeks.toISOString().substring(0, 10);
-    const defaultDeadline = dateInOneWeek.toISOString().substring(0, 10);
-
-    this.goal_deadline = defaultDeadline;
-  }
-
-  private setDefaultGoalParameters() {
-    this.setDefaultGoalValue();
-    this.setDefaultGoalDeadline();
   }
 
   private checkOverdueGoals() {
@@ -427,21 +345,6 @@ export class ToDoListComponent implements OnDestroy {
     return goal.tasks
       .filter(task => !task.workflowyId?.includes('everything-else'))
       .reduce((estimate, task) => estimate + task.time_est, 0);
-  }
-
-  private hydrateFormWithSelectedGoal(): void {
-    this.goal_desc = this.goal_opened?.name;
-    this.goal_time_est = this.goal_opened?.time_est;
-    this.goal_val = this.goal_opened?.value;
-    this.goal_deadline = this.goal_opened?.deadline;
-  }
-
-  private resetGoalForm(): void {
-    this.goal_desc = undefined;
-    this.goal_val = undefined;
-    this.goal_time_est = undefined;
-
-    this.setDefaultGoalDeadline();
   }
 
   private resetTaskForm(): void {

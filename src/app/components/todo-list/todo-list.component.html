@@ -148,7 +148,7 @@
       </add-task-form>
       <add-goal-form *ngSwitchCase="'goal'" (submitGoal)="addGoal($event)" (close)="toggleForm('none')">
       </add-goal-form>
-      <edit-goal-form *ngSwitchCase="'editGoal'" [goal]="goal_opened" (close)="toggleForm('none')">
+      <edit-goal-form *ngSwitchCase="'editGoal'" [goal]="goal_opened" (submitGoal)="editGoal($event)" (close)="toggleForm('none')">
       </edit-goal-form>
     </ng-container>
   </div>

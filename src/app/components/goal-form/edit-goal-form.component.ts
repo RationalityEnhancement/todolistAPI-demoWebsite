@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { GoalService } from 'src/app/provider/goal.service';
 import { Goal } from '../../interfaces/item'
 
 @Component({
@@ -12,6 +11,7 @@ export class EditGoalFormComponent implements OnInit {
 
   @Input() public goal: Goal;
   @Output() public close = new EventEmitter<void>();
+  @Output() public submitGoal = new EventEmitter<Goal>();
 
   public form: FormGroup;
 
@@ -33,8 +33,7 @@ export class EditGoalFormComponent implements OnInit {
 
 
   constructor(
-    private formBuilder: FormBuilder,
-    private goalService: GoalService
+    private formBuilder: FormBuilder
   ) {
     this.initForm();
   }
@@ -45,10 +44,9 @@ export class EditGoalFormComponent implements OnInit {
 
   public editGoal(): void {
     const updatedValues = this.form.value;
-
     const goal = { ...this.goal, ...updatedValues };
 
-    this.goalService.editGoal(goal);
+    this.submitGoal.emit(goal);
     this.closeForm();
   }
 

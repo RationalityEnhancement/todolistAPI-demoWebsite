@@ -108,6 +108,10 @@ export class ToDoListComponent implements OnDestroy {
     this.goalService.addGoal(goalProperties);
   }
 
+  public editGoal(goalProperties: Goal) {
+    this.goalService.editGoal(goalProperties);
+  }
+
   public deleteGoal(goal) {
     if (confirm('Do you really want to delete this goal?')) {
       this.goalService.deleteGoal(goal);  

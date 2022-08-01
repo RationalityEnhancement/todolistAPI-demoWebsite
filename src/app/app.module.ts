@@ -14,7 +14,7 @@ import { AdapterService } from './provider/adapter.service';
 import { WorkflowyService } from './provider/workflowy.service';
 import { TodoListService } from './provider/todo-list.service';
 import { COLORS, COLOR_CONFIG } from './constants/colors';
-import { GoalFormComponent } from './components/goal-form/goal-form.component';
+import { EditGoalFormComponent } from './components/goal-form/edit-goal-form.component';
 import { AddGoalFormComponent } from './components/add-goal-form/add-goal-form.component';
 import { InitialGoalFormComponent } from './components/initial-goal-form/initial-goal-form.component';
 import { AddTaskFormComponent } from './components/add-task-form/add-task-form.component';
@@ -26,7 +26,7 @@ import { ColorService } from './provider/color.service';
   declarations: [
     AppComponent,
     ToDoListComponent,
-    GoalFormComponent,
+    EditGoalFormComponent,
     AddGoalFormComponent,
     InitialGoalFormComponent,
     AddTaskFormComponent

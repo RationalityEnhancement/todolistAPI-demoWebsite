@@ -4,11 +4,11 @@ import { GoalService } from 'src/app/provider/goal.service';
 import { Goal } from '../../interfaces/item'
 
 @Component({
-  selector: 'goal-form',
-  templateUrl: './goal-form.component.html',
-  styleUrls: ['./goal-form.component.scss']
+  selector: 'edit-goal-form',
+  templateUrl: './edit-goal-form.component.html',
+  styleUrls: ['./edit-goal-form.component.scss']
 })
-export class GoalFormComponent implements OnInit {
+export class EditGoalFormComponent implements OnInit {
 
   @Input() public goal: Goal;
   @Output() public close = new EventEmitter<void>();

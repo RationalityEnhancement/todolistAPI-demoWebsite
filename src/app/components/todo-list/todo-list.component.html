@@ -201,27 +201,8 @@
     </form>
   </div>
 
-
-  <div class="form-popup" id="edit-goal-form" *ngIf="currentGoalForm === 'editGoal'">
-    <form class="form-container">
-      <h1>Edit Goal <b>{{goal_opened.name}}</b></h1>
-      <label for="goal-desc" style="font-size: 12px; color: gray; margin-left: 6px">Goal Name</label>
-      <input [(ngModel)]="goal_desc" type="text" placeholder={{goal_opened.name}} name="goal-desc" required>
-
-      <label for="goal-val" style="font-size: 12px; color: gray; margin-left: 6px"> Goal Value</label>
-      <input [(ngModel)]="goal_val" type="number" placeholder={{goal_opened.value}} name="goal-val" min="0" max="9999"
-        required>
-
-      <label for="goal-time" style="font-size: 12px; color: gray; margin-left: 6px">Goal Time Estimation (hrs)</label>
-      <input [(ngModel)]="goal_time_est" type="number" placeholder={{goal_opened.time_est}} name="goal-time-est">
-
-      <label for="goal-deadline" style="font-size: 12px; color: gray; margin-left: 6px">Enter a deadline
-        (optional)</label>
-      <input [(ngModel)]="goal_deadline" type="date" placeholder={{goal_opened.deadline}} name="goal-deadline">
-
-      <button type="submit" class="btn add" (click)="updateGoal($event)">Submit</button>
-      <button type="submit" class="btn cancel" (click)="closeForm()">Cancel</button>
-    </form>
+  <div *ngIf="currentGoalForm === 'editGoal'" class="goal-form-popup">
+    <goal-form [goal]="goal_opened" (close)="currentGoalForm = 'none'"></goal-form>
   </div>
 
   <div class="goal-wrapper" id="goal-display" *ngIf="goals.length > 0">

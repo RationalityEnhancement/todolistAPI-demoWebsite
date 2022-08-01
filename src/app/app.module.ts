@@ -4,12 +4,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
-import { MatSliderModule } from '@angular/material/slider';
-import { MatButtonModule } from '@angular/material/button';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-
 import { AppComponent } from './app.component';
 import { ToDoListComponent } from './components/todo-list/todo-list.component'
 
@@ -20,12 +14,14 @@ import { AdapterService } from './provider/adapter.service';
 import { WorkflowyService } from './provider/workflowy.service';
 import { TodoListService } from './provider/todo-list.service';
 import { COLORS, COLOR_CONFIG } from './constants/colors';
+import { GoalFormComponent } from './components/goal-form/goal-form.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    ToDoListComponent
+    ToDoListComponent,
+    GoalFormComponent
   ],
   imports: [
     BrowserModule,
@@ -33,11 +29,6 @@ import { COLORS, COLOR_CONFIG } from './constants/colors';
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatSliderModule,
-    MatButtonModule,
-    MatAutocompleteModule,
-    MatFormFieldModule,
-    MatInputModule
   ],
   providers: [
     GoalService,

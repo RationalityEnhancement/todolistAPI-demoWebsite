@@ -1,0 +1,48 @@
+<form [formGroup]="form" (ngSubmit)="editGoal()" class="form-container">
+  <h1>Edit Goal <b>{{goal.name}}</b></h1>
+  <label for="goal-desc">Goal Name</label>
+  <input id="goal-desc" type="text" required formControlName="name">
+
+  <div *ngIf="name.invalid && (name.dirty || name.touched)" class="feedback-message">
+    <div *ngIf="name.errors?.required">
+      Please enter a name for your goal.
+    </div>
+  </div>
+
+  <label for="goal-val"> Goal Value</label>
+  <input id="goal-val" type="number" required formControlName="value">
+
+  <div *ngIf="value.invalid && (value.dirty || value.touched)" class="feedback-message">
+    <div *ngIf="value.errors?.required">
+      Please enter a value for your goal.
+    </div>
+    <div *ngIf="(value.errors?.min || value.errors?.max)">
+      Please enter a value between 1 and 100.
+    </div>
+  </div>
+
+  <label for="goal-time">Goal Time Estimation (hrs)</label>
+  <input id="goal-time" type="number" required formControlName="time_est">
+
+  <div *ngIf="estimate.invalid && (estimate.dirty || estimate.touched)" class="feedback-message">
+    <div *ngIf="estimate.errors?.required">
+      Please enter an estimate for your goal.
+    </div>
+    <div *ngIf="(estimate.errors?.min)">
+      Please enter a valid estimate for your goal.
+    </div>
+  </div>
+
+  <label for="goal-deadline">Enter a deadline
+    (optional)</label>
+  <input id="goal-deadline" type="date" [placeholder]="goal.deadline" required formControlName="deadline">
+
+  <div *ngIf="deadline.invalid && (deadline.dirty || deadline.touched)" class="feedback-message">
+    <div *ngIf="(deadline.errors?.invalidDeadline)">
+      Please enter a deadline that is not in the past.
+    </div>
+  </div>
+
+  <button [disabled]="form.invalid" type="submit" class="btn">Submit</button>
+  <button type="button" class="btn" (click)="closeForm()">Cancel</button>
+</form>

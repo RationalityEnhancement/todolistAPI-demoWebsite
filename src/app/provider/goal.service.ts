@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 
-import { Observable, ReplaySubject } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
+import { from, Observable, ReplaySubject } from 'rxjs';
+import { filter, map, mergeMap, take, toArray } from 'rxjs/operators';
 
-import { Goal } from "../interfaces/item";
+import { Goal, Item } from "../interfaces/item";
 
 @Injectable()
 export class GoalService {
@@ -54,5 +54,56 @@ export class GoalService {
 
     public listenToGoals(): Observable<Goal[]> {
         return this.goals$.asObservable();
+    }
+
+    public editGoal(goal: Goal): void {
+        const updatedGoal = this.getGoalWithUpdatedTasks(goal);
+
+        this.getGoals()
+            .pipe(
+                mergeMap(goals => from(goals)),
+                map(goal => goal.code === updatedGoal.code ? updatedGoal : goal),
+                toArray()
+            ).subscribe(updatedGoals => {
+                this.setAdjustedGoal(updatedGoal);
+                this.setGoals(updatedGoals);
+            });
+    }
+
+    private getGoalWithUpdatedTasks(goal: Goal): Goal {
+        const tasks = this.getTasksWithUpdatedEverythingElseTask(goal);
+
+        return { ...goal, tasks };
+    }
+
+    private getTasksWithUpdatedEverythingElseTask(goal: Goal): Item[] {
+        return goal.tasks.map(task => {
+            if (task.workflowyId?.includes('everything-else')) {
+                task = this.getUpdatedEverythingElseTask(task, goal);
+            }
+
+            return task;
+        });
+    }
+
+    private getUpdatedEverythingElseTask(task: Item, goal: Goal): Item {
+        const goalEstimate = goal.time_est;
+        const totalTaskEstimate = this.getTotalEstimateOfRelevantTasks(goal.tasks);
+
+        if (goalEstimate > totalTaskEstimate) {
+            task.time_est = goalEstimate - totalTaskEstimate;
+            task.deadline = goal.deadline;
+            task.completed = false;
+        } else {
+            task.completed = true;
+        }
+
+        return task;
+    }
+
+    private getTotalEstimateOfRelevantTasks(tasks: Item[]) {
+        return tasks
+            .filter(task => !task.workflowyId?.includes('everything-else'))
+            .reduce((estimate, task) => estimate + task.time_est, 0);
     }
 }

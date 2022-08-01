@@ -8,7 +8,7 @@ export class TaskService {
 
   constructor() { }
 
-  public addTaskToGoal(task: Item, goal: Goal) {
+  public addTaskToGoal(task: Item, goal: Goal): Goal {
     const newTask: Item = {
       ...task,
       workflowyId: `g${goal.code}-t${goal.tasks.length + 1}-${Date.now()}`
@@ -19,7 +19,7 @@ export class TaskService {
     return goal;
   }
 
-  public deleteTaskFromGoal(task, goal: Goal) {
+  public deleteTaskFromGoal(task, goal: Goal): Goal {
     const index = goal.tasks.indexOf(task);
 
     goal.tasks.splice(index, 1);
@@ -70,7 +70,7 @@ export class TaskService {
     return task;
   }
 
-  private getTotalEstimateOfRelevantTasks(tasks: Item[]) {
+  private getTotalEstimateOfRelevantTasks(tasks: Item[]): number {
     return tasks
       .filter(task => !task.workflowyId?.includes('everything-else'))
       .reduce((estimate, task) => estimate + task.time_est, 0);

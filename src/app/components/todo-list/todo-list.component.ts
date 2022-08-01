@@ -94,23 +94,23 @@ export class ToDoListComponent implements OnDestroy {
     this.toggleForm('goal');
   }
 
-  public openTaskForm(e?, goal?) {
+  public openTaskForm(goal?) {
     this.goal_opened = goal;
     this.toggleForm('task');
   }
 
-  public openEditGoalForm(event, goal) {
+  public openEditGoalForm(goal) {
     this.goal_opened = goal;
     this.toggleForm('editGoal');
   }
 
   public addGoal(goalProperties: Goal) {
-    this.goalService.addGoal(goalProperties, this.goals);
+    this.goalService.addGoal(goalProperties);
   }
 
-  public deleteGoal(event, goal) {
+  public deleteGoal(goal) {
     if (confirm('Do you really want to delete this goal?')) {
-      this.goalService.deleteGoal(goal, this.goals);  
+      this.goalService.deleteGoal(goal);  
     }
   }
 
@@ -118,7 +118,7 @@ export class ToDoListComponent implements OnDestroy {
     this.goalService.addTask(task, goal);
   }
 
-  public deleteTask(event, goal, task) {
+  public deleteTask(goal, task) {
     this.goalService.deleteTask(task, goal);
   }
 

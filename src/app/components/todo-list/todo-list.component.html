@@ -159,13 +159,13 @@
         <div> Goal: <b>{{goal.name}}</b> <br> Value: {{goal.value}}% <br>Time Estimation: {{goal.time_est}} hr
           <br> Deadline: / {{goal.deadline}}
           <div>
-            <div class="icon plus" (click)="openTaskForm($event, goal)">
+            <div class="icon plus" (click)="openTaskForm(goal)">
               <div>+</div>
             </div>
-            <div class="icon plus" (click)="deleteGoal($event, goal)" id="hoverText">
+            <div class="icon plus" (click)="deleteGoal(goal)" id="hoverText">
               <div>-</div>
             </div>
-            <div style="cursor:pointer;" (click)="openEditGoalForm($event, goal)"><img [src]="imageUrls['edit_icon.png']"
+            <div style="cursor:pointer;" (click)="openEditGoalForm(goal)"><img [src]="imageUrls['edit_icon.png']"
                 alt="edit icon" width="20px" height="20px"> </div>
           </div>
           <div *ngIf="goal.tasks !== undefined">
@@ -181,7 +181,7 @@
                       {{task.name}} <br /> Time: {{task.time_est}} hr
                       <br> Deadline: / {{task.deadline}}
                       <div *ngIf="!(task.scheduled || task.completed)" class="del-wrapper">
-                        <div class="del" (click)="deleteItem($event, goal, task)">
+                        <div class="del" (click)="deleteTask(goal, task)">
                           <div>-</div>
                         </div>
                       </div>

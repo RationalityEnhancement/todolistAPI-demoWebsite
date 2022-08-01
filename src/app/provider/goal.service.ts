@@ -62,22 +62,14 @@ export class GoalService {
         return this.goals$.asObservable();
     }
 
-    public addGoal(goal: Goal, goals: Goal[]): void {
-        const color = this.getColor(goals);
-        const everythinElseTask = this.taskService.getEverythingElseTask(goal);
-        const code = `${goals.length + 1}`;
-
-        const newGoal: Goal = {
-            ...goal,
-            code: code,
-            color: color,
-            tasks: [everythinElseTask]
-        };
-
-        const updatedGoals = goals.concat(newGoal);
-
-        this.setAddedGoal(newGoal);
-        this.setGoals(updatedGoals);
+    public addGoal(goal: Goal): void {
+        this.getGoals()
+            .pipe(
+                map(goals => this.createNewGoal(goal, goals)),
+            ).subscribe(([newGoal, goals]) => {
+                this.setAddedGoal(newGoal);
+                this.setGoals(goals.concat(newGoal));
+            });
     }
 
     public editGoal(goal: Goal): void {
@@ -92,12 +84,14 @@ export class GoalService {
             });
     }
 
-    public deleteGoal(deletedGoal: Goal, goals: Goal[]): void {
-        const updatedGoals = goals.filter(goal => goal.code !== deletedGoal.code);
-        const renumberedGoals = this.renumberGoals(updatedGoals);
-
-        this.setGoals(renumberedGoals);
-        this.setDeletedGoal(deletedGoal);
+    public deleteGoal(deletedGoal: Goal): void {
+        this.getGoals()
+            .pipe(
+                map(goals => this.removeGoal(deletedGoal, goals))
+            ).subscribe(([deletedGoal, updatedGoals]) => {
+                this.setDeletedGoal(deletedGoal);
+                this.setGoals(updatedGoals);
+            });
     }
 
     public addTask(task: Item, goal: Goal) {
@@ -107,14 +101,35 @@ export class GoalService {
 
     public deleteTask(task, goal: Goal) {
         const updatedGoal = this.taskService.deleteTaskFromGoal(task, goal);
-
         this.editGoal(updatedGoal);
     }
 
-    private updateGoal(updatedGoal: Goal, goals: Goal[]) {
+    private updateGoal(updatedGoal: Goal, goals: Goal[]): Goal[] {
         return goals.map(goal =>
             goal.code === updatedGoal.code ? updatedGoal : goal
         );
+    }
+
+    private createNewGoal(goal: Goal, goals: Goal[]): [Goal, Goal[]] {
+        const color = this.getColor(goals);
+        const everythinElseTask = this.taskService.getEverythingElseTask(goal);
+        const code = `${goals.length + 1}`;
+
+        const newGoal: Goal = {
+            ...goal,
+            code: code,
+            color: color,
+            tasks: [everythinElseTask]
+        };
+
+        return [newGoal, goals];
+    }
+
+    private removeGoal(deletedGoal: Goal, goals: Goal[]): [Goal, Goal[]] {
+        const updatedGoals = goals.filter(goal => goal.code !== deletedGoal.code);
+        const renumberedGoals = this.renumberGoals(updatedGoals);
+
+        return [deletedGoal, renumberedGoals];
     }
 
     private getColor(goals: Goal[]): string {

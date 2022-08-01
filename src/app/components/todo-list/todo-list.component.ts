@@ -98,14 +98,10 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   toggleGoalExplanation() {
-    if (!this.validateForm_goal()) {
-      return;
-    }
     this.toggleView('goalExplanation');
   }
 
   toggleGoalEditor() {
-    this.addGoal();
     this.toggleView('goalEditor');
   }
 
@@ -129,18 +125,11 @@ export class ToDoListComponent implements OnDestroy {
     this.toggleForm('editGoal');
   }
 
-  addGoal(event?) {
-    if (!this.validateForm_goal()) {
-      return
-    };
-
+  addGoal(goalProperties: Goal) {
     const newGoal: Goal = {
+      ...goalProperties,
       code: `${this.goals.length + 1}`,
       color: this.getColor(),
-      name: this.goal_desc,
-      time_est: this.goal_time_est,
-      deadline: this.goal_deadline,
-      value: this.goal_val,
       tasks: []
     };
 
@@ -153,15 +142,12 @@ export class ToDoListComponent implements OnDestroy {
 
     newGoal.tasks.push(everythingElseTask);
 
-    if (this.goal_desc != undefined) {
-      this.goals = this.goals.concat(newGoal);
+    this.goals = this.goals.concat(newGoal);
+    
+    this.setGoals(this.goals);
+    this.goalService.setAddedGoal(newGoal);
 
-      this.goal_opened = newGoal;
-
-      this.setGoals(this.goals);
-
-      this.goalService.setAddedGoal(newGoal);
-    }
+    this.goal_opened = newGoal;
   }
 
   deleteGoal(event, goal) {

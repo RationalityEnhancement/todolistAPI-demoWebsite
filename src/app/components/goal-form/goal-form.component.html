@@ -9,7 +9,7 @@
     </div>
   </div>
 
-  <label for="goal-val"> Goal Value</label>
+  <label for="goal-val">Relative Goal Value</label>
   <input id="goal-val" type="number" required formControlName="value">
 
   <div *ngIf="value.invalid && (value.dirty || value.touched)" class="feedback-message">

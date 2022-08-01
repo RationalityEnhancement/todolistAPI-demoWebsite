@@ -169,7 +169,7 @@
       <input [(ngModel)]="task_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD) (optional)"
         name="item-deadline">
 
-      <button type="submit" class="btn add" (click)="this.addItem();">Add</button>
+      <button type="submit" class="btn add" (click)="addItem()">Add</button>
       <button type="submit" class="btn cancel" (click)="closeForm()">Cancel</button>
     </form>
   </div>
@@ -178,31 +178,12 @@
     <div>Add Goals</div>
   </div>
 
-  <div class="form-popup" *ngIf="currentGoalForm === 'goal'">
-    <form class="form-container">
-      <h1>Add Goal</h1>
-      <label for="goal-desc"></label>
-      <input [(ngModel)]="goal_desc" type="text" placeholder="Goal Description (*Required)" name="goal-desc" required>
-
-      <label for="goal-val"></label>
-      <input [(ngModel)]="goal_val" type="number" placeholder="Relative Goal Value (1-100%) (*Required)" name="goal-val"
-        min="0" max="9999" required>
-
-      <label for="goal-time"></label>
-      <input [(ngModel)]="goal_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)"
-        name="goal-time-est">
-
-      <label for="goal-deadline" style="font-size: 12px; color: gray; margin-left: 6px">Enter a deadline
-        (optional)</label>
-      <input [(ngModel)]="goal_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD)" name="goal-deadline">
-
-      <button type="submit" class="btn add" (click)="addGoal($event)">Add</button>
-      <button type="submit" class="btn cancel" (click)="closeForm()">Cancel</button>
-    </form>
+  <div *ngIf="currentGoalForm === 'goal'" class="goal-form-popup">
+    <add-goal-form (submitGoal)="addGoal($event)" (close)="toggleForm('none')"></add-goal-form>
   </div>
 
   <div *ngIf="currentGoalForm === 'editGoal'" class="goal-form-popup">
-    <goal-form [goal]="goal_opened" (close)="currentGoalForm = 'none'"></goal-form>
+    <goal-form [goal]="goal_opened" (close)="toggleForm('none')"></goal-form>
   </div>
 
   <div class="goal-wrapper" id="goal-display" *ngIf="goals.length > 0">

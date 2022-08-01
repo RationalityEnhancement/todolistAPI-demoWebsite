@@ -11,24 +11,22 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-  <reg-todo-list reg-goals='[   {
-    "name": "123",
-    "time_est": 20,
-    "value": 1321,
-    "tasks": [
-        {
-            "name": "321321",
-            "time_est": 10,
-            "today": true
-        },
-        {
-            "name": "4213215",
-            "time_est": 5,
-            "today": true
-        }
-    ],
-    "num_children": 2
-}]'></reg-todo-list>
+  <reg-todo-list reg-goals='[{
+      "code": "1",
+      "color": "#f561fa",
+      "name": "Goal 1",
+      "estimate": 10,
+      "deadline": "2022-08-05",
+      "value": 50,
+      "tasks": [
+          {
+              "name": "All tasks that are not clearly specified, but necesssary for your goal. It might be a good idea to divide this goal into smaller, more actionable tasks.",
+              "time_est": 10,
+              "deadline": "2022-08-05",
+              "workflowyId": "g2-everything-else-1659094181342"
+          }
+      ]
+  }]'></reg-todo-list>
 </body>
 
 <script>const el = document.querySelector('reg-todo-list');

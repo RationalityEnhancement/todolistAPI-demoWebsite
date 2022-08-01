@@ -15,13 +15,15 @@ import { WorkflowyService } from './provider/workflowy.service';
 import { TodoListService } from './provider/todo-list.service';
 import { COLORS, COLOR_CONFIG } from './constants/colors';
 import { GoalFormComponent } from './components/goal-form/goal-form.component';
+import { AddGoalFormComponent } from './components/add-goal-form/add-goal-form.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ToDoListComponent,
-    GoalFormComponent
+    GoalFormComponent,
+    AddGoalFormComponent
   ],
   imports: [
     BrowserModule,

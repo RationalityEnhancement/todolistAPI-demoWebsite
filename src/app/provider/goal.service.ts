@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 
 import { Observable, ReplaySubject } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
+import { tap, map, take } from 'rxjs/operators';
 
 import { Goal, Item } from "../interfaces/item";
 import { ColorService } from "./color.service";
@@ -19,7 +19,7 @@ export class GoalService {
     constructor(
         private taskService: TaskService,
         private colorService: ColorService
-        ) { }
+    ) { }
 
     public setAddedGoal(goal: Goal): void {
         this.addedGoal$.next(goal);
@@ -40,7 +40,6 @@ export class GoalService {
     public getGoals(): Observable<Goal[]> {
         return this.goals$
             .pipe(
-                filter(goals => !!goals.length),
                 take(1)
             );
     }
@@ -61,55 +60,60 @@ export class GoalService {
         return this.goals$.asObservable();
     }
 
-    public addGoal(goal: Goal): void {
-        this.getGoals()
+    public addGoal(goal: Goal) {
+        return this.getGoals()
             .pipe(
                 map(goals => this.createNewGoal(goal, goals)),
-            ).subscribe(([newGoal, goals]) => {
-                this.setAddedGoal(newGoal);
-                this.setGoals(goals.concat(newGoal));
-            });
+                tap(({addedGoal, updatedGoals}) => {
+                    this.setAddedGoal(addedGoal);
+                    this.setGoals(updatedGoals);
+                })
+            );
     }
 
-    public editGoal(goal: Goal): void {
+    public editGoal(goal: Goal) {
         const updatedGoal = this.taskService.updateTasksForGoal(goal);
 
-        this.getGoals()
+        return this.getGoals()
             .pipe(
-                map(goals => this.updateGoal(updatedGoal, goals))
-            ).subscribe(updatedGoals => {
-                this.setAdjustedGoal(updatedGoal);
-                this.setGoals(updatedGoals);
-            });
+                map(goals => this.updateGoals(updatedGoal, goals)),
+                tap(({adjustedGoal, updatedGoals}) => {
+                    this.setAdjustedGoal(adjustedGoal);
+                    this.setGoals(updatedGoals);
+                })
+            );
     }
 
-    public deleteGoal(deletedGoal: Goal): void {
-        this.getGoals()
+    public deleteGoal(deletedGoal: Goal) {
+        return this.getGoals()
             .pipe(
-                map(goals => this.removeGoal(deletedGoal, goals))
-            ).subscribe(([deletedGoal, updatedGoals]) => {
-                this.setDeletedGoal(deletedGoal);
-                this.setGoals(updatedGoals);
-            });
+                map(goals => this.removeGoal(deletedGoal, goals)),
+                tap(({deletedGoal, updatedGoals}) => {
+                    this.setDeletedGoal(deletedGoal);
+                    this.setGoals(updatedGoals);
+                })
+            );
     }
 
     public addTask(task: Item, goal: Goal) {
         const updatedGoal = this.taskService.addTaskToGoal(task, goal);
-        this.editGoal(updatedGoal);
+        return this.editGoal(updatedGoal);
     }
 
     public deleteTask(task, goal: Goal) {
         const updatedGoal = this.taskService.deleteTaskFromGoal(task, goal);
-        this.editGoal(updatedGoal);
+        return this.editGoal(updatedGoal);
     }
 
-    private updateGoal(updatedGoal: Goal, goals: Goal[]): Goal[] {
-        return goals.map(goal =>
+    private updateGoals(updatedGoal: Goal, goals: Goal[]) {
+        const updatedGoals =  goals.map(goal =>
             goal.code === updatedGoal.code ? updatedGoal : goal
         );
+
+        return { adjustedGoal: updatedGoal, updatedGoals: updatedGoals };
     }
 
-    private createNewGoal(goal: Goal, goals: Goal[]): [Goal, Goal[]] {
+    private createNewGoal(goal: Goal, goals: Goal[]) {
         const color = this.colorService.getGoalColor(goals);
         const everythinElseTask = this.taskService.getEverythingElseTask(goal);
         const code = `${goals.length + 1}`;
@@ -121,14 +125,14 @@ export class GoalService {
             tasks: [everythinElseTask]
         };
 
-        return [newGoal, goals];
+        return { addedGoal: newGoal, updatedGoals: goals };
     }
 
-    private removeGoal(deletedGoal: Goal, goals: Goal[]): [Goal, Goal[]] {
+    private removeGoal(deletedGoal: Goal, goals: Goal[]) {
         const updatedGoals = goals.filter(goal => goal.code !== deletedGoal.code);
         const renumberedGoals = this.renumberGoals(updatedGoals);
 
-        return [deletedGoal, renumberedGoals];
+        return { deletedGoal: deletedGoal, updatedGoals: renumberedGoals };
     }
 
     private renumberGoals(goals): Goal[] {

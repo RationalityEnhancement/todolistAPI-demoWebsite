@@ -21,9 +21,9 @@ export class ToDoListComponent implements OnDestroy {
   public currentInformationPopup: 'goalExample' | 'information' | 'finishGoals' | 'legend' | 'none';
   public currentGoalForm: 'goal' | 'task' | 'editGoal' | 'none';
   public currentView: 'initialGoal' | 'goalExplanation' | 'goalEditor' | 'none';
-  
+
   public imageUrls: Record<string, string>;
-  
+
   private images = ['information.png', 'edit_icon.png'];
   private newTaskAdded: boolean;
 
@@ -37,8 +37,6 @@ export class ToDoListComponent implements OnDestroy {
     this.imageUrls = this.imageUrlService.createImageUrls(this.images);
 
     this.listenToGoalChanges();
-
-    setTimeout(() => this.checkOverdueGoals(), 1000)
   }
 
   public ngOnDestroy(): void {
@@ -105,25 +103,30 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   public addGoal(goalProperties: Goal) {
-    this.goalService.addGoal(goalProperties);
+    this.goalService.addGoal(goalProperties)
+      .subscribe();
   }
 
   public editGoal(goalProperties: Goal) {
-    this.goalService.editGoal(goalProperties);
+    this.goalService.editGoal(goalProperties)
+      .subscribe();
   }
 
   public deleteGoal(goal) {
     if (confirm('Do you really want to delete this goal?')) {
-      this.goalService.deleteGoal(goal);  
+      this.goalService.deleteGoal(goal)
+        .subscribe();
     }
   }
 
   public addTask(task: Item, goal: Goal) {
-    this.goalService.addTask(task, goal);
+    this.goalService.addTask(task, goal)
+      .subscribe();
   }
 
   public deleteTask(goal, task) {
-    this.goalService.deleteTask(task, goal);
+    this.goalService.deleteTask(task, goal)
+      .subscribe();
   }
 
   public getDisplayedTasks(tasks: Item[]) {
@@ -161,8 +164,9 @@ export class ToDoListComponent implements OnDestroy {
         this.goals = goals;
 
         this.goals.length ? this.toggleView('goalEditor') : this.toggleView('initialGoal');
-
         this.newTaskAdded = this.getTaskAddedStatus(goals);
+
+        setTimeout(() => this.checkOverdueGoals(), 1000)
       });
   }
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Goal } from 'src/app/interfaces/item';
 
@@ -8,8 +8,6 @@ import { Goal } from 'src/app/interfaces/item';
   styleUrls: ['./add-goal-form.component.scss']
 })
 export class AddGoalFormComponent implements OnInit {
-
-  @Input() public goal: Goal;
   
   @Output() public close = new EventEmitter<void>();
   @Output() public submitGoal = new EventEmitter<Goal>();

@@ -64,7 +64,7 @@ export class GoalService {
         return this.getGoals()
             .pipe(
                 map(goals => this.createNewGoal(goal, goals)),
-                tap(({addedGoal, updatedGoals}) => {
+                tap(({ addedGoal, updatedGoals }) => {
                     this.setAddedGoal(addedGoal);
                     this.setGoals(updatedGoals);
                 })
@@ -77,7 +77,7 @@ export class GoalService {
         return this.getGoals()
             .pipe(
                 map(goals => this.updateGoals(updatedGoal, goals)),
-                tap(({adjustedGoal, updatedGoals}) => {
+                tap(({ adjustedGoal, updatedGoals }) => {
                     this.setAdjustedGoal(adjustedGoal);
                     this.setGoals(updatedGoals);
                 })
@@ -88,7 +88,7 @@ export class GoalService {
         return this.getGoals()
             .pipe(
                 map(goals => this.removeGoal(deletedGoal, goals)),
-                tap(({deletedGoal, updatedGoals}) => {
+                tap(({ deletedGoal, updatedGoals }) => {
                     this.setDeletedGoal(deletedGoal);
                     this.setGoals(updatedGoals);
                 })
@@ -106,7 +106,7 @@ export class GoalService {
     }
 
     private updateGoals(updatedGoal: Goal, goals: Goal[]) {
-        const updatedGoals =  goals.map(goal =>
+        const updatedGoals = goals.map(goal =>
             goal.code === updatedGoal.code ? updatedGoal : goal
         );
 
@@ -125,7 +125,9 @@ export class GoalService {
             tasks: [everythinElseTask]
         };
 
-        return { addedGoal: newGoal, updatedGoals: goals };
+        const updatedGoals = goals.concat(newGoal);
+
+        return { addedGoal: newGoal, updatedGoals: updatedGoals };
     }
 
     private removeGoal(deletedGoal: Goal, goals: Goal[]) {

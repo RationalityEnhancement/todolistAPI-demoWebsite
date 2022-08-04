@@ -144,11 +144,13 @@
 
   <div class="form-popup">
     <ng-container [ngSwitch]="currentGoalForm">
-      <add-task-form *ngSwitchCase="'task'" [goal]="goal_opened" (submitTask)="addTask($event, goal_opened)" (close)="toggleForm('none')">
+      <add-task-form *ngSwitchCase="'task'" [goal]="goal_opened" (submitTask)="addTask($event, goal_opened)"
+        (close)="toggleForm('none')">
       </add-task-form>
       <add-goal-form *ngSwitchCase="'goal'" (submitGoal)="addGoal($event)" (close)="toggleForm('none')">
       </add-goal-form>
-      <edit-goal-form *ngSwitchCase="'editGoal'" [goal]="goal_opened" (submitGoal)="editGoal($event)" (close)="toggleForm('none')">
+      <edit-goal-form *ngSwitchCase="'editGoal'" [goal]="goal_opened" (submitGoal)="editGoal($event)"
+        (close)="toggleForm('none')">
       </edit-goal-form>
     </ng-container>
   </div>
@@ -196,5 +198,7 @@
     </ul>
   </div>
 
-  <div class="btn bottom-fixed" (click)="createTodoList()">Create Optimal To-Do List</div>
+  <button (click)="createTodoList()" [disabled]="!validTodoList" class="btn bottom-fixed">
+    Create Optimal To-Do List
+  </button>
 </div>

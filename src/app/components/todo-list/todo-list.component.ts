@@ -22,6 +22,7 @@ export class ToDoListComponent implements OnDestroy {
   public currentGoalForm: 'goal' | 'task' | 'editGoal' | 'none';
   public currentView: 'initialGoal' | 'goalExplanation' | 'goalEditor' | 'none';
 
+
   public imageUrls: Record<string, string>;
 
   private images = ['information.png', 'edit_icon.png'];
@@ -45,10 +46,6 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   public createTodoList() {
-    if (!this.validateTodolistData()) {
-      return;
-    }
-
     this.todoListService.requestOptimalTodoList()
       .subscribe((optimizedTodoList) => {
         this.todoListService.setoptimizedTodoList(optimizedTodoList);
@@ -138,21 +135,19 @@ export class ToDoListComponent implements OnDestroy {
       .map(goal => this.getDisplayedTasks(goal.tasks))
       .some(tasks => tasks?.length < 3)
     ) {
-      alert("Please add at least 3 tasks for each goal!");
       return false;
     }
 
     if (this.goals.length < 3) {
-      alert("Please add at least three goals!");
       return false;
     }
 
     if (!this.newTaskAdded) {
-      alert('All your tasks are scheduled already. Please add new tasks before you create a new to-do list!')
       return false;
     }
 
     return true;
+
   }
 
   private listenToGoalChanges(): void {
@@ -166,6 +161,7 @@ export class ToDoListComponent implements OnDestroy {
         this.goals.length ? this.toggleView('goalEditor') : this.toggleView('initialGoal');
         this.newTaskAdded = this.getTaskAddedStatus(goals);
 
+        this.validateTodolistData();
         setTimeout(() => this.checkOverdueGoals(), 1000)
       });
   }

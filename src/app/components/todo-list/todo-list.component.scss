@@ -35,11 +35,6 @@ li {
   margin-right: 10px;
 }
 
-.slider {
-  display: inline-block;
-  width: 100%;
-}
-
 .icon {
   cursor: pointer;
   display: inline-grid;
@@ -189,9 +184,20 @@ li {
   .btn {
     margin: 20px auto;
     width: 300px;
-    background: #8e44ad !important;
+
+    background: #8e44ad;
     color: #FFF;
     box-shadow: none;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: 18px;
+    border: none;
+
+    &:disabled,
+    &[disabled] {
+      background-color: #aea0b3;
+    }
+
+    transition: 0.25s;
   }
 
 
@@ -291,135 +297,6 @@ li {
   to {
     opacity: 1;
   }
-}
-
-/* Add styles to the form container */
-.form-container {
-  max-width: 300px;
-  padding: 10px;
-  background-color: white;
-}
-
-/* Full-width input fields */
-.form-container input[type=text],
-input[type=number],
-input[type=date],
-.form-container input[type=password] {
-  width: 92%;
-  height: 40px;
-  border: 1px solid 615757;
-  /* box-sizing: unset; */
-  padding: 6px;
-  margin: 6px;
-
-}
-
-/* hide arrows in the number input box - Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* hide arrows in the number input box in FireFox */
-input[type=number] {
-  -moz-appearance: textfield;
-}
-
-
-/* When the inputs get focus, do something */
-.form-container input[type=text]:focus,
-input[type=number]:focus,
-input[type=date]:focus,
-.form-container input[type=password]:focus {
-  background-color: #ddd;
-  outline: none;
-}
-
-/* Set a style for the submit/login button */
-.form-container .btn {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom: 10px;
-  margin: 10px 0;
-  min-inline-size: -webkit-fill-available;
-}
-
-/* Add a red background color to the cancel button */
-.form-container .cancel {
-  background-color: red;
-}
-
-.form-container .add {}
-
-/* Add some hover effects to buttons */
-.form-container .btn:hover,
-.open-button:hover {
-  opacity: 1;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked+.slider {
-  background-color: #2196F3;
-}
-
-input:focus+.slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked+.slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
 }
 
 .item-desc-wrapper {

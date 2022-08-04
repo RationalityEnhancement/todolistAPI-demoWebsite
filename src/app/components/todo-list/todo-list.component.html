@@ -12,31 +12,18 @@
   <br>
 
   <div class="initial-goal-form">
-    <form class="form-container">
-      <label for="goal-desc"></label>
-      <input [(ngModel)]="goal_desc" type="text" placeholder="Goal Description (*Required)" name="goal-desc" required>
-
-      <label for="goal-time"></label>
-      <input [(ngModel)]="goal_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)"
-        name="goal-time-est">
-
-      <label for="goal-deadline" style="font-size: 12px; color: gray; margin-left: 6px">Enter a deadline
-        (defaults to 7 days)</label>
-      <input [(ngModel)]="goal_deadline" type="date" name="goal-deadline">
-
-      <button type="submit" class="btn add" (click)="toggleGoalExplanation()">Next</button>
-    </form>
+    <initial-goal-form (submitGoal)="toggleGoalExplanation($event)"></initial-goal-form>
   </div>
 </div>
 
 <div class="initial-goal-explanation" *ngIf="currentView === 'goalExplanation'">
   <h2>Here is your most important goal!</h2>
   <div class="initial-goal-preview">
-    <h3>{{goal_desc}}</h3>
+    <h3>{{goal_opened.name}}</h3>
     <ul>
-      <li class="goal-info-elelement">Value: <span><b>{{goal_val}}%</b></span></li>
-      <li class="goal-info-elelement"> Estimation: <span><b>{{goal_time_est}} hr</b></span></li>
-      <li class="goal-info-elelement">Deadline: <span><b>{{goal_deadline}}</b></span></li>
+      <li class="goal-info-elelement">Value: <span><b>{{goal_opened.value}}%</b></span></li>
+      <li class="goal-info-elelement"> Estimation: <span><b>{{goal_opened.time_est}} hr</b></span></li>
+      <li class="goal-info-elelement">Deadline: <span><b>{{goal_opened.deadline}}</b></span></li>
     </ul>
   </div>
 
@@ -123,7 +110,8 @@
 
         <span class="popuptext" [class.show]="currentInformationPopup == 'finishGoals'">
           <b>Next step</b>
-          <br>Please click on the button <b>Create Optimal To-Do List</b> when you finish. You will receive your optimal to-do list after a short moment.
+          <br>Please click on the button <b>Create Optimal To-Do List</b> when you finish. You will receive your optimal
+          to-do list after a short moment.
           <br></span>
       </div>
 
@@ -144,84 +132,25 @@
           <span>Delete the goal </span>
           <div style="cursor:not-allowed; padding-left:5px;  "><img src="{{imageUrls['edit_icon.png']}}" alt="edit icon"
               width="20px" height="20px"> Edit the goal</div>
-
-
         </span>
       </div>
     </div>
   </div>
 
 
-
-  <div class="form-popup" id="task-form" *ngIf="currentGoalForm === 'task'">
-
-    <form class="form-container">
-      <h1>Add a task to your goal <b>{{goal_opened.name}}</b></h1>
-      <label for="item-desc"></label>
-      <input [(ngModel)]="task_desc" type="text" placeholder="Task Description (*Required)" name="item-desc"
-        required>
-
-      <label for="item-time"></label>
-      <input [(ngModel)]="task_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)"
-        name="item-time-est" required>
-
-      <label for="item-deadline"></label>
-      <input [(ngModel)]="task_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD) (optional)"
-        name="item-deadline">
-
-      <button type="submit" class="btn add" (click)="this.addItem();">Add</button>
-      <button type="submit" class="btn cancel" (click)="closeForm()">Cancel</button>
-    </form>
-  </div>
-
-  <div class="btn" (click)="openGoal()">
+  <div class="btn" (click)="openGoalForm()">
     <div>Add Goals</div>
   </div>
 
-  <div class="form-popup" *ngIf="currentGoalForm === 'goal'">
-    <form class="form-container">
-      <h1>Add Goal</h1>
-      <label for="goal-desc"></label>
-      <input [(ngModel)]="goal_desc" type="text" placeholder="Goal Description (*Required)" name="goal-desc" required>
-
-      <label for="goal-val"></label>
-      <input [(ngModel)]="goal_val" type="number" placeholder="Relative Goal Value (1-100%) (*Required)" name="goal-val"
-        min="0" max="9999" required>
-
-      <label for="goal-time"></label>
-      <input [(ngModel)]="goal_time_est" type="number" placeholder="Enter Time Estimate (Hours) (*Required)"
-        name="goal-time-est">
-
-      <label for="goal-deadline" style="font-size: 12px; color: gray; margin-left: 6px">Enter a deadline
-        (optional)</label>
-      <input [(ngModel)]="goal_deadline" type="date" placeholder="Enter Deadline (YYYY.MM.DD)" name="goal-deadline">
-
-      <button type="submit" class="btn add" (click)="addGoal($event)">Add</button>
-      <button type="submit" class="btn cancel" (click)="closeForm()">Cancel</button>
-    </form>
-  </div>
-
-
-  <div class="form-popup" id="edit-goal-form" *ngIf="currentGoalForm === 'editGoal'">
-    <form class="form-container">
-      <h1>Edit Goal <b>{{goal_opened.name}}</b></h1>
-      <label for="goal-desc" style="font-size: 12px; color: gray; margin-left: 6px">Goal Name</label>
-      <input [(ngModel)]="goal_desc" type="text" placeholder={{goal_opened.name}} name="goal-desc" required>
-
-      <label for="goal-val" style="font-size: 12px; color: gray; margin-left: 6px"> Goal Value</label>
-      <input [(ngModel)]="goal_val" type="number" placeholder={{goal_opened.value}} name="goal-val" min="0" max="9999"
-        required>
-
-      <label for="goal-time" style="font-size: 12px; color: gray; margin-left: 6px">Goal Time Estimation (hrs)</label>
-      <input [(ngModel)]="goal_time_est" type="number" placeholder={{goal_opened.time_est}} name="goal-time-est">
-
-      <label for="goal-deadline" style="font-size: 12px; color: gray; margin-left: 6px">Enter a deadline
-        (optional)</label>
-      <input [(ngModel)]="goal_deadline" type="date" placeholder={{goal_opened.deadline}} name="goal-deadline">
-
-      <button type="submit" class="btn add" (click)="updateGoal($event)">Submit</button>
-      <button type="submit" class="btn cancel" (click)="closeForm()">Cancel</button>
-    </form>
+  <div class="form-popup">
+    <ng-container [ngSwitch]="currentGoalForm">
+      <add-task-form *ngSwitchCase="'task'" [goal]="goal_opened" (submitTask)="addTask($event, goal_opened)" (close)="toggleForm('none')">
+      </add-task-form>
+      <add-goal-form *ngSwitchCase="'goal'" (submitGoal)="addGoal($event)" (close)="toggleForm('none')">
+      </add-goal-form>
+      <edit-goal-form *ngSwitchCase="'editGoal'" [goal]="goal_opened" (submitGoal)="editGoal($event)" (close)="toggleForm('none')">
+      </edit-goal-form>
+    </ng-container>
   </div>
 
   <div class="goal-wrapper" id="goal-display" *ngIf="goals.length > 0">
@@ -230,18 +159,17 @@
         <div> Goal: <b>{{goal.name}}</b> <br> Value: {{goal.value}}% <br>Time Estimation: {{goal.time_est}} hr
           <br> Deadline: / {{goal.deadline}}
           <div>
-            <div class="icon plus" (click)="openTask($event, goal)">
+            <div class="icon plus" (click)="openTaskForm(goal)">
               <div>+</div>
             </div>
-            <div class="icon plus" (click)="deleteGoal($event, goal)" id="hoverText">
+            <div class="icon plus" (click)="deleteGoal(goal)" id="hoverText">
               <div>-</div>
             </div>
-            <div style="cursor:pointer;" (click)="editGoal($event, goal)"><img [src]="imageUrls['edit_icon.png']"
+            <div style="cursor:pointer;" (click)="openEditGoalForm(goal)"><img [src]="imageUrls['edit_icon.png']"
                 alt="edit icon" width="20px" height="20px"> </div>
           </div>
           <div *ngIf="goal.tasks !== undefined">
             <div *ngIf="goal.tasks.length > 0">
-              <!--<div id="goal-sum-time" > Time Estimation:  {{goal.goal_time_est}} </div>-->
 
               <div> ------ Tasks ------
                 <ul>
@@ -253,7 +181,7 @@
                       {{task.name}} <br /> Time: {{task.time_est}} hr
                       <br> Deadline: / {{task.deadline}}
                       <div *ngIf="!(task.scheduled || task.completed)" class="del-wrapper">
-                        <div class="del" (click)="deleteItem($event, goal, task)">
+                        <div class="del" (click)="deleteTask(goal, task)">
                           <div>-</div>
                         </div>
                       </div>

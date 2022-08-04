@@ -1,0 +1,41 @@
+<form [formGroup]="form" (ngSubmit)="submitForm()"  class="form-container">
+    <h1>Add a task to your goal <b>{{goal.name}}</b></h1>
+    <label for="task-name">Task Name</label>
+    <input id="task-name" type="text" required placeholder="Task Description" formControlName="name">
+  
+    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="feedback-message">
+      <div *ngIf="name.errors?.required">
+        Please enter a name for your task.
+      </div>
+    </div>
+  
+    <label for="task-estimate">Task Time Estimation</label>
+    <input id="task-estimate" type="number" placeholder="Enter Time Estimate (Hours)" required formControlName="time_est">
+  
+    <div *ngIf="estimate.invalid && (estimate.dirty || estimate.touched)" class="feedback-message">
+      <div *ngIf="estimate.errors?.required">
+        Please enter an estimate for your task.
+      </div>
+      <div *ngIf="(estimate.errors?.min)">
+        Please enter a valid estimate for your task.
+      </div>
+      <div *ngIf="(estimate.errors?.max)">
+        Please enter a time estimate that is less than 4 hours. Your tasks should be actionable and specific, so you could achieve them in one day. Ideally your task's estimate is between 1 - 2 hours.
+      </div>
+    </div>
+  
+    <label for="task-deadline">Enter a deadline (optional)</label>
+    <input id="task-deadline" type="date" formControlName="deadline">
+  
+    <div *ngIf="deadline.invalid && (deadline.dirty || deadline.touched)" class="feedback-message">
+      <div *ngIf="(deadline.errors?.deadlineInPast)">
+        Please enter a deadline that is not in the past.
+      </div>
+      <div *ngIf="(deadline.errors?.afterGoalDeadline)">
+        Please enter a deadline that is before your goal's deadline.
+      </div>
+    </div>
+  
+    <button [disabled]="form.invalid" type="submit" class="btn">Submit</button>
+    <button type="button" class="btn" (click)="closeForm()">Cancel</button>
+  </form>

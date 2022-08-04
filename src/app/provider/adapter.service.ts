@@ -74,8 +74,7 @@ export class AdapterService {
     private getRawCompliceIntentionName(task: OptimizedTodo): string {
         const taskName = task.nm;
         const taskValue = `=${task.val}`;
-        const workflowyId = `$wf:${task.id}`;
 
-        return `${taskName} ${taskValue} ${workflowyId}`;
+        return `${taskName} ${taskValue}`;
     }
 }

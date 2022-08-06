@@ -16,7 +16,6 @@ export class GoalEditorComponent implements OnInit {
 
   public selectedGoal: Goal;
 
-  public currentInformationPopup: 'goalExample' | 'information' | 'finishGoals' | 'legend' | 'none';
   public currentGoalForm: 'goal' | 'task' | 'editGoal' | 'none';
   public currentView: 'initialGoal' | 'goalExplanation' | 'goalEditor' | 'none';
 
@@ -26,7 +25,7 @@ export class GoalEditorComponent implements OnInit {
     return this.validateTodolistData();
   }
 
-  private images = ['information.png', 'edit_icon.png'];
+  private images = ['edit_icon.png'];
   private newTaskAdded: boolean;
 
   constructor(
@@ -51,14 +50,6 @@ export class GoalEditorComponent implements OnInit {
       }, error => {
         alert(error?.error || 'An unexpected error occured. If you continue to encounter this issue, please contact us at reg.experiments@tuebingen.mpg.de.');
       });
-  }
-
-  public toggleInformationPopup(popup) {
-    if (this.currentInformationPopup === popup) {
-      this.currentInformationPopup = 'none';
-    } else {
-      this.currentInformationPopup = popup;
-    }
   }
 
   public toggleForm(formType: 'goal' | 'task' | 'editGoal' | 'none') {
@@ -131,7 +122,6 @@ export class GoalEditorComponent implements OnInit {
     }
 
     return true;
-
   }
 
   private getTaskAddedStatus(): boolean {

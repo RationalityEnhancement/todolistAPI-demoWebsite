@@ -1,0 +1,112 @@
+<div class="goal-editor-instructions">
+    <div class="section-1">
+        <h2>Please follow the instructions below:</h2>
+        <ol>
+            <li>
+                For your most important goal, think about all tasks that need to be completed to achieve your goal.
+                Afterward, add them to your goal.
+            </li>
+            <li>
+                Then, please tell us about other goals you want to achieve. Ideally, you provide at least
+                <b>three</b>
+                goals.
+            </li>
+            <li>
+                Please estimate how valuable each of the additional goals is relative to your most valuable goal on a
+                scale
+                from 1% to 100%.
+            </li>
+        </ol>
+    </div>
+
+    <h2>What are goals and tasks?</h2>
+
+    <div class="section-2">
+        <b>Goal</b>: Something that you need to or want to achieve. <br>
+        <b>Task</b>: A task along your path to achieving the goal. Ideally, a task does not take longer than 2
+        hours.<br>
+
+        <div class="popup" (click)="toggleInformationPopup('goalExample')" id="hoverText" style="margin-top: 10px;">
+            <img [src]="imageUrls['information.png']" alt="info icon" width="20px" height="20px"
+                style="margin-right: 10px"><b>Example for a good goal</b>
+
+            <span class="popuptext" [class.show]="currentInformationPopup == 'goalExample'">
+                We recommend choosing an ongoing project, such as “write the term paper for my English class”, “start my
+                own
+                business”, “learn programming”, or “get a good job”, that you can work on in the next 7 days.
+                <br><br>
+                In comparison, "cooking dinner on X'mas" isn't a suitable goal. Ideally, your goal can be broken down
+                into a
+                series of smaller tasks.
+                <br><br>
+
+
+                <b>Example</b>:
+                <br>Goal: Write a term paper for my English class (Value: 5000)
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Brainstorm potential topics [2 hrs]
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Choose a topic [1 hrs]
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;|----Read first article on topic [1.5 hrs]
+                <br> &nbsp;&nbsp;&nbsp;&nbsp;|----Outline the paper [2.5hr]
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and so on...
+            </span>
+        </div>
+        <br>
+        <div (click)="toggleInformationPopup('information')" class="popup" id="hoverText">
+            <img [src]="imageUrls['information.png']" alt="info icon" width="20px" height="20px"
+                style="margin-right: 10px">
+            <b>Which information should I enter?</b>
+            <span class="popuptext" [class.show]="currentInformationPopup == 'information'">
+                <b>Description</b>
+                <br>Write down what you want to achieve (e.g., “Start my own business”)
+                <br><br><b>Value</b>
+                <br>How valuable would it be for you to have achieved this goal on a scale from 1 to 100, where 1 means
+                “I
+                couldn’t care less.” and 100 means “Nothing could be more valuable to me.”? Don’t stress about the exact
+                value.
+                What matters most is that you assign higher values to the goals that are more important to you. If your
+                first
+                goal
+                is twice as valuable to you as your second goal, then its value should be twice as high.
+                <br><br><b>Estimated Time</b>
+                <br>How many hours will it take to achieve this goal or task?
+                <br><br><b>Deadline</b>
+                <br>If there is a deadline for this goal or task, then please fill it in!
+
+                <br></span>
+        </div>
+        <br>
+        <div class="popup" (click)="toggleInformationPopup('finishGoals')" id="hoverText">
+            <img [src]="imageUrls['information.png']" alt="info icon" width="20px" height="20px"
+                style="margin-right: 10px">
+            <b>What to do when I finish adding goals?</b>
+
+            <span class="popuptext" [class.show]="currentInformationPopup == 'finishGoals'">
+                <b>Next step</b>
+                <br>Please click on the button <b>Create Optimal To-Do List</b> when you finish. You will receive your
+                optimal
+                to-do list after a short moment.
+                <br></span>
+        </div>
+
+        <br>
+
+        <div class="popup" (click)="toggleInformationPopup('legend')" id="hoverText"><img
+                src="{{imageUrls['information.png']}}" alt="info icon" width="20px" height="20px"
+                style="margin-right:10px">
+            <b>Icons</b>
+            <span class="popuptext_info" [class.show]="currentInformationPopup == 'legend'">
+
+                <div class="icon plus" style="text-align:center;cursor:not-allowed; ">
+                    <div> +</div>
+                </div>
+                <span>Add a task </span><br>
+                <div class="icon plus" style="text-align:center; cursor:not-allowed">
+                    <div> -</div>
+                </div>
+                <span>Delete the goal </span>
+                <div style="cursor:not-allowed; padding-left:5px;  "><img src="{{imageUrls['edit_icon.png']}}"
+                        alt="edit icon" width="20px" height="20px"> Edit the goal</div>
+            </span>
+        </div>
+    </div>
+</div>

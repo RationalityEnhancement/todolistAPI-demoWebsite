@@ -20,6 +20,7 @@ import { InitialGoalFormComponent } from './components/initial-goal-form/initial
 import { AddTaskFormComponent } from './components/add-task-form/add-task-form.component';
 import { TaskService } from './provider/task.service';
 import { ColorService } from './provider/color.service';
+import { InitialGoalViewComponent } from './components/initial-goal-view/initial-goal-view.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { ColorService } from './provider/color.service';
     EditGoalFormComponent,
     AddGoalFormComponent,
     InitialGoalFormComponent,
-    AddTaskFormComponent
+    AddTaskFormComponent,
+    InitialGoalViewComponent
   ],
   imports: [
     BrowserModule,

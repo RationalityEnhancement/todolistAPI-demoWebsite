@@ -38,8 +38,9 @@ export class InitialGoalFormComponent implements OnInit {
 
   public submitForm(): void {
     const goalProperties = this.form.value;
+    const initialGoalProperties = { ...goalProperties, value: 100};
 
-    this.submitGoal.emit(goalProperties);
+    this.submitGoal.emit(initialGoalProperties);
   }
 
   private initForm(): void {

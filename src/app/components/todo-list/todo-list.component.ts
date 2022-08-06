@@ -81,7 +81,6 @@ export class ToDoListComponent implements OnDestroy {
   }
 
   public toggleGoalEditor() {
-    this.addGoal(this.goal_opened);
     this.toggleView('goalEditor');
   }
 

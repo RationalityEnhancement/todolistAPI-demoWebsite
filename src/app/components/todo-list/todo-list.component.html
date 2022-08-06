@@ -1,38 +1,6 @@
-<div class="initial-goal-wrapper" *ngIf="currentView === 'initialGoal'">
-  <div class="initial-goal-introduction">
-
-    <h2>
-      What is the most important goal you want to achieve this week?
-    </h2>
-
-    <p>
-      Take a moment to think about the question and enter your first goal.
-    </p>
-  </div>
-  <br>
-
-  <div class="initial-goal-form">
-    <initial-goal-form (submitGoal)="toggleGoalExplanation($event)"></initial-goal-form>
-  </div>
-</div>
-
-<div class="initial-goal-explanation" *ngIf="currentView === 'goalExplanation'">
-  <h2>Here is your most important goal!</h2>
-  <div class="initial-goal-preview">
-    <h3>{{goal_opened.name}}</h3>
-    <ul>
-      <li class="goal-info-elelement">Value: <span><b>{{goal_opened.value}}%</b></span></li>
-      <li class="goal-info-elelement"> Estimation: <span><b>{{goal_opened.time_est}} hr</b></span></li>
-      <li class="goal-info-elelement">Deadline: <span><b>{{goal_opened.deadline}}</b></span></li>
-    </ul>
-  </div>
-
-  <p>
-    Because this is your most valuable goal, we set its value to 100% and use it as a reference point for estimating
-    the value of your other goals.
-  </p>
-  <button type="submit" class="btn add" (click)="toggleGoalEditor()">Next</button>
-</div>
+<ng-container *ngIf="currentView =='initialGoal'">
+  <initial-goal-view (submitInitialGoal)="toggleGoalEditor()"></initial-goal-view>
+</ng-container>
 
 <div class="goal-editor-wrapper" *ngIf="currentView === 'goalEditor'">
   <div class="goal-editor-instructions">

@@ -1,4 +1,4 @@
-<div>
+<div class="editor-instructions-wrapper">
     <goal-editor-instructions></goal-editor-instructions>
 </div>
 <div class="btn" (click)="openGoalForm()">
@@ -18,7 +18,7 @@
     </ng-container>
 </div>
 
-<div class="goal-wrapper" id="goal-display" *ngIf="goals.length > 0">
+<div class="goal-wrapper" id="goal-display" *ngIf="goals.length">
     <ul>
         <li *ngFor="let goal of goals" class="goal-item">
             <div> Goal: <b>{{goal.name}}</b> <br> Value: {{goal.value}}% <br>Time Estimation: {{goal.time_est}} hr

@@ -4,6 +4,11 @@ li {
     list-style-type: none;
 }
 
+.editor-instructions-wrapper {
+    margin-bottom: 50px;
+    padding: 20px;
+}
+
 .icon {
     cursor: pointer;
     display: inline-grid;
@@ -65,6 +70,7 @@ li {
 
 .goal-wrapper ul {
     width: 100%;
+    padding: 0;
     display: inline-grid;
     overflow: auto;
     justify-content: space-between;

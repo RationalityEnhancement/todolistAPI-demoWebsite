@@ -5,19 +5,6 @@
     <div>Add Goals</div>
 </div>
 
-<div class="form-popup">
-    <ng-container [ngSwitch]="currentGoalForm">
-        <add-task-form *ngSwitchCase="'task'" [goal]="selectedGoal" (submitTask)="addTask($event, selectedGoal)"
-            (close)="toggleForm('none')">
-        </add-task-form>
-        <add-goal-form *ngSwitchCase="'goal'" (submitGoal)="addGoal($event)" (close)="toggleForm('none')">
-        </add-goal-form>
-        <edit-goal-form *ngSwitchCase="'editGoal'" [goal]="selectedGoal" (submitGoal)="editGoal($event)"
-            (close)="toggleForm('none')">
-        </edit-goal-form>
-    </ng-container>
-</div>
-
 <div class="goal-wrapper" id="goal-display" *ngIf="goals.length">
     <ul>
         <li *ngFor="let goal of goals" class="goal-item">
@@ -64,3 +51,16 @@
 <button (click)="createTodoList()" [disabled]="!validTodoList" class="btn bottom-fixed">
     Create Optimal To-Do List
 </button>
+
+<div class="form-popup">
+    <ng-container [ngSwitch]="currentGoalForm">
+        <add-task-form *ngSwitchCase="'task'" [goal]="selectedGoal" (submitTask)="addTask($event, selectedGoal)"
+            (close)="toggleForm('none')">
+        </add-task-form>
+        <add-goal-form *ngSwitchCase="'goal'" (submitGoal)="addGoal($event)" (close)="toggleForm('none')">
+        </add-goal-form>
+        <edit-goal-form *ngSwitchCase="'editGoal'" [goal]="selectedGoal" (submitGoal)="editGoal($event)"
+            (close)="toggleForm('none')">
+        </edit-goal-form>
+    </ng-container>
+</div>

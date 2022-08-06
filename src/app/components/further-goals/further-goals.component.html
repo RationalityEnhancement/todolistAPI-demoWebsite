@@ -1,0 +1,28 @@
+<div class="introduction">
+    <h2>What else are you up to?</h2>
+    <p>Please think about two further goals, you would like to achieve in the coming months.</p>
+</div>
+<div class="goal-explanation" style="display: flex; justify-content: start;">
+    <ng-container *ngFor="let goal of goals">
+        <div class="goal-preview" style="margin: 25px; height: max-content; align-self: center;">
+            <h3>{{goal.name}}</h3>
+            <ul>
+                <li class="goal-info-elelement">Value: <span><b>{{goal.value}}%</b></span></li>
+                <li class="goal-info-elelement"> Estimation: <span><b>{{goal.time_est}}hr</b></span></li>
+                <li class="goal-info-elelement">Deadline: <span><b>{{goal.deadline}}</b></span></li>
+            </ul>
+        </div>
+    </ng-container>
+    <div (click)="openForm()" class="initial-goal-preview"
+        style="align-self: center;margin: 25px;padding: 10px 30px; cursor: pointer; background-color: #8e44ad;">
+        <h3 style="font-size: 40px;margin: 0;color: white;">+</h3>
+    </div>
+</div>
+
+
+<ng-container *ngIf="isFormOpen">
+    <div class="form-popup">
+        <add-goal-form (submitGoal)="addFurtherGoal($event)" (close)="closeForm()">
+        </add-goal-form>
+    </div>
+</ng-container>

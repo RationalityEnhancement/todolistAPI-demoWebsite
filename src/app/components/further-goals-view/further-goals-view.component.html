@@ -15,22 +15,34 @@
     </ng-container>
 </div>
 
-<button (click)="toggleAddGoalForm()" class="btn">
-    <span class="icon">+</span>
-    <span class="label">Add goal</span>    
-</button>
-
-
-<ng-container *ngIf="currentForm === 'addGoal'">
-    <div class="form-popup">
-        <add-goal-form (submitGoal)="addFurtherGoal($event)" (close)="closeForm()">
-        </add-goal-form>
-    </div>
+<ng-container *ngIf="goals.length < 3; then addGoalButton else continueButton">
 </ng-container>
 
-<ng-container *ngIf="currentForm === 'editGoal'">
-    <div class="form-popup">
-        <edit-goal-form [goal]="selectedGoal" (submitGoal)="editGoal($event)" (close)="closeForm()">
-        </edit-goal-form>
-    </div>
+<ng-container [ngSwitch]="currentForm">
+    <ng-container *ngSwitchCase="'addGoal'">
+        <div class="form-popup">
+            <add-goal-form (submitGoal)="addFurtherGoal($event)" (close)="closeForm()">
+            </add-goal-form>
+        </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'editGoal'">
+        <div class="form-popup">
+            <edit-goal-form [goal]="selectedGoal" (submitGoal)="editGoal($event)" (close)="closeForm()">
+            </edit-goal-form>
+        </div>
+    </ng-container>
 </ng-container>
+
+<ng-template #addGoalButton>
+    <button (click)="toggleAddGoalForm()" class="btn">
+        <span class="icon">+</span>
+        <span class="label">Add goal</span>
+    </button>
+</ng-template>
+
+<ng-template #continueButton>
+    <button (click)="continue()" class="btn">
+        <span class="label">Continue</span>
+    </button>
+</ng-template>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Goal } from 'src/app/interfaces/item';
 import { GoalService } from 'src/app/provider/goal.service';
 
@@ -10,6 +10,8 @@ import { GoalService } from 'src/app/provider/goal.service';
 export class FurtherGoalsViewComponent implements OnInit {
 
   @Input() public goals: Goal[] = [];
+
+  @Output() public continueToGoalEditor = new EventEmitter<void>();
 
   public currentForm: 'addGoal' | 'editGoal' | 'none';
   public selectedGoal: Goal;
@@ -41,5 +43,9 @@ export class FurtherGoalsViewComponent implements OnInit {
   public editGoal(goalProperties: Goal) {
     this.goalService.editGoal(goalProperties)
       .subscribe();
+  }
+
+  public continue(): void {
+    this.continueToGoalEditor.emit();
   }
 }

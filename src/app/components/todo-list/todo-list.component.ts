@@ -14,7 +14,7 @@ import { Goal } from '../../interfaces/item';
 export class ToDoListComponent {
 
   public goals$: Observable<Goal[]>;
-  public currentView: 'initialGoal' | 'goalExplanation' | 'goalEditor' | 'none';
+  public currentView: 'initialGoal' | 'furtherGoals' | 'goalEditor' | 'none';
 
 
   constructor(
@@ -23,7 +23,7 @@ export class ToDoListComponent {
     this.goals$ = this.initializeGoals();
   }
 
-  public toggleView(view: 'initialGoal' | 'goalExplanation' | 'goalEditor' | 'none') {
+  public toggleView(view: 'initialGoal' | 'furtherGoals' | 'goalEditor' | 'none') {
     this.currentView = view;
   }
 
@@ -35,6 +35,10 @@ export class ToDoListComponent {
   }
 
   private toggleDefaultView(goals: Goal[]): void {
+    if (this.currentView === 'furtherGoals') {
+      return;
+    }
+    
     goals.length ? this.toggleView('goalEditor') : this.toggleView('initialGoal');
   }
 }

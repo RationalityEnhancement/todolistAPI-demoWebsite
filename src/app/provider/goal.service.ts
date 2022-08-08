@@ -100,6 +100,11 @@ export class GoalService {
         return this.editGoal(updatedGoal);
     }
 
+    public editTask(task: Item, goal: Goal) {
+        const updatedGoal = this.taskService.editTaskOfGoal(task, goal);
+        return this.editGoal(updatedGoal);
+    }
+
     public deleteTask(task, goal: Goal) {
         const updatedGoal = this.taskService.deleteTaskFromGoal(task, goal);
         return this.editGoal(updatedGoal);
@@ -115,15 +120,18 @@ export class GoalService {
 
     private createNewGoal(goal: Goal, goals: Goal[]) {
         const color = this.colorService.getGoalColor(goals);
-        const everythinElseTask = this.taskService.getEverythingElseTask(goal);
         const code = `${goals.length + 1}`;
 
         const newGoal: Goal = {
             ...goal,
             code: code,
             color: color,
-            tasks: [everythinElseTask]
+            tasks: []
         };
+        
+        const everythingElseTask = this.taskService.getEverythingElseTask(newGoal);
+
+        newGoal.tasks.push(everythingElseTask);
 
         const updatedGoals = goals.concat(newGoal);
 

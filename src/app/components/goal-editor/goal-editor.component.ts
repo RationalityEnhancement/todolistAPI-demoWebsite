@@ -15,8 +15,9 @@ export class GoalEditorComponent implements OnInit {
   @Input() public goals: Goal[] = [];
 
   public selectedGoal: Goal;
+  public selectedTask: Item;
 
-  public currentGoalForm: 'goal' | 'task' | 'editGoal' | 'none';
+  public currentGoalForm: 'goal' | 'addTask' | 'editTask' | 'editGoal' | 'none';
   public currentView: 'initialGoal' | 'goalExplanation' | 'goalEditor' | 'none';
 
   public imageUrls: Record<string, string>;
@@ -52,7 +53,7 @@ export class GoalEditorComponent implements OnInit {
       });
   }
 
-  public toggleForm(formType: 'goal' | 'task' | 'editGoal' | 'none') {
+  public toggleForm(formType: 'goal' | 'addTask' | 'editTask' | 'editGoal' | 'none') {
     this.currentGoalForm = formType;
   }
 
@@ -64,9 +65,15 @@ export class GoalEditorComponent implements OnInit {
     this.toggleForm('goal');
   }
 
-  public openTaskForm(goal?) {
+  public openAddTaskForm(goal: Goal) {
     this.selectedGoal = goal;
-    this.toggleForm('task');
+    this.toggleForm('addTask');
+  }
+
+  public openEditTaskForm(goal: Goal, task: Item) {
+    this.selectedGoal = goal;
+    this.selectedTask = task;
+    this.toggleForm('editTask');
   }
 
   public openEditGoalForm(goal) {
@@ -93,6 +100,11 @@ export class GoalEditorComponent implements OnInit {
 
   public addTask(task: Item, goal: Goal) {
     this.goalService.addTask(task, goal)
+      .subscribe();
+  }
+
+  public editTask(task: Item, goal: Goal) {
+    this.goalService.editTask(task, goal)
       .subscribe();
   }
 

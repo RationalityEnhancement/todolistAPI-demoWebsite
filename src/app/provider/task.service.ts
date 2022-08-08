@@ -15,7 +15,20 @@ export class TaskService {
     };
 
     goal.tasks.push(newTask);
-    
+
+    return goal;
+  }
+
+  public editTaskOfGoal(editedTask: Item, goal: Goal): Goal {
+    const updatedTasks =  goal.tasks.map(task => {
+      if (task.workflowyId === editedTask.workflowyId) {
+        return editedTask;
+      }
+      return task;
+    });
+
+    goal.tasks = updatedTasks;
+
     return goal;
   }
 

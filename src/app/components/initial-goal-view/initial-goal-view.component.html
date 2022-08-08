@@ -21,12 +21,7 @@
     <div class="initial-goal-explanation">
         <h2>Here is your most important goal!</h2>
         <div class="initial-goal-preview">
-            <h3>{{goalProperties.name}}</h3>
-            <ul>
-                <li class="goal-info-elelement">Value: <span><b>{{goalProperties.value}}%</b></span></li>
-                <li class="goal-info-elelement"> Estimation: <span><b>{{goalProperties.time_est}} hr</b></span></li>
-                <li class="goal-info-elelement">Deadline: <span><b>{{goalProperties.deadline}}</b></span></li>
-            </ul>
+            <goal-preview [goal]="goalProperties"></goal-preview>
         </div>
 
         <p>

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { faCheck, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { timer } from 'rxjs';
 import { Goal, Item } from 'src/app/interfaces/item';
 import { GoalService } from 'src/app/provider/goal.service';
@@ -19,6 +20,11 @@ export class GoalEditorComponent implements OnInit {
 
   public currentGoalForm: 'addGoal' | 'addTask' | 'editTask' | 'editGoal' | 'none';
   public currentView: 'initialGoal' | 'goalExplanation' | 'goalEditor' | 'none';
+
+  public completeIcon = faCheck;
+  public deleteIcon = faTrashAlt;
+  public editIcon = faEdit;
+
 
   public imageUrls: Record<string, string>;
 
@@ -94,7 +100,7 @@ export class GoalEditorComponent implements OnInit {
   public deleteGoal(goal) {
     if (confirm('Do you really want to delete this goal?')) {
       this.goalService.deleteGoal(goal)
-        .subscribe();
+        .subscribe(() => this.toggleForm('none'));
     }
   }
 
@@ -108,9 +114,9 @@ export class GoalEditorComponent implements OnInit {
       .subscribe();
   }
 
-  public deleteTask(goal, task) {
+  public deleteTask(task: Item, goal: Goal) {
     this.goalService.deleteTask(task, goal)
-      .subscribe();
+      .subscribe(() => this.toggleForm('none'));
   }
 
   public getDisplayedTasks(tasks: Item[]) {

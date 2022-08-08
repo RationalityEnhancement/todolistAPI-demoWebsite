@@ -33,37 +33,15 @@
         }
     }
 
-    transition: 0.25s;
-}
-
-.overdue {
-    border-color: #c91515;
-}
-
-.icon-wrapper {
-    padding-top: 20px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.icon {
-    width: 20px;
-    margin: 0 15px;
-    opacity: 0.5;
-    color: #8e44ad;
-
     &:hover {
-        transform: scale(1.05);
-        opacity: 1;
+        box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, 0.15);
+        transform: scale(1.01);
         cursor: pointer;
     }
 
     transition: 0.25s;
 }
 
-.edit {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    margin: 0;
+.overdue {
+    border-color: #c91515;
 }

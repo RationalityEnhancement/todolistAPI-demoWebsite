@@ -105,7 +105,7 @@ export class GoalService {
         return this.editGoal(updatedGoal);
     }
 
-    public deleteTask(task, goal: Goal) {
+    public deleteTask(task: Item, goal: Goal) {
         const updatedGoal = this.taskService.deleteTaskFromGoal(task, goal);
         return this.editGoal(updatedGoal);
     }

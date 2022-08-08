@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faCheck, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { Item } from 'src/app/interfaces/item';
 
@@ -11,6 +11,8 @@ export class TaskPreviewComponent implements OnInit {
 
   @Input() public task: Item;
 
+  @Output() public deleteSubmit = new EventEmitter();
+
   public isOverdue: boolean;
 
   public completeIcon = faCheck;
@@ -22,6 +24,10 @@ export class TaskPreviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.setOverdueStatus();
+   }
+
+   public delete(): void {
+    this.deleteSubmit.emit();
    }
 
    private setOverdueStatus(): void {

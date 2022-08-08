@@ -2,7 +2,16 @@
     <h2>Adjust your goals</h2>
     <div class="goal-preview-gallery">
         <ng-container *ngFor="let goal of goals">
-            <goal-preview [goal]="goal" (click)="openEditGoalForm(goal)"></goal-preview>
+            <goal-preview [goal]="goal" (click)="openEditGoalForm(goal)">
+                <div class="icon-wrapper">
+                    <div (click)="deleteGoal(goal)" class="icon">
+                        <fa-icon [icon]="completeIcon"></fa-icon>
+                    </div>
+                    <div (click)="deleteGoal(goal)" class="icon">
+                        <fa-icon [icon]="deleteIcon"></fa-icon>
+                    </div>
+                </div>
+            </goal-preview>
         </ng-container>
     </div>
 
@@ -27,7 +36,7 @@
 
             <div style="margin-top: 20px; display: flex; flex-wrap: wrap; align-content: start;">
                 <ng-container *ngFor="let task of getDisplayedTasks(goal.tasks)">
-                    <task-preview [task]="task" (click)="openEditTaskForm(goal, task)"></task-preview>
+                    <task-preview [task]="task" (deleteSubmit)="deleteTask(task, goal)" (click)="openEditTaskForm(goal, task)"></task-preview>
                 </ng-container>
             </div>
         </div>

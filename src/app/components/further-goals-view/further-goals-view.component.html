@@ -14,8 +14,9 @@
 <ng-container [ngSwitch]="currentForm">
     <ng-container *ngSwitchCase="'addGoal'">
         <div class="form-popup">
-            <add-goal-form (submitGoal)="addFurtherGoal($event)" (close)="closeForm()">
-            </add-goal-form>
+            <goal-form (submitGoal)="addFurtherGoal($event)" (close)="closeForm()">
+                <h2>Add a new goal</h2>
+            </goal-form>
         </div>
     </ng-container>
 

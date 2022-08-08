@@ -32,7 +32,8 @@ export class TaskService {
     return goal;
   }
 
-  public deleteTaskFromGoal(task, goal: Goal): Goal {
+  public deleteTaskFromGoal(task: Item, goal: Goal): Goal {
+    console.log(task, goal)
     const index = goal.tasks.indexOf(task);
 
     goal.tasks.splice(index, 1);

@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { faCheck, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { Goal } from 'src/app/interfaces/item';
 
 @Component({
@@ -13,10 +12,6 @@ export class GoalPreviewComponent implements OnInit {
 
   public isOverdue: boolean;
   
-  public completeIcon = faCheck;
-  public deleteIcon = faTrashAlt;
-  public editIcon = faEdit
-
   constructor() { }
 
   ngOnInit(): void {

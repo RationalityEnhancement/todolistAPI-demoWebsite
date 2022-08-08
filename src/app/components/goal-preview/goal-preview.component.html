@@ -1,20 +1,9 @@
 <div [ngClass]="{'overdue': isOverdue}" class="goal-preview">
-    <div class="edit icon">
-        <fa-icon [icon]="editIcon"></fa-icon>
-    </div>
     <h3>{{goal.name}}</h3>
     <ul>
         <li class="goal-info-element">Value: <span><b>{{goal.value}}%</b></span></li>
         <li class="goal-info-element"> Estimation: <span><b>{{goal.time_est}}hr</b></span></li>
         <li class="goal-info-element">Deadline: <span><b>{{goal.deadline}}</b></span></li>
     </ul>
-
-    <div class="icon-wrapper">
-        <div class="icon">
-            <fa-icon [icon]="completeIcon"></fa-icon>
-        </div>
-        <div class="icon">
-            <fa-icon [icon]="deleteIcon"></fa-icon>
-        </div>
-    </div>
+    <ng-content></ng-content>
 </div>

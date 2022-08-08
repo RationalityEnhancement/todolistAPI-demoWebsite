@@ -100,7 +100,7 @@ export class GoalEditorComponent implements OnInit {
   public deleteGoal(goal) {
     if (confirm('Do you really want to delete this goal?')) {
       this.goalService.deleteGoal(goal)
-        .subscribe(() => this.toggleForm('none'));
+        .subscribe(() => this.closeForm());
     }
   }
 
@@ -116,7 +116,7 @@ export class GoalEditorComponent implements OnInit {
 
   public deleteTask(task: Item, goal: Goal) {
     this.goalService.deleteTask(task, goal)
-      .subscribe(() => this.toggleForm('none'));
+      .subscribe(() => this.closeForm());
   }
 
   public getDisplayedTasks(tasks: Item[]) {

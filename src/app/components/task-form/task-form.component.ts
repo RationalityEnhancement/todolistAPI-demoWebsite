@@ -48,7 +48,7 @@ export class TaskFormComponent implements OnInit {
     const task = { ...this.task, ...taskProperties }
 
     this.submitTask.emit(task);
-    this.closeForm();
+    this.initForm()
   }
 
   public closeForm(): void {
@@ -56,7 +56,7 @@ export class TaskFormComponent implements OnInit {
   }
 
   private initForm(): void {
-    const nameValidators = [Validators.required];
+    const nameValidators = [Validators.required, this.nameValidator()];
     const estimateValidators = [Validators.required, Validators.min(0.1), Validators.max(4)];
     const deadlineValidators = [this.deadlineValidator()];
 
@@ -73,6 +73,18 @@ export class TaskFormComponent implements OnInit {
       time_est: this.task.time_est,
       deadline: this.task.deadline
     });
+  }
+
+  private nameValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const alreadyUsedNames = this.goal.tasks.map(task => task.name);
+
+      if (alreadyUsedNames.includes(control.value)) {
+        return { nameAlreadyUsed: { value: control.value } };
+      }
+
+      return null;
+    };
   }
 
   private deadlineValidator(): ValidatorFn {

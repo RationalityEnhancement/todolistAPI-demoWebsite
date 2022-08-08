@@ -49,19 +49,19 @@
 
 <div class="form-popup">
     <ng-container [ngSwitch]="currentGoalForm">
-        <task-form *ngSwitchCase="'addTask'" (submitTask)="addTask($event, selectedGoal)" (close)="toggleForm('none')"
+        <task-form *ngSwitchCase="'addTask'" (submitTask)="addTask($event, selectedGoal)" (close)="closeForm()"
             [goal]="selectedGoal">
             <h2>Add a task to your goal <b>{{selectedGoal.name}}</b></h2>
         </task-form>
         <task-form *ngSwitchCase="'editTask'" (submitTask)="editTask($event, selectedGoal)" [goal]="selectedGoal"
-            [task]="selectedTask" (close)="toggleForm('none')">
+            [task]="selectedTask" (close)="closeForm()">
             <h2>Edit task <b>{{selectedTask.name}}</b></h2>
         </task-form>
-        <goal-form *ngSwitchCase="'addGoal'" (submitGoal)="addGoal($event)" (close)="toggleForm('none')">
+        <goal-form *ngSwitchCase="'addGoal'" (submitGoal)="addGoal($event)" (close)="closeForm()">
             <h2>Add a new goal</h2>
         </goal-form>
         <goal-form *ngSwitchCase="'editGoal'" [goal]="selectedGoal" (submitGoal)="editGoal($event)"
-            (close)="toggleForm('none')">
+            (close)="closeForm()">
             <h2>Edit your goal <b>{{selectedGoal.name}}</b></h2>
         </goal-form>
     </ng-container>

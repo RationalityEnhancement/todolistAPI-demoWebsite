@@ -48,11 +48,13 @@
             [task]="selectedTask" (close)="toggleForm('none')">
             <h2>Edit task <b>{{selectedTask.name}}</b></h2>
         </task-form>
-        <add-goal-form *ngSwitchCase="'goal'" (submitGoal)="addGoal($event)" (close)="toggleForm('none')">
-        </add-goal-form>
-        <edit-goal-form *ngSwitchCase="'editGoal'" [goal]="selectedGoal" (submitGoal)="editGoal($event)"
+        <goal-form *ngSwitchCase="'addGoal'" (submitGoal)="addGoal($event)" (close)="toggleForm('none')">
+            <h2>Add a new goal</h2>
+        </goal-form>
+        <goal-form *ngSwitchCase="'editGoal'" [goal]="selectedGoal" (submitGoal)="editGoal($event)"
             (close)="toggleForm('none')">
-        </edit-goal-form>
+            <h2>Edit Goal <b>{{selectedGoal.name}}</b></h2>
+        </goal-form>
     </ng-container>
 </div>
 <!--

@@ -26,7 +26,8 @@ import { GoalEditorInstructionsComponent } from './components/goal-editor-instru
 import { FurtherGoalsViewComponent } from './components/further-goals-view/further-goals-view.component';
 import { TaskPreviewComponent } from './components/task-preview/task-preview.component';
 import { GoalPreviewComponent } from './components/goal-preview/goal-preview.component';
-import { TaskFormComponent } from './components/task-form/task-form.component'
+import { TaskFormComponent } from './components/task-form/task-form.component';
+import { GoalFormComponent } from './components/goal-form/goal-form.component'
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { TaskFormComponent } from './components/task-form/task-form.component'
     FurtherGoalsViewComponent,
     TaskPreviewComponent,
     GoalPreviewComponent,
-    TaskFormComponent
+    TaskFormComponent,
+    GoalFormComponent
   ],
   imports: [
     BrowserModule,

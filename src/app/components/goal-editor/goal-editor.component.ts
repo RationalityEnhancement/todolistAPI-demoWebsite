@@ -17,7 +17,7 @@ export class GoalEditorComponent implements OnInit {
   public selectedGoal: Goal;
   public selectedTask: Item;
 
-  public currentGoalForm: 'goal' | 'addTask' | 'editTask' | 'editGoal' | 'none';
+  public currentGoalForm: 'addGoal' | 'addTask' | 'editTask' | 'editGoal' | 'none';
   public currentView: 'initialGoal' | 'goalExplanation' | 'goalEditor' | 'none';
 
   public imageUrls: Record<string, string>;
@@ -53,7 +53,7 @@ export class GoalEditorComponent implements OnInit {
       });
   }
 
-  public toggleForm(formType: 'goal' | 'addTask' | 'editTask' | 'editGoal' | 'none') {
+  public toggleForm(formType: 'addGoal' | 'addTask' | 'editTask' | 'editGoal' | 'none') {
     this.currentGoalForm = formType;
   }
 
@@ -62,7 +62,7 @@ export class GoalEditorComponent implements OnInit {
   }
 
   public openGoalForm() {
-    this.toggleForm('goal');
+    this.toggleForm('addGoal');
   }
 
   public openAddTaskForm(goal: Goal) {

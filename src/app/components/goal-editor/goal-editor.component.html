@@ -2,13 +2,13 @@
     <h2>Adjust your goals</h2>
     <div class="goal-preview-gallery">
         <ng-container *ngFor="let goal of goals">
-            <goal-preview [goal]="goal"></goal-preview>
+            <goal-preview [goal]="goal" (click)="openEditGoalForm(goal)"></goal-preview>
         </ng-container>
     </div>
 
     <button (click)="openGoalForm()" class="btn add-goal-btn">
         <span class="btn-icon">+</span>
-        <span class="label">Add goal</span>
+        <span class="label">Add Goal</span>
     </button>
 </div>
 
@@ -53,7 +53,7 @@
         </goal-form>
         <goal-form *ngSwitchCase="'editGoal'" [goal]="selectedGoal" (submitGoal)="editGoal($event)"
             (close)="toggleForm('none')">
-            <h2>Edit Goal <b>{{selectedGoal.name}}</b></h2>
+            <h2>Edit your goal <b>{{selectedGoal.name}}</b></h2>
         </goal-form>
     </ng-container>
 </div>

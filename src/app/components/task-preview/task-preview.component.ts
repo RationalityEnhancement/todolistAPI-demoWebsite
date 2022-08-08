@@ -8,11 +8,10 @@ import { Item } from 'src/app/interfaces/item';
 })
 export class TaskPreviewComponent implements OnInit {
 
-  @Input() public task: Item; 
+  @Input() public task: Item;
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }

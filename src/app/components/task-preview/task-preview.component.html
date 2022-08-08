@@ -1,4 +1,5 @@
-<div class="task-preview">
+<div [ngClass]="{'completed': task.completed, 'scheduled': task.scheduled}" 
+    class="task-preview">
     <h3>{{task.name}}</h3>
     <ul>
         <li class="info-elelement"> Estimation: <span>{{task.time_est}}hr</span></li>

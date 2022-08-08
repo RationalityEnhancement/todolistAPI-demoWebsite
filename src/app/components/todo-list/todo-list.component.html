@@ -1,4 +1,6 @@
 <ng-container *ngIf="goals$ | async as goals">
+<!--  <further-goals-view [goals]="goals" (continueToGoalEditor)="toggleView('goalEditor')">
+  </further-goals-view> -->
   <ng-container [ngSwitch]="currentView">
     <initial-goal-view *ngSwitchCase="'initialGoal'" (submitInitialGoal)="toggleView('furtherGoals')">
     </initial-goal-view>

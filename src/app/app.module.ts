@@ -23,7 +23,9 @@ import { ColorService } from './provider/color.service';
 import { InitialGoalViewComponent } from './components/initial-goal-view/initial-goal-view.component';
 import { GoalEditorComponent } from './components/goal-editor/goal-editor.component';
 import { GoalEditorInstructionsComponent } from './components/goal-editor-instructions/goal-editor-instructions.component';
-import { FurtherGoalsViewComponent } from './components/further-goals-view/further-goals-view.component'
+import { FurtherGoalsViewComponent } from './components/further-goals-view/further-goals-view.component';
+import { TaskPreviewComponent } from './components/task-preview/task-preview.component';
+import { GoalPreviewComponent } from './components/goal-preview/goal-preview.component'
 
 
 @NgModule({
@@ -37,7 +39,9 @@ import { FurtherGoalsViewComponent } from './components/further-goals-view/furth
     InitialGoalViewComponent,
     GoalEditorComponent,
     GoalEditorInstructionsComponent,
-    FurtherGoalsViewComponent
+    FurtherGoalsViewComponent,
+    TaskPreviewComponent,
+    GoalPreviewComponent
   ],
   imports: [
     BrowserModule,

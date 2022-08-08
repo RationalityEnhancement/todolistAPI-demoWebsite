@@ -1,7 +1,20 @@
+* {
+    box-sizing: border-box;
+}
+
+h1, h2, h3 {
+    font-weight: lighter;
+}
+
 ul,
 li {
     text-decoration: none;
     list-style-type: none;
+}
+
+.goal-preview-gallery {
+    display: flex;
+    justify-content: start;
 }
 
 .editor-instructions-wrapper {
@@ -156,4 +169,44 @@ li {
 
     border-radius: 15px;
     box-shadow: 5px 5px 20px 0px rgba(0, 0, 0, 0.2);
+}
+
+.add-goal-btn {
+    margin: 20px 0;
+
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+    .btn-icon {
+        margin-right: 5px;
+
+        font-weight: lighter;
+        font-size: 32px;
+    }
+
+    &:hover {
+        background: #8122a9;
+        box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, 0.15);
+        transform: scale(1.01);
+    }
+
+    transition: 0.25s;
+}
+
+.add-task-btn {
+    margin: 0;
+    width: max-content;
+    padding: 0 24px;
+    align-self: center;
+
+    font-size: 14px;
+
+    &:hover {
+        background: #8122a9;
+        box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, 0.15);
+        transform: scale(1.01);
+    }
+
+    transition: 0.25;
 }

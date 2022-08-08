@@ -1,17 +1,10 @@
 <div class="introduction">
     <h2>What else are you up to?</h2>
-    <p>Please think about two further goals, you would like to achieve in the coming months.</p>
+    <p>Please think about <b>two</b> further goals, you would like to achieve in the coming months.</p>
 </div>
-<div class="goal-explanation">
+<div class="goal-preview-gallery">
     <ng-container *ngFor="let goal of goals">
-        <div (click)="toggleEditGoalForm(goal)" class="goal-preview">
-            <h3>{{goal.name}}</h3>
-            <ul>
-                <li class="goal-info-elelement">Value: <span><b>{{goal.value}}%</b></span></li>
-                <li class="goal-info-elelement"> Estimation: <span><b>{{goal.time_est}}hr</b></span></li>
-                <li class="goal-info-elelement">Deadline: <span><b>{{goal.deadline}}</b></span></li>
-            </ul>
-        </div>
+        <goal-preview [goal]="goal"></goal-preview>
     </ng-container>
 </div>
 

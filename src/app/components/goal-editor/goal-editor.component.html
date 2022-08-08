@@ -1,11 +1,57 @@
-<div class="editor-instructions-wrapper">
-    <goal-editor-instructions></goal-editor-instructions>
-</div>
-<div class="btn" (click)="openGoalForm()">
-    <div>Add Goals</div>
+<div style="padding-bottom: 20px">
+    <h2>Adjust your goals</h2>
+    <div class="goal-preview-gallery">
+        <ng-container *ngFor="let goal of goals">
+            <goal-preview [goal]="goal"></goal-preview>
+        </ng-container>
+    </div>
+
+    <button (click)="openGoalForm()" class="btn add-goal-btn">
+        <span class="btn-icon">+</span>
+        <span class="label">Add goal</span>
+    </button>
 </div>
 
-<div class="goal-wrapper" id="goal-display" *ngIf="goals.length">
+<hr>
+
+<div style="padding-top: 20px">
+    <h2>Add tasks to your goals</h2>
+    <ng-container *ngFor="let goal of goals">
+        <div
+            style="padding:20px; border-radius: 20px; margin: 20px; border: 1px solid #8e44ad; box-shadow: 5px 5px 20px 0px rgba(0, 0, 0, 0.1);">
+            <h2>{{goal.name}}</h2>
+
+            <button class="btn add-task-btn" (click)="openTaskForm(goal)">
+                Add Task
+            </button>
+
+            <div style="margin-top: 20px; display: flex; flex-wrap: wrap; align-content: start;">
+                <ng-container *ngFor="let task of getDisplayedTasks(goal.tasks)">
+                    <task-preview [task]="task"></task-preview>
+                </ng-container>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<button (click)="createTodoList()" [disabled]="!validTodoList" class="btn bottom-fixed">
+    Create Optimal To-Do List
+</button>
+
+<div class="form-popup">
+    <ng-container [ngSwitch]="currentGoalForm">
+        <add-task-form *ngSwitchCase="'task'" [goal]="selectedGoal" (submitTask)="addTask($event, selectedGoal)"
+            (close)="toggleForm('none')">
+        </add-task-form>
+        <add-goal-form *ngSwitchCase="'goal'" (submitGoal)="addGoal($event)" (close)="toggleForm('none')">
+        </add-goal-form>
+        <edit-goal-form *ngSwitchCase="'editGoal'" [goal]="selectedGoal" (submitGoal)="editGoal($event)"
+            (close)="toggleForm('none')">
+        </edit-goal-form>
+    </ng-container>
+</div>
+<!--
+    <div class="goal-wrapper" id="goal-display" *ngIf="goals.length">
     <ul>
         <li *ngFor="let goal of goals" class="goal-item">
             <div> Goal: <b>{{goal.name}}</b> <br> Value: {{goal.value}}% <br>Time Estimation: {{goal.time_est}} hr
@@ -64,3 +110,4 @@
         </edit-goal-form>
     </ng-container>
 </div>
+-->

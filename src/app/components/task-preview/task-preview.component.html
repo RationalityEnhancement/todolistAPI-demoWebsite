@@ -1,4 +1,4 @@
-<div [ngClass]="{'completed': task.completed, 'scheduled': task.scheduled}" 
+<div [ngClass]="{'completed': task.completed, 'scheduled': task.scheduled, 'overdue': isOverdue}" 
     class="task-preview">
     <h3>{{task.name}}</h3>
     <ul>

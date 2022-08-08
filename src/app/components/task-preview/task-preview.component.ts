@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { faCheck, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { Item } from 'src/app/interfaces/item';
 
 @Component({
@@ -11,6 +12,11 @@ export class TaskPreviewComponent implements OnInit {
   @Input() public task: Item;
 
   public isOverdue: boolean;
+
+  public completeIcon = faCheck;
+  public deleteIcon = faTrashAlt;
+  public editIcon = faEdit
+
 
   constructor() { }
 

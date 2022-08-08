@@ -1,4 +1,6 @@
 .goal-preview {
+    position: relative;
+    
     width: max-content;
     margin: 25px auto;
     padding: 25px;
@@ -10,6 +12,7 @@
     border-radius: 20px;
     border: 3px solid #8e44ad;
     text-align: left;
+
 
     ul {
         list-style: none;
@@ -30,16 +33,37 @@
         }
     }
 
+    transition: 0.25s;
+}
+
+.overdue {
+    border-color: #c91515;
+}
+
+.icon-wrapper {
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.icon {
+    width: 20px;
+    margin: 0 15px;
+    opacity: 0.5;
+    color: #8e44ad;
 
     &:hover {
-        box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, 0.15);
-        transform: scale(1.01);
+        transform: scale(1.05);
+        opacity: 1;
         cursor: pointer;
     }
 
     transition: 0.25s;
 }
 
-.overdue {
-    border-color: #c91515;
+.edit {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    margin: 0;
 }

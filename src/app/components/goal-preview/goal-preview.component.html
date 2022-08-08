@@ -1,4 +1,4 @@
-<div class="goal-preview">
+<div [ngClass]="{'overdue': isOverdue}" class="goal-preview">
     <h3>{{goal.name}}</h3>
     <ul>
         <li class="goal-info-elelement">Value: <span><b>{{goal.value}}%</b></span></li>

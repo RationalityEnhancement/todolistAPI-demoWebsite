@@ -20,7 +20,7 @@ export class TaskPreviewComponent implements OnInit {
 
    private setOverdueStatus(): void {
     if (this.task.deadline) {
-      const deadlineDate = new Date('08/01/2022');
+      const deadlineDate = new Date(this.task.deadline);
       const todayDate = new Date(new Date().toISOString().substring(0, 10));
 
       this.isOverdue = deadlineDate < todayDate;

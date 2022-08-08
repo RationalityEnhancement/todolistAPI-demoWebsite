@@ -3,6 +3,6 @@
     <h3>{{task.name}}</h3>
     <ul>
         <li class="info-elelement"> Estimation: <span>{{task.time_est}}hr</span></li>
-        <li class="info-elelement">Deadline: <span>{{task.deadline}}</span></li>
+        <li class="info-elelement">Deadline: <span>{{task.deadline || '/'}}</span></li>
     </ul>
 </div>

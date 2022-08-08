@@ -10,9 +10,18 @@ export class GoalPreviewComponent implements OnInit {
 
   @Input() public goal: Goal;
 
+  public isOverdue: boolean;
+
   constructor() { }
 
   ngOnInit(): void {
+    this.setOverdueStatus();
   }
 
+  private setOverdueStatus(): void {
+    const deadlineDate = new Date(this.goal.deadline);
+    const todayDate = new Date(new Date().toISOString().substring(0, 10));
+
+    this.isOverdue = deadlineDate < todayDate;
+   }
 }

@@ -57,13 +57,6 @@ h3 {
     margin: 20px auto;
     width: 300px;
 
-    background: #8e44ad;
-    color: #FFF;
-    box-shadow: none;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-    font-size: 18px;
-    border: none;
-
     display: flex;
     justify-content: center;
     align-content: center;
@@ -74,14 +67,6 @@ h3 {
         font-weight: lighter;
         font-size: 32px;
     }
-
-    &:hover {
-        background: #8122a9;
-        box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, 0.15);
-        transform: scale(1.01);
-    }
-
-    transition: 0.25s;
 }
 
 .form-popup {

@@ -26,9 +26,8 @@
 <div style="padding-top: 20px">
     <h2>Add tasks to your goals</h2>
     <ng-container *ngFor="let goal of goals">
-        <div
-            style="padding:20px; border-radius: 20px; margin: 20px; border: 1px solid #8e44ad; box-shadow: 5px 5px 20px 0px rgba(0, 0, 0, 0.1);">
-            <h2>{{goal.name}}</h2>
+        <div class="task-preview-gallery">
+            <h2><b>{{goal.name}}</b></h2>
 
             <button class="btn add-task-btn" (click)="openAddTaskForm(goal)">
                 Add Task
@@ -36,7 +35,8 @@
 
             <div style="margin-top: 20px; display: flex; flex-wrap: wrap; align-content: start;">
                 <ng-container *ngFor="let task of getDisplayedTasks(goal.tasks)">
-                    <task-preview [task]="task" (deleteSubmit)="deleteTask(task, goal)" (click)="openEditTaskForm(goal, task)"></task-preview>
+                    <task-preview [task]="task" (deleteSubmit)="deleteTask(task, goal)"
+                        (click)="openEditTaskForm(goal, task)"></task-preview>
                 </ng-container>
             </div>
         </div>
@@ -50,7 +50,7 @@
 <div class="form-popup">
     <ng-container [ngSwitch]="currentGoalForm">
         <task-form *ngSwitchCase="'addTask'" (submitTask)="addTask($event, selectedGoal)" (close)="closeForm()"
-            [goal]="selectedGoal">
+            [goal]="selectedGoal" @blendInAnimation>
             <h2>Add a task to your goal <b>{{selectedGoal.name}}</b></h2>
         </task-form>
         <task-form *ngSwitchCase="'editTask'" (submitTask)="editTask($event, selectedGoal)" [goal]="selectedGoal"

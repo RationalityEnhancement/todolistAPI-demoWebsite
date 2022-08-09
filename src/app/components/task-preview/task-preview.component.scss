@@ -31,32 +31,11 @@
             margin-left: 5px;
         }
     }
+    
     .icon-wrapper {
         padding-top: 10px;
         display: flex;
         justify-content: space-between;
-    }
-    
-    .icon {
-        width: 20px;
-        margin: 0 15px;
-        opacity: 0.5;
-        color: #8e44ad;
-    
-        &:hover {
-            transform: scale(1.05);
-            opacity: 1;
-            cursor: pointer;
-        }
-    
-        transition: 0.25s;
-    }
-    
-    .edit {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        margin: 0;
     }
 
     &:hover {

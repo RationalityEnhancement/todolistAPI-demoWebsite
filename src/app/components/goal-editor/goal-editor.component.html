@@ -50,7 +50,7 @@
 <div class="form-popup">
     <ng-container [ngSwitch]="currentGoalForm">
         <task-form *ngSwitchCase="'addTask'" (submitTask)="addTask($event, selectedGoal)" (close)="closeForm()"
-            [goal]="selectedGoal" @blendInAnimation>
+            [goal]="selectedGoal">
             <h2>Add a task to your goal <b>{{selectedGoal.name}}</b></h2>
         </task-form>
         <task-form *ngSwitchCase="'editTask'" (submitTask)="editTask($event, selectedGoal)" [goal]="selectedGoal"

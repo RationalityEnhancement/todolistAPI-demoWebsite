@@ -35,7 +35,9 @@
 
             <div style="margin-top: 20px; display: flex; flex-wrap: wrap; align-content: start;">
                 <ng-container *ngFor="let task of getDisplayedTasks(goal.tasks)">
-                    <task-preview [task]="task" (deleteSubmit)="deleteTask(task, goal)"
+                    <task-preview [task]="task" 
+                    (deleteSubmit)="deleteTask(task, goal)"
+                    (completeSubmit)="editTask($event, goal)"
                         (click)="openEditTaskForm(goal, task)"></task-preview>
                 </ng-container>
             </div>

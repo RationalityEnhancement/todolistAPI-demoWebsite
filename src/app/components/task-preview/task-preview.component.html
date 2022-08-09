@@ -8,10 +8,10 @@
     </ul>
 
     <div class="icon-wrapper">
-        <div (click)="delete()" class="icon">
+        <div (click)="toggleComplete()" class="icon" [ngClass]="{'icon-complete': task.completed}">
             <fa-icon [icon]="completeIcon"></fa-icon>
         </div>
-        <div (click)="delete()" class="icon">
+        <div (click)="deleteTask()" class="icon">
             <fa-icon [icon]="deleteIcon"></fa-icon>
         </div>
     </div>

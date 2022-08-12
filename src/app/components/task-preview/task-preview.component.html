@@ -1,6 +1,4 @@
-<div [ngClass]="{'completed': task.completed, 'scheduled': task.scheduled, 'overdue': isOverdue}" 
-    class="task-preview"
->
+<div [ngClass]="{'completed': task.completed, 'scheduled': task.scheduled, 'overdue': isOverdue}" class="task-preview">
     <h3>{{task.name}}</h3>
     <ul>
         <li class="info-elelement"> Estimation: <span>{{task.time_est}}hr</span></li>
@@ -8,9 +6,11 @@
     </ul>
 
     <div class="icon-wrapper">
+        <!--       
         <div (click)="toggleComplete()" class="icon" [ngClass]="{'icon-complete': task.completed}">
             <fa-icon [icon]="completeIcon"></fa-icon>
-        </div>
+        </div> 
+        -->
         <div (click)="deleteTask()" class="icon">
             <fa-icon [icon]="deleteIcon"></fa-icon>
         </div>

@@ -118,7 +118,7 @@ export class GoalEditorComponent implements OnInit {
 
   public editTask(task: Item, goal: Goal) {
     this.goalService.editTask(task, goal)
-      .subscribe();
+      .subscribe(() => this.closeForm());
   }
 
   public deleteTask(task: Item, goal: Goal) {

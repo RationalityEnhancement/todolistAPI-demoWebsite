@@ -1,5 +1,8 @@
-<div style="padding-bottom: 20px">
-    <h2>Adjust your goals</h2>
+<section style="padding-bottom: 20px">
+    <div class="section-header">
+        <h2>1. Set your goals</h2>
+        <p>What are you up to in the next weeks?</p>
+    </div>
     <div class="goal-preview-gallery">
         <ng-container *ngFor="let goal of goals">
             <goal-preview [goal]="goal" (click)="openEditGoalForm(goal)">
@@ -19,11 +22,14 @@
         <span class="btn-icon">+</span>
         <span class="label">Add Goal</span>
     </button>
-</div>
+</section>
 
-<div style="padding-top: 20px">
-    <h2>2. Plan your goals</h2>
-    <p>What steps are necessary to achieve your goals?</p>
+<section>
+    <div class="section-header">
+        <h2>2. Plan your goals</h2>
+        <p>What steps are necessary to achieve your goals?</p>
+    </div>
+
     <ng-container *ngFor="let goal of goals">
         <div class="goal-wrapper">
             <h2><b>{{goal.name}}</b></h2>
@@ -40,11 +46,18 @@
             </div>
         </div>
     </ng-container>
-</div>
+</section>
 
-<button (click)="createTodoList()" [disabled]="!validTodoList" class="btn">
-    Create Optimal To-Do List
-</button>
+<section>
+    <div class="section-header">
+        <h2>3. Work on your goals</h2>
+        <p>Create your optimal to-do list for today & start working towards your goals!</p>
+    </div>
+
+    <button (click)="createTodoList()" [disabled]="!validTodoList" class="btn">
+        Create Optimal To-Do List
+    </button>
+</section>
 
 <div class="form-popup">
     <ng-container [ngSwitch]="currentGoalForm">

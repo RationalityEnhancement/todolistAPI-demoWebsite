@@ -1,6 +1,17 @@
+section {
+    padding: 25px 0;
+
+    .section-header {
+        p {
+            margin-bottom: 0;
+        }
+    }
+}
+
 .goal-preview-gallery {
     display: flex;
     justify-content: flex-start;
+    flex-wrap: wrap;
 
 
     .icon-wrapper {
@@ -11,9 +22,9 @@
 }
 
 .goal-wrapper {
+    margin-top: 25px;
     padding: 20px;
     border-radius: 20px;
-    margin: 20px;
 
     background-color: #8d44ad33;
 }
@@ -24,19 +35,19 @@
 }
 
 .btn {
-    margin: 20px auto;
+    margin-top: 25px;
     width: 300px;
 }
 
-.bottom-fixed {
-    position: fixed;
+// .bottom-fixed {
+//     position: fixed;
 
-    bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
+//     bottom: 50px;
+//     left: 50%;
+//     transform: translateX(-50%);
 
-    box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, 0.3) !important;
-}
+//     box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, 0.3) !important;
+// }
 
 .scheduled {
     border: none;
@@ -61,7 +72,7 @@
 }
 
 .add-goal-btn {
-    margin: 20px 0;
+    margin-top: 20px;
 
     display: flex;
     justify-content: center;

@@ -6,17 +6,16 @@
   <base href="./">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,900' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700' rel='stylesheet' type='text/css'>
 </head>
-<body>
+<body style="padding: 25px">
   <reg-todo-list reg-goals='[{
       "code": "1",
       "color": "#f561fa",
       "name": "Goal 1",
       "estimate": 10,
-      "deadline": "2022-08-05",
+      "deadline": "2022-08-15",
       "value": 50,
       "tasks": [
           {
@@ -35,6 +34,7 @@
 
   el.addEventListener('addedGoalEvent', (event) => console.log(event.detail));
   el.addEventListener('deletedGoalEvent', (event) => console.log(event.detail));
+  el.addEventListener('completedGoalEvent', (event) => console.log(event.detail));
   el.addEventListener('adjustedGoalEvent', (event) => console.log(event.detail));
 </script>
 </html>

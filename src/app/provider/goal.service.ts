@@ -15,6 +15,7 @@ export class GoalService {
     private addedGoal$ = new ReplaySubject<Goal>();
     private adjustedGoal$ = new ReplaySubject<Goal>();
     private deletedGoal$ = new ReplaySubject<Goal>();
+    private completedGoal$ = new ReplaySubject<Goal>();
 
     constructor(
         private taskService: TaskService,
@@ -27,6 +28,10 @@ export class GoalService {
 
     public setDeletedGoal(goal: Goal): void {
         this.deletedGoal$.next(goal);
+    }
+
+    public setCompletedGoal(goal: Goal): void {
+        this.completedGoal$.next(goal);
     }
 
     public setAdjustedGoal(goal: Goal): void {
@@ -50,6 +55,10 @@ export class GoalService {
 
     public listenToDeletedGoal(): Observable<Goal> {
         return this.deletedGoal$.asObservable();
+    }
+
+    public listenToCompletedGoal(): Observable<Goal> {
+        return this.completedGoal$.asObservable();
     }
 
     public listenToAdjustedGoal(): Observable<Goal> {
@@ -84,11 +93,22 @@ export class GoalService {
             );
     }
 
+    public completeGoal(completedGoal: Goal) {
+        return this.getGoals()
+            .pipe(
+                map(goals => this.removeGoal(completedGoal, goals)),
+                tap(updatedGoals => {
+                    this.setCompletedGoal(completedGoal);
+                    this.setGoals(updatedGoals);
+                })
+            );
+    }
+
     public deleteGoal(deletedGoal: Goal) {
         return this.getGoals()
             .pipe(
                 map(goals => this.removeGoal(deletedGoal, goals)),
-                tap(({ deletedGoal, updatedGoals }) => {
+                tap((updatedGoals) => {
                     this.setDeletedGoal(deletedGoal);
                     this.setGoals(updatedGoals);
                 })
@@ -128,7 +148,7 @@ export class GoalService {
             color: color,
             tasks: []
         };
-        
+
         const everythingElseTask = this.taskService.getEverythingElseTask(newGoal);
 
         newGoal.tasks.push(everythingElseTask);
@@ -142,7 +162,7 @@ export class GoalService {
         const updatedGoals = goals.filter(goal => goal.code !== deletedGoal.code);
         const renumberedGoals = this.renumberGoals(updatedGoals);
 
-        return { deletedGoal: deletedGoal, updatedGoals: renumberedGoals };
+        return renumberedGoals;
     }
 
     private renumberGoals(goals): Goal[] {

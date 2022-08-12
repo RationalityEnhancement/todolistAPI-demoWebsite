@@ -1,12 +1,22 @@
 :host {
-    height: 100%;
 
     * {
+        box-sizing: border-box;
+    }
+
+    p, li, span {
+        font-family: 'Open Sans';
+        font-size: 16px;
+        font-weight: normal;
+    }
+
+    h1, h2, h3, h4, button {
         font-family: "Montserrat", sans-serif;
          box-sizing: border-box;
     }
 
-    color: #252525;
+        font-weight: lighter;
+        color: #252525;
 
 
     .btn {
@@ -37,12 +47,11 @@
     .icon {
         width: 20px;
         margin: 0 15px;
-        opacity: 0.5;
-        color: #8e44ad;
+        opacity: 0.3;
 
         &:hover {
-            transform: scale(1.05);
-            opacity: 1;
+            transform: scale(1.2)!important;
+            opacity: 0.7;
             cursor: pointer;
         }
 

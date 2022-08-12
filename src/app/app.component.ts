@@ -29,11 +29,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @Output() public optimizedTodoListEvent = new EventEmitter<string>();
   @Output() public goalsEvent = new EventEmitter<RelevantCompliceGoalAttributes[]>();
-  
+
   @Output() public addedGoalEvent = new EventEmitter<NewCompliceGoal>();
   @Output() public deletedGoalEvent = new EventEmitter<RelevantCompliceGoalAttributes>();
+  @Output() public completedGoalEvent = new EventEmitter<RelevantCompliceGoalAttributes>();
   @Output() public adjustedGoalEvent = new EventEmitter<RelevantCompliceGoalAttributes>();
-  
+
 
   private destroy$ = new Subject<boolean>();
 
@@ -41,7 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private goalService: GoalService,
     private todoListService: TodoListService,
     private adapterService: AdapterService
-    ) { }
+  ) { }
 
   public ngOnInit(): void {
     this.publishEvents();
@@ -83,6 +84,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.publishAddedGoal();
     this.publishDeletedGoal();
+    this.publishCompletedGoal();
     this.publishAdjustedGoal();
   }
 
@@ -99,46 +101,57 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private publishGoals(): void {
     this.goalService.listenToGoals()
-    .pipe(
-      map(goals => this.adapterService.toCompliceGoals(goals)),
-      takeUntil(this.destroy$)
-    )
-    .subscribe(compliceGoals => {
-      this.dispatchGoals(compliceGoals);
-    })
+      .pipe(
+        map(goals => this.adapterService.toCompliceGoals(goals)),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(compliceGoals => {
+        this.dispatchGoals(compliceGoals);
+      })
   }
 
   private publishAddedGoal(): void {
     this.goalService.listenToAddedGoal()
-    .pipe(
-      map(goal => this.adapterService.toNewCompliceGoal(goal)),
-      takeUntil(this.destroy$)
-    )
-    .subscribe(compliceGoal => {
-      this.dispatchAddedGoal(compliceGoal);
-    })
+      .pipe(
+        map(goal => this.adapterService.toNewCompliceGoal(goal)),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(compliceGoal => {
+        this.dispatchAddedGoal(compliceGoal);
+      })
   }
 
   private publishDeletedGoal(): void {
     this.goalService.listenToDeletedGoal()
+      .pipe(
+        map(goal => this.adapterService.toRelevantCompliceGoalAttributes(goal)),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(compliceGoal => {
+        this.dispatchDeletedGoal(compliceGoal);
+      });
+  }
+
+  private publishCompletedGoal(): void {
+    this.goalService.listenToCompletedGoal()
     .pipe(
       map(goal => this.adapterService.toRelevantCompliceGoalAttributes(goal)),
       takeUntil(this.destroy$)
     )
     .subscribe(compliceGoal => {
-      this.dispatchDeletedGoal(compliceGoal);
+      this.dispatchCompletedGoal(compliceGoal);
     })
   }
 
   private publishAdjustedGoal(): void {
     this.goalService.listenToAdjustedGoal()
-    .pipe(
-      map(goal => this.adapterService.toRelevantCompliceGoalAttributes(goal)),
-      takeUntil(this.destroy$)
-    )
-    .subscribe(compliceGoal => {
-      this.dispatchAdjustedGoal(compliceGoal);
-    })
+      .pipe(
+        map(goal => this.adapterService.toRelevantCompliceGoalAttributes(goal)),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(compliceGoal => {
+        this.dispatchAdjustedGoal(compliceGoal);
+      })
   }
 
   private dispatchoptimizedTodoList(rawIntentions: string): void {
@@ -155,6 +168,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private dispatchDeletedGoal(goal: RelevantCompliceGoalAttributes): void {
     this.deletedGoalEvent.emit(goal);
+  }
+
+  private dispatchCompletedGoal(goal: RelevantCompliceGoalAttributes): void {
+    this.completedGoalEvent.emit(goal);
   }
 
   private dispatchAdjustedGoal(goal: RelevantCompliceGoalAttributes): void {

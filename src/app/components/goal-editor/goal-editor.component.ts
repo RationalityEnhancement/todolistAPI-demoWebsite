@@ -97,6 +97,13 @@ export class GoalEditorComponent implements OnInit {
       .subscribe();
   }
 
+  public completeGoal(goal) {
+    if (confirm('Do you really want to complete this goal? Once completed, you can not work on it anymore. However, you can still see your progress towards it on the "Timeline" page')) {
+      this.goalService.completeGoal(goal)
+        .subscribe(() => this.closeForm());
+    }
+  }
+
   public deleteGoal(goal) {
     if (confirm('Do you really want to delete this goal?')) {
       this.goalService.deleteGoal(goal)

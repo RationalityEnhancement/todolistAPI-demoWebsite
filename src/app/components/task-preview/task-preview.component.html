@@ -11,8 +11,25 @@
             <fa-icon [icon]="completeIcon"></fa-icon>
         </div> 
         -->
-        <div (click)="deleteTask()" class="icon">
-            <fa-icon [icon]="deleteIcon"></fa-icon>
-        </div>
+
+        <ng-container *ngIf="!(task.completed || task.scheduled)">
+            <div (click)="deleteTask()" class="icon">
+                <fa-icon [icon]="deleteIcon"></fa-icon>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="task.scheduled">
+            <span>scheduled</span>
+            <div class="icon">
+                <fa-icon [icon]="scheduledIcon"></fa-icon>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="task.completed && !task.scheduled">
+            <span>completed</span>
+            <div class="icon">
+                <fa-icon [icon]="completeIcon"></fa-icon>
+            </div>
+        </ng-container>
     </div>
 </div>

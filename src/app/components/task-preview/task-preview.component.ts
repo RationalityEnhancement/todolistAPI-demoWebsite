@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { faCheck, faArrowAltCircleLeft, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faArrowAltCircleLeft, faTrashAlt, faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
 import { Item } from 'src/app/interfaces/item';
 
 @Component({
@@ -19,8 +19,12 @@ export class TaskPreviewComponent implements OnInit {
   public completeIcon = faCheck;
   public deleteIcon = faTrashAlt;
   public undoIcon = faArrowAltCircleLeft;
+  public scheduledIcon = faCalendarCheck;
 
 
+  public get isRemovable() {
+    return !(this.task.completed || this.task.scheduled);
+  }
   constructor() { }
 
   ngOnInit(): void {
@@ -42,7 +46,9 @@ export class TaskPreviewComponent implements OnInit {
       const deadlineDate = new Date(this.task.deadline);
       const todayDate = new Date(new Date().toISOString().substring(0, 10));
 
-      this.isOverdue = deadlineDate < todayDate;
+      if (!this.task.completed) {
+        this.isOverdue = deadlineDate < todayDate;
+      }
     }
   }
 }

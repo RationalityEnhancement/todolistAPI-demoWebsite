@@ -77,6 +77,10 @@ export class GoalEditorComponent implements OnInit {
   }
 
   public openEditTaskForm(goal: Goal, task: Item) {
+    if (task.completed || task.scheduled) {
+      return;
+    }
+    
     this.selectedGoal = goal;
     this.selectedTask = task;
     this.toggleForm('editTask');

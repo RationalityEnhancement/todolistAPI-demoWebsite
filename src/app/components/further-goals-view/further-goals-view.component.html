@@ -1,6 +1,6 @@
 <div class="introduction">
     <h2>What else are you up to?</h2>
-    <p>Please think about <b>two</b> further goals, you would like to achieve in the coming months.</p>
+    <p>Please think about <b>two</b> further goals, you would like to achieve this month.</p>
 </div>
 <div class="goal-preview-gallery">
     <ng-container *ngFor="let goal of goals">
@@ -30,7 +30,7 @@
 
 <ng-template #addGoalButton>
     <button (click)="toggleAddGoalForm()" class="btn">
-        <span class="icon">+</span>
+        <span class="add-icon">+</span>
         <span class="label">Add goal</span>
     </button>
 </ng-template>

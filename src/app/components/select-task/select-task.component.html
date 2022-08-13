@@ -1,0 +1,30 @@
+<div class="goal-wrapper">
+    <div class="header">
+        <h2>Select your tasks for today</h2>
+        <div>
+            <button [disabled]="!hasOpenTasks" class="btn add-intentions-btn">
+                Draft Intentions
+            </button>
+            <button class="btn add-intentions-btn">
+                Cancel
+            </button>
+        </div>
+    </div>
+    <div class="goal-list">
+        <ng-container *ngIf="!hasOpenTasks">
+            <h4>There are currently no open tasks. Go to the <b>Goals</b> page to enter new tasks to your goals.</h4>
+        </ng-container>
+        <ng-container *ngIf="hasOpenTasks">
+            <div *ngFor="let goal of goals">
+                <h3><b>{{goal.name}}</b></h3>
+                <div class="task-list">
+                    <ng-container *ngFor="let task of getDisplayedTasks(goal.tasks)">
+                        <task-preview [task]="task" (deleteSubmit)="deleteTask(task, goal)"
+                            (completeSubmit)="editTask($event, goal)" (click)="openEditTaskForm(goal, task)">
+                        </task-preview>
+                    </ng-container>
+                </div>
+            </div>
+        </ng-container> 
+    </div>
+</div>

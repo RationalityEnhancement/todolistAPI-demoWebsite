@@ -26,6 +26,7 @@ import { GoalPreviewComponent } from './components/goal-preview/goal-preview.com
 import { TaskFormComponent } from './components/task-form/task-form.component';
 import { GoalFormComponent } from './components/goal-form/goal-form.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SelectTaskComponent } from './components/select-task/select-task.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     TaskPreviewComponent,
     GoalPreviewComponent,
     TaskFormComponent,
-    GoalFormComponent
+    GoalFormComponent,
+    SelectTaskComponent
   ],
   imports: [
     BrowserModule,

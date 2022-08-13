@@ -1,0 +1,49 @@
+.goal-wrapper {
+    position: fixed;
+
+    width: 75%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    padding: 20px;
+    border-radius: 20px;
+    margin: 20px;
+
+    background-color: #f0d6fb;
+    box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, 0.15);
+
+    z-index: 100;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .add-intentions-btn {
+            width: max-content;
+            padding: 0 16px;
+            margin: 0 10px;
+
+            font-size: 14px;
+        }
+    }
+
+    .goal-list {
+        max-height: 300px;
+        overflow: auto;
+
+        h4 {
+            font-weight: normal;
+        }
+
+        .task-list {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: start;
+        }
+    }
+
+
+
+}

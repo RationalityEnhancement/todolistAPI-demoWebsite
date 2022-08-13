@@ -19,8 +19,9 @@ export interface Item {
     value?: number,
     today?: boolean,
     completed?: boolean
-    workflowyId?: string,
     scheduled?: boolean
+    workflowyId?: string,
+    goalCode?: string,
 }
 
 export interface OptimizedTodo {

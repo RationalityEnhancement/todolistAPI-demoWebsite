@@ -2,10 +2,17 @@
     <div class="header">
         <h2>Select your tasks for today</h2>
         <div>
-            <button [disabled]="!hasOpenTasks" class="btn add-intentions-btn">
-                Draft Intentions
+            <button [disabled]="!hasOpenTasks"
+            (click)="draftIntentions()" 
+            class="btn add-intentions-btn">
+                <ng-container *ngIf="selectedTasks.length">
+                    Draft {{selectedTasks.length}} Intention(s) For Today
+                </ng-container>
+                <ng-container *ngIf="!selectedTasks.length">
+                    Draft Intentions For Today
+                </ng-container>
             </button>
-            <button class="btn add-intentions-btn">
+            <button (click)="cancel()" class="btn add-intentions-btn">
                 Cancel
             </button>
         </div>
@@ -19,8 +26,7 @@
                 <h3><b>{{goal.name}}</b></h3>
                 <div class="task-list">
                     <ng-container *ngFor="let task of getDisplayedTasks(goal.tasks)">
-                        <task-preview [task]="task" (deleteSubmit)="deleteTask(task, goal)"
-                            (completeSubmit)="editTask($event, goal)" (click)="openEditTaskForm(goal, task)">
+                        <task-preview [task]="task" (click)="selectTask(task, goal)">
                         </task-preview>
                     </ng-container>
                 </div>

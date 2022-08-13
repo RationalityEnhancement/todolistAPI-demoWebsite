@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Goal, Item } from 'src/app/interfaces/item';
 
 @Component({
@@ -9,6 +9,11 @@ import { Goal, Item } from 'src/app/interfaces/item';
 export class SelectTaskComponent implements OnInit {
 
   @Input() public goals: Goal[] = [];
+
+  @Output() public submitIntentions = new EventEmitter<Item[]>();
+  @Output() public close = new EventEmitter<void>();
+
+  public selectedTasks: Item[] = [];
 
   public get hasOpenTasks(): boolean {
     return !!this.goals
@@ -21,6 +26,20 @@ export class SelectTaskComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  public draftIntentions() {
+    this.submitIntentions.emit(this.selectedTasks);
+  }
+
+  public cancel() {
+    this.close.emit();
+  }
+
+  public selectTask(task: Item, goal: Goal) {
+    this.selectedTasks.push({ ...task, goalCode: goal.code });
+
+    console.log(this.selectedTasks)
   }
 
   public getDisplayedTasks(tasks: Item[]): Item[] {

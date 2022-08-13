@@ -26,8 +26,11 @@
                 <h3><b>{{goal.name}}</b></h3>
                 <div class="task-list">
                     <ng-container *ngFor="let task of getDisplayedTasks(goal.tasks)">
-                        <task-preview [task]="task" (click)="selectTask(task, goal)">
-                        </task-preview>
+                        <task-select-preview
+                            [task]="task" 
+                            [selected]="isTaskSelected(task)" 
+                            (click)="selectTask(task, goal)">
+                        </task-select-preview>
                     </ng-container>
                 </div>
             </div>

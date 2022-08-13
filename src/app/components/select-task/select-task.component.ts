@@ -36,17 +36,26 @@ export class SelectTaskComponent implements OnInit {
     this.close.emit();
   }
 
-  public selectTask(task: Item, goal: Goal) {
-    this.selectedTasks.push({ ...task, goalCode: goal.code });
+  public selectTask(task: Item, goal: Goal): void {
+    if (!this.isTaskSelected(task)) {
+      const selectedTask = { ...task, goalCode: goal.code };
 
-    console.log(this.selectedTasks)
+      this.selectedTasks = this.selectedTasks.concat([selectedTask]);
+    } else {
+      this.selectedTasks = this.selectedTasks.filter(selectedTask =>
+        selectedTask.workflowyId !== task.workflowyId
+      );
+    }
   }
 
   public getDisplayedTasks(tasks: Item[]): Item[] {
-    const filteredTasks = tasks
+    return tasks
       .filter(task => !task.workflowyId?.includes('everything-else'))
-
-    return filteredTasks;
   }
 
+  public isTaskSelected(task: Item): boolean {
+    return this.selectedTasks
+      .map(selectedTask => selectedTask.workflowyId)
+      .includes(task.workflowyId);
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Goal, Item } from 'src/app/interfaces/item';
 import { GoalService } from 'src/app/provider/goal.service';
@@ -6,7 +6,8 @@ import { GoalService } from 'src/app/provider/goal.service';
 @Component({
   selector: 'select-task-button',
   templateUrl: './select-task-button.component.html',
-  styleUrls: ['./select-task-button.component.scss']
+  styleUrls: ['./select-task-button.component.scss'],
+  encapsulation: ViewEncapsulation.ShadowDom
 })
 export class SelectTaskButtonComponent implements OnInit {
 
@@ -31,6 +32,7 @@ export class SelectTaskButtonComponent implements OnInit {
 
   public draftIntentions(tasks: Item[]) {
     console.log(tasks);
+    this.closePopup()
   }
 
 }

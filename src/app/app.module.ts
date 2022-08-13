@@ -71,10 +71,14 @@ import { SelectTaskButtonComponent } from './components/select-task-button/selec
 export class AppModule implements DoBootstrap {
 
   constructor(private injector: Injector) {
-    const elementSelector = 'reg-todo-list';
+    const todoListElementSelector = 'reg-todo-list';
+    const selectTasksElementSelector = 'reg-select-tasks';
 
-    const webComponent = createCustomElement(AppComponent, { injector: this.injector });
-    customElements.define(elementSelector, webComponent);
+    const todoListWebCompoonent = createCustomElement(AppComponent, { injector: this.injector });
+    const selectTasksWebComponent = createCustomElement(SelectTaskButtonComponent, { injector: this.injector });
+
+    customElements.define(todoListElementSelector, todoListWebCompoonent);
+    customElements.define(selectTasksElementSelector, selectTasksWebComponent);
   }
 
   ngDoBootstrap() { }

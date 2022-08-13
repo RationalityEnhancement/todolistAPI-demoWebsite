@@ -51,6 +51,7 @@ export class SelectTaskComponent implements OnInit {
   public getDisplayedTasks(tasks: Item[]): Item[] {
     return tasks
       .filter(task => !task.workflowyId?.includes('everything-else'))
+      .filter(task => !(task.completed || task.scheduled));
   }
 
   public isTaskSelected(task: Item): boolean {

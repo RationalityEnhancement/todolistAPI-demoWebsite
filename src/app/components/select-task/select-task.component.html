@@ -1,6 +1,11 @@
 <div class="select-task-wrapper">
     <div class="header">
-        <h2>Select your tasks for today</h2>
+        <div>
+            <h2>Select your tasks for today</h2>
+            <p>What are you up to today? Click on the relevant tasks below to draft them as your intentions for today.
+            </p>
+        </div>
+
         <div>
             <button (click)="cancel()" class="btn add-intentions-btn">
                 Cancel
@@ -12,33 +17,30 @@
             <h4>There are currently no open tasks. Go to the <b>Goals</b> page to enter new tasks to your goals.</h4>
         </ng-container>
         <ng-container *ngIf="hasOpenTasks">
-            <h4>What are you up to today? Click on the relevant tasks below to draft them as your intentions for today.</h4>
-        </ng-container>
-        <ng-container *ngIf="hasOpenTasks">
             <div *ngFor="let goal of goals">
                 <h3><b>{{goal.name}}</b></h3>
+                <ng-container *ngIf="!getDisplayedTasks(goal.tasks).length">
+                    <h4>All tasks for this goal are already completed or
+                        scheduled for today. Go to the <b>Goals</b> page to add further tasks to your goal.</h4>
+                </ng-container>
                 <div class="task-list">
                     <ng-container *ngFor="let task of getDisplayedTasks(goal.tasks)">
-                        <task-select-preview
-                            [task]="task" 
-                            [selected]="isTaskSelected(task)" 
+                        <task-select-preview [task]="task" [selected]="isTaskSelected(task)"
                             (click)="selectTask(task, goal)">
                         </task-select-preview>
                     </ng-container>
                 </div>
             </div>
-        </ng-container> 
+        </ng-container>
     </div>
     <div>
-        <button [disabled]="!selectedTasks.length"
-            (click)="draftIntentions()" 
-            class="btn add-intentions-btn">
-                <ng-container *ngIf="selectedTasks.length">
-                    Draft {{selectedTasks.length}} Intention(s) For Today
-                </ng-container>
-                <ng-container *ngIf="!selectedTasks.length">
-                    Draft Intentions For Today
-                </ng-container>
-            </button>
+        <button [disabled]="!selectedTasks.length" (click)="draftIntentions()" class="btn add-intentions-btn">
+            <ng-container *ngIf="selectedTasks.length">
+                Draft {{selectedTasks.length}} Intention(s) For Today
+            </ng-container>
+            <ng-container *ngIf="!selectedTasks.length">
+                Draft Intentions For Today
+            </ng-container>
+        </button>
     </div>
 </div>

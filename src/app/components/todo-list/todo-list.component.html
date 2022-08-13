@@ -1,9 +1,7 @@
 <ng-container *ngIf="goals$ | async as goals">
-<!--  <further-goals-view [goals]="goals" (continueToGoalEditor)="toggleView('goalEditor')">
-  </further-goals-view> -->
 
   <div style="margin-bottom: 100px;">
-    <select-task [goals]="goals"></select-task>
+    <select-task-button [goals]="goals"></select-task-button>
   </div>
   
   

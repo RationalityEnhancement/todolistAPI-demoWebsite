@@ -1,13 +1,13 @@
-.goal-wrapper {
+.select-task-wrapper {
     position: fixed;
 
     width: 75%;
     left: 50%;
-    transform: translateX(-50%);
+    top: 30%;
+    transform: translate(-50%, -50%);
 
     padding: 20px;
     border-radius: 20px;
-    margin: 20px;
 
     background-color: #f0d6fb;
     box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, 0.15);
@@ -18,14 +18,6 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-
-        .add-intentions-btn {
-            width: max-content;
-            padding: 0 16px;
-            margin: 0 10px;
-
-            font-size: 14px;
-        }
     }
 
     .goal-list {
@@ -33,6 +25,7 @@
         overflow: auto;
 
         h4 {
+            margin-top: 0;
             font-weight: normal;
         }
 
@@ -44,6 +37,11 @@
         }
     }
 
+    .add-intentions-btn {
+        width: max-content;
+        padding: 0 16px;
+        margin: 24px 0;
 
-
+        font-size: 14px;
+    }
 }

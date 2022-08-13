@@ -1,0 +1,11 @@
+<div class="select-task-button">
+    <ng-container *ngIf="popupDisplayed">
+        <select-task [goals]="goals$ | async"
+            (submitIntentions)="draftIntentions($event)"
+            (close)="closePopup()"
+        ></select-task>
+    </ng-container>
+
+    <button (click)="showPopup()" class="btn">Select Tasks</button>
+    
+</div>

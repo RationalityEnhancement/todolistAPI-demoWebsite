@@ -6,30 +6,18 @@
     </ul>
 
     <div class="icon-wrapper">
-        <!--       
-        <div (click)="toggleComplete()" class="icon" [ngClass]="{'icon-complete': task.completed}">
-            <fa-icon [icon]="completeIcon"></fa-icon>
-        </div> 
-        -->
-
         <ng-container *ngIf="!(task.completed || task.scheduled)">
-            <div (click)="deleteTask()" class="icon">
-                <fa-icon [icon]="deleteIcon"></fa-icon>
-            </div>
+            <fa-icon [icon]="deleteIcon" (click)="deleteTask()" class="icon"></fa-icon>
         </ng-container>
 
         <ng-container *ngIf="task.scheduled && !task.completed">
             <span>scheduled</span>
-            <div class="icon">
-                <fa-icon [icon]="scheduledIcon"></fa-icon>
-            </div>
+            <fa-icon [icon]="scheduledIcon" class="icon"></fa-icon>
         </ng-container>
 
         <ng-container *ngIf="task.completed">
             <span>completed</span>
-            <div class="icon">
-                <fa-icon [icon]="completeIcon"></fa-icon>
-            </div>
+            <fa-icon [icon]="completeIcon" class="icon"></fa-icon>
         </ng-container>
     </div>
 </div>

@@ -6,13 +6,9 @@
     <div class="goal-preview-gallery">
         <ng-container *ngFor="let goal of goals">
             <goal-preview [goal]="goal" (click)="openEditGoalForm(goal)">
-                <div class="icon-wrapper">
-                    <div (click)="completeGoal(goal)" class="icon">
-                        <fa-icon [icon]="completeIcon"></fa-icon>
-                    </div>
-                    <div (click)="deleteGoal(goal)" class="icon">
-                        <fa-icon [icon]="deleteIcon"></fa-icon>
-                    </div>
+                <div class="icon-wrapper"> 
+                    <fa-icon [icon]="completeIcon" (click)="completeGoal(goal)" class="icon"></fa-icon>
+                    <fa-icon [icon]="deleteIcon" (click)="deleteGoal(goal)" class="icon"></fa-icon>
                 </div>
             </goal-preview>
         </ng-container>

@@ -2,15 +2,16 @@
     <div class="header">
         <div>
             <h2>Select your tasks for today</h2>
-            <p>What are you up to today? CompliceX can help you here! By clicking on <b>Create Optimal To-Do List</b>, CompliceX will determine your most important tasks and suggest them as your intentions for today. You can also select your tasks manually by clicking on them. Afterward, draft them as your intentions for today.
+            <p>What are you up to today? CompliceX can help you here!
+                By clicking on <b>Create Optimal To-Do List</b>, CompliceX will determine your most important tasks and
+                suggest them as your intentions for today. You can also select your tasks manually by clicking on them.
+                Afterward, draft them as your intentions for today.
             </p>
         </div>
 
-        <div>
-            <button (click)="cancel()" class="btn add-intentions-btn">
-                Cancel
-            </button>
-        </div>
+        <button (click)="cancel()" class="btn cancel-btn">
+            Cancel
+        </button>
     </div>
     <div class="goal-list">
         <ng-container *ngIf="!hasOpenTasks">
@@ -36,6 +37,9 @@
     <div class="submit-buttons">
         <button (click)="createOptimalTodolist()" class="btn optimal-todo-list-btn">
             Create Optimal To-Do List
+            <ng-container *ngIf="loading">
+                <fa-icon class="icon" [icon]="loadingIcon"></fa-icon>
+            </ng-container>
         </button>
         <button [disabled]="!selectedTasks.length" (click)="draftIntentions()" class="btn add-intentions-btn">
             <ng-container *ngIf="selectedTasks.length">

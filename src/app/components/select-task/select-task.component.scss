@@ -22,6 +22,13 @@
         p {
             width: 75%;
         }
+
+        .cancel-btn {
+            width: max-content;
+            padding: 0 16px;
+            align-self: flex-start;
+            font-size: 14px;
+        }
     }
 
     .goal-list {
@@ -42,11 +49,36 @@
         }
     }
 
-    .add-intentions-btn, .optimal-todo-list-btn {
-        width: max-content;
-        padding: 0 24px;
-        margin: 24px 10px;
+    .submit-buttons {
 
-        font-size: 14px;
+        display: flex;
+
+        .add-intentions-btn,
+        .optimal-todo-list-btn {
+            display: flex;
+            width: max-content;
+            padding: 0 24px;
+            margin: 24px 10px;
+
+            font-size: 14px;
+        }
+
+        .icon {
+            display: inline-block;
+            line-height: initial;
+            height: 32px;
+
+            align-self: center;
+
+            margin-left: 15px;
+            width: 32px;
+            opacity: 0.8;
+
+            animation: rotate 1.25s infinite;
+
+            @keyframes rotate {
+                to{ transform: rotate(360deg); }
+            }
+        }
     }
 }

@@ -1,6 +1,8 @@
 <div class="select-task-button">
     <ng-container *ngIf="popupDisplayed">
-        <select-task [goals]="goals$ | async"
+        <select-task 
+            [goals]="goals$ | async"
+            [loading]="requestingTodoList"
             (submitIntentions)="selectTasks($event)"
             (submitOptimalTodoList)="createOptimalTodoList()"
             (close)="closePopup()"

@@ -32,6 +32,7 @@ export class SelectTaskButtonComponent implements OnInit {
 
   public goals$: Observable<Goal[]>;
   public popupDisplayed: boolean;
+  public requestingTodoList: boolean
 
   constructor(
     private adapterService: AdapterService,
@@ -58,6 +59,7 @@ export class SelectTaskButtonComponent implements OnInit {
   }
 
   public createOptimalTodoList() {
+    this.requestingTodoList = true;
     this.todoListService.requestOptimalTodoList()
       .subscribe(todoList => {
         this.createOptimalTodoListSuccess(todoList);
@@ -94,9 +96,11 @@ export class SelectTaskButtonComponent implements OnInit {
   private createOptimalTodoListSuccess(todolist: any) {
     this.createdOptimalTodoListEvent.emit(todolist);
     this.closePopup();
+    this.requestingTodoList = false;
   }
 
   private createOptimalTodoListError(error: any) {
+    this.requestingTodoList = false;
     alert(error?.error || 'An unexpected error occured. If you continue to encounter this issue, please contact us at reg.experiments@tuebingen.mpg.de.');
   }
 }

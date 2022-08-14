@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { Goal, Item } from 'src/app/interfaces/item';
 
 @Component({
@@ -9,12 +10,15 @@ import { Goal, Item } from 'src/app/interfaces/item';
 export class SelectTaskComponent implements OnInit {
 
   @Input() public goals: Goal[] = [];
+  @Input() public loading: boolean;
 
   @Output() public submitIntentions = new EventEmitter<Item[]>();
   @Output() public submitOptimalTodoList = new EventEmitter<void>();
   @Output() public close = new EventEmitter<void>();
 
   public selectedTasks: Item[] = [];
+
+  public loadingIcon = faCircleNotch;
 
   public get hasOpenTasks(): boolean {
     return !!this.goals

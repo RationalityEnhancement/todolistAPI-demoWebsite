@@ -77,15 +77,19 @@ export class TaskFormComponent implements OnInit {
 
   private nameValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
+      const alreadyUsedNames = this.goal.tasks.map(task => task.name);
+      const invalidCharacters = ['(', '^', '~', ')'];
 
       if (this.task) {
         return null;
       }
 
-      const alreadyUsedNames = this.goal.tasks.map(task => task.name);
-
       if (alreadyUsedNames.includes(control.value)) {
         return { nameAlreadyUsed: { value: control.value } };
+      }
+
+      if (invalidCharacters.some(c => control.value.includes(c))) {
+        return { invalidCharacters: { value: control.value } };
       }
 
       return null;

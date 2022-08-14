@@ -10,6 +10,9 @@
       <div *ngIf="name.errors?.nameAlreadyUsed">
         Please enter a name that is not already used.
       </div>
+      <div *ngIf="name.errors?.invalidCharacters">
+        Please do not use special characters, e.g (^~)
+      </div>
     </div>
   
     <label for="task-estimate">Task Time Estimation</label>

@@ -35,10 +35,10 @@
         </ng-container>
     </div>
     <div class="submit-buttons">
-        <button (click)="createOptimalTodolist()" class="btn optimal-todo-list-btn">
+        <button (click)="createOptimalTodolist()" [disabled]="loading" class="btn optimal-todo-list-btn">
             Create Optimal To-Do List
             <ng-container *ngIf="loading">
-                <fa-icon class="icon" [icon]="loadingIcon"></fa-icon>
+                <fa-icon class="loading-icon" [icon]="loadingIcon"></fa-icon>
             </ng-container>
         </button>
         <button [disabled]="!selectedTasks.length" (click)="draftIntentions()" class="btn add-intentions-btn">

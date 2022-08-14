@@ -63,15 +63,14 @@
             font-size: 14px;
         }
 
-        .icon {
+        .loading-icon {
             display: inline-block;
-            line-height: initial;
+            width: 32px;
             height: 32px;
+            margin-left: 15px;
+            line-height: initial;
 
             align-self: center;
-
-            margin-left: 15px;
-            width: 32px;
             opacity: 0.8;
 
             animation: rotate 1.25s infinite;

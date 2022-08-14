@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { faCheck, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faCircleNotch, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { timer } from 'rxjs';
 import { Goal, Item } from 'src/app/interfaces/item';
 import { GoalService } from 'src/app/provider/goal.service';
@@ -24,6 +24,9 @@ export class GoalEditorComponent implements OnInit {
   public completeIcon = faCheck;
   public deleteIcon = faTrashAlt;
   public editIcon = faEdit;
+  public loadingIcon = faCircleNotch;
+
+  public loading: boolean;
 
 
   public imageUrls: Record<string, string>;
@@ -51,11 +54,13 @@ export class GoalEditorComponent implements OnInit {
   }
 
   public createTodoList() {
+    this.loading = true;
+
     this.todoListService.requestOptimalTodoList()
       .subscribe((optimizedTodoList) => {
-        this.todoListService.setoptimizedTodoList(optimizedTodoList);
+        this.requestOptimalTodoListSuccess(optimizedTodoList);
       }, error => {
-        alert(error?.error || 'An unexpected error occured. If you continue to encounter this issue, please contact us at reg.experiments@tuebingen.mpg.de.');
+        this.requestOptimalTodoListError(error);
       });
   }
 
@@ -151,6 +156,16 @@ export class GoalEditorComponent implements OnInit {
     }
 
     return true;
+  }
+
+  private requestOptimalTodoListSuccess(todoList) {
+    this.todoListService.setoptimizedTodoList(todoList);
+    this.loading = false;
+  }
+
+  private requestOptimalTodoListError(error: any) {
+    this.loading = false;
+    alert(error?.error || 'An unexpected error occured. If you continue to encounter this issue, please contact us at reg.experiments@tuebingen.mpg.de.');
   }
 
   private getTaskAddedStatus(): boolean {

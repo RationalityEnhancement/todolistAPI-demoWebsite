@@ -54,8 +54,11 @@
         <p>Create your optimal to-do list for today & start working towards your goals!</p>
     </div>
 
-    <button (click)="createTodoList()" [disabled]="!validTodoList" class="btn">
+    <button (click)="createTodoList()" [disabled]="!validTodoList || loading" class="btn create-todo-list-btn">
         Create Optimal To-Do List
+        <ng-container *ngIf="loading">
+            <fa-icon class="loading-icon" [icon]="loadingIcon"></fa-icon>
+        </ng-container>
     </button>
 </section>
 

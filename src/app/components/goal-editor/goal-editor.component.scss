@@ -39,16 +39,6 @@ section {
     width: 300px;
 }
 
-// .bottom-fixed {
-//     position: fixed;
-
-//     bottom: 50px;
-//     left: 50%;
-//     transform: translateX(-50%);
-
-//     box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, 0.3) !important;
-// }
-
 .scheduled {
     border: none;
     background: #8d44ad7c;
@@ -109,4 +99,27 @@ section {
     }
 
     transition: 0.25;
+}
+
+.create-todo-list-btn {
+    display: flex;
+    padding: 0 24px;
+    width: max-content;
+
+    .loading-icon {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        margin-left: 15px;
+        line-height: initial;
+    
+        align-self: center;
+        opacity: 0.8;
+    
+        animation: rotate 1.25s infinite;
+    
+        @keyframes rotate {
+            to{ transform: rotate(360deg); }
+        }
+    }
 }

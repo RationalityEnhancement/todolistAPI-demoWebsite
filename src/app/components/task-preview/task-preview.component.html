@@ -18,14 +18,14 @@
             </div>
         </ng-container>
 
-        <ng-container *ngIf="task.scheduled">
+        <ng-container *ngIf="task.scheduled && !task.completed">
             <span>scheduled</span>
             <div class="icon">
                 <fa-icon [icon]="scheduledIcon"></fa-icon>
             </div>
         </ng-container>
 
-        <ng-container *ngIf="task.completed && !task.scheduled">
+        <ng-container *ngIf="task.completed">
             <span>completed</span>
             <div class="icon">
                 <fa-icon [icon]="completeIcon"></fa-icon>

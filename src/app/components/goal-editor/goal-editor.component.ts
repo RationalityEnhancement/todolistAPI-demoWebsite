@@ -26,7 +26,7 @@ export class GoalEditorComponent implements OnInit {
   public editIcon = faEdit;
   public loadingIcon = faCircleNotch;
 
-  public loading: boolean = true;
+  public loading: boolean;
 
 
   public imageUrls: Record<string, string>;

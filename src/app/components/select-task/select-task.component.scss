@@ -18,6 +18,10 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        p {
+            width: 75%;
+        }
     }
 
     .goal-list {
@@ -38,10 +42,10 @@
         }
     }
 
-    .add-intentions-btn {
+    .add-intentions-btn, .optimal-todo-list-btn {
         width: max-content;
         padding: 0 24px;
-        margin: 24px 0;
+        margin: 24px 10px;
 
         font-size: 14px;
     }

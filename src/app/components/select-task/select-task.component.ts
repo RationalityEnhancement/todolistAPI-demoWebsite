@@ -11,6 +11,7 @@ export class SelectTaskComponent implements OnInit {
   @Input() public goals: Goal[] = [];
 
   @Output() public submitIntentions = new EventEmitter<Item[]>();
+  @Output() public submitOptimalTodoList = new EventEmitter<void>();
   @Output() public close = new EventEmitter<void>();
 
   public selectedTasks: Item[] = [];
@@ -30,6 +31,10 @@ export class SelectTaskComponent implements OnInit {
 
   public draftIntentions() {
     this.submitIntentions.emit(this.selectedTasks);
+  }
+
+  public createOptimalTodolist() {
+    this.submitOptimalTodoList.emit();
   }
 
   public cancel() {

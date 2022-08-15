@@ -1,12 +1,47 @@
-<section style="padding-bottom: 20px">
+<section>
     <div class="section-header">
         <h2>1. Set your goals</h2>
-        <p>What are you up to in the next weeks?</p>
+        <div class="sub-headline">
+            <h3>What are you up to in the next weeks?</h3>
+            <fa-icon [icon]="infoIcon" (click)="togglePopup('goals')" class="icon"></fa-icon>
+        </div>
+        <p>Click the button <b>Add Goal</b> to add a new goal. If you want to adjust one of your goals again, just click
+            on it.</p>
+
+        <div *ngIf="currentInstructionsPopup === 'goals'" class="instruction-box">
+            <div class="instructions-header">
+                <h3>What information should I enter?</h3>
+                <button (click)="togglePopup('none')" class="btn close-btn" style="align-self: flex-start;">
+                    Close
+                </button>
+            </div>
+            <p>To create your optimized to-do lists, CompliceX needs specific information about your goals. Consider the
+                following, when you enter your goals.</p>
+            <div class="goal-instructions-required-data">
+                <h4>Description</h4>
+                <p>Write down what you want to achieve (e.g., “Start my own business”)</p>
+                <h4>Value</h4>
+                <p>How valuable would it be for you to have achieved this goal on a scale from 1 to 100, where 1 means
+                    “I
+                    couldn’t care less.” and 100 means “Nothing could be more valuable to me.”? Don’t stress about the
+                    exact
+                    value.
+                    What matters most is that you assign higher values to the goals that are more important to you. If
+                    your
+                    first
+                    goal
+                    is twice as valuable to you as your second goal, then its value should be twice as high.</p>
+                <h4>Estimated Time</h4>
+                <p>How many hours will it take to achieve this goal or task? You do not need to provide a super accurate estimate. Just think about the rough dimension of your goal.</p>
+                <h4>Deadline</h4>
+                <p>If there is a deadline for this goal or task, then please fill it in!</p>
+            </div>
+        </div>
     </div>
     <div class="goal-preview-gallery">
         <ng-container *ngFor="let goal of goals">
             <goal-preview [goal]="goal" (click)="openEditGoalForm(goal)">
-                <div class="icon-wrapper"> 
+                <div class="icon-wrapper">
                     <fa-icon [icon]="completeIcon" (click)="completeGoal(goal)" class="icon"></fa-icon>
                     <fa-icon [icon]="deleteIcon" (click)="deleteGoal(goal)" class="icon"></fa-icon>
                 </div>
@@ -23,7 +58,34 @@
 <section>
     <div class="section-header">
         <h2>2. Plan your goals</h2>
-        <p>What steps are necessary to achieve your goals?</p>
+        <div class="sub-headline">
+            <h3>What steps are necessary to achieve your goals?</h3>
+            <fa-icon [icon]="infoIcon" (click)="togglePopup('tasks')" class="icon"></fa-icon>
+        </div>
+        <p>Click the button <b>Add Task</b> to add a new task to the relevant goal. If you want to adjust one of your
+            tasks again, just click on it.</p>
+
+        <div *ngIf="currentInstructionsPopup === 'tasks'" class="instruction-box">
+            <div class="instructions-header">
+                <h3>How do I plan my goals?</h3>
+                <button (click)="togglePopup('none')" class="btn close-btn" style="align-self: flex-start;">
+                    Close
+                </button>
+            </div>
+            <p>Try to think about very specific, small steps that would be necessary to achieve your goal. Ideally, your
+                tasks take about 1-2 hours. That way, you ensure that you have always a good overview about the next
+                steps. If tasks are too large, one likely looses track of the original intention. Consider the example
+                below.</p>
+
+            <h4>Write a term paper for my English class (Value: 100%)</h4>
+            <ol>
+                <li>Brainstorm potential topics ~~2 hrs</li>
+                <li>Choose a topic ~~1 hrs</li>
+                <li>Read first article on topic ~~1.5 hrs</li>
+                <li>Outline the paper ~~2.5hr</li>
+                <li>and so on...</li>
+            </ol>
+        </div>
     </div>
 
     <ng-container *ngFor="let goal of goals">
@@ -47,7 +109,30 @@
 <section>
     <div class="section-header">
         <h2>3. Work on your goals</h2>
-        <p>Create your optimal to-do list for today & start working towards your goals!</p>
+        <div class="sub-headline">
+            <h3>Create your optimal to-do list for today!</h3>
+            <fa-icon [icon]="infoIcon" class="icon" (click)="togglePopup('todolist')"></fa-icon>
+        </div>
+
+        <div *ngIf="currentInstructionsPopup === 'todolist'" class="instruction-box">
+            <div class="instructions-header">
+                <div>
+                    <h3>What is my optimal to-do list?</h3>
+                    <h4>Suggestions for each day</h4>
+                </div>
+                <button (click)="togglePopup('none')" class="btn close-btn" style="align-self: flex-start;">
+                    Close
+                </button>
+            </div>
+            <p>CompliceX uses an intelligent algorithm to determine the most relevant tasks for each day. It takes the
+                provided data about your goals & tasks and generates a handful of suggestions that you could work
+                on. However, these are still suggestions. If you want to work on different tasks instead, you can choose
+                them manually as well.
+            </p>
+            <h4>Score for each task</h4>
+            <p>Additionally, CompliceX calculates a score for each suggested task. If you finish a task, you will earn a
+                virtual reward for it. That way, it can motivate you to work on the most relevant tasks each day.</p>
+        </div>
     </div>
 
     <button (click)="createTodoList()" [disabled]="!validTodoList || loading" class="btn create-todo-list-btn">

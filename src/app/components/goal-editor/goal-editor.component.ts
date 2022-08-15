@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { faCheck, faCircleNotch, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faCircleNotch, faInfoCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { timer } from 'rxjs';
 import { Goal, Item } from 'src/app/interfaces/item';
 import { GoalService } from 'src/app/provider/goal.service';
@@ -20,10 +20,11 @@ export class GoalEditorComponent implements OnInit {
 
   public currentGoalForm: 'addGoal' | 'addTask' | 'editTask' | 'editGoal' | 'none';
   public currentView: 'initialGoal' | 'goalExplanation' | 'goalEditor' | 'none';
+  public currentInstructionsPopup: 'goals' | 'tasks' | 'todolist' |'none';
 
   public completeIcon = faCheck;
   public deleteIcon = faTrashAlt;
-  public editIcon = faEdit;
+  public infoIcon = faInfoCircle;
   public loadingIcon = faCircleNotch;
 
   public loading: boolean;
@@ -66,6 +67,10 @@ export class GoalEditorComponent implements OnInit {
 
   public toggleForm(formType: 'addGoal' | 'addTask' | 'editTask' | 'editGoal' | 'none') {
     this.currentGoalForm = formType;
+  }
+
+  public togglePopup(popupType: 'goals' | 'tasks' | 'todolist' |'none') {
+    this.currentInstructionsPopup = popupType;
   }
 
   public closeForm() {

@@ -7,6 +7,7 @@
         </div>
         <p>Click the button <b>Add Goal</b> to add a new goal. If you want to adjust one of your goals again, just click
             on it.</p>
+        <p *ngIf="goals.length < 3"> Please add at least <b>three</b> goals!</p>
 
         <div *ngIf="currentInstructionsPopup === 'goals'" class="instruction-box">
             <div class="instructions-header">
@@ -91,6 +92,10 @@
     <ng-container *ngFor="let goal of goals">
         <div class="goal-wrapper">
             <h2><b>{{goal.name}}</b></h2>
+
+            <p *ngIf="getDisplayedTasks(goal.tasks).length < 3">
+                Please add at least <b>three</b> tasks to your goal!
+            </p>
 
             <button class="btn add-task-btn" (click)="openAddTaskForm(goal)">
                 Add Task

@@ -73,8 +73,8 @@
                 </button>
             </div>
             <p>Try to think about very specific, small steps that would be necessary to achieve your goal. Ideally, your
-                tasks take about 1-2 hours. That way, you ensure that you have always a good overview about the next
-                steps. If tasks are too large, one likely looses track of the original intention. Consider the example
+                tasks do not take longer than <b> 1-2 hours</b>. That way, you ensure that you have always a good overview about the next
+                steps. If tasks are too large, one likely looses track of what they are actually about. Consider the example
                 below.</p>
 
             <h4>Write a term paper for my English class (Value: 100%)</h4>
@@ -116,14 +116,12 @@
 
         <div *ngIf="currentInstructionsPopup === 'todolist'" class="instruction-box">
             <div class="instructions-header">
-                <div>
-                    <h3>What is my optimal to-do list?</h3>
-                    <h4>Suggestions for each day</h4>
-                </div>
+                <h3>What is my optimal to-do list?</h3>
                 <button (click)="togglePopup('none')" class="btn close-btn" style="align-self: flex-start;">
                     Close
                 </button>
             </div>
+            <h4>Suggestions for each day</h4>
             <p>CompliceX uses an intelligent algorithm to determine the most relevant tasks for each day. It takes the
                 provided data about your goals & tasks and generates a handful of suggestions that you could work
                 on. However, these are still suggestions. If you want to work on different tasks instead, you can choose

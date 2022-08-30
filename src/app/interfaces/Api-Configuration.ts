@@ -3,5 +3,6 @@ export interface ApiConfiguration {
     timezoneOffsetMinutes: number,
     userkey: string
     ymd: string,
-    apiUrl: string
+    apiUrl: string,
+    gamificationEnabled: boolean
 }

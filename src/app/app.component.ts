@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { ApiConfiguration } from './interfaces/Api-Configuration';
 import { CompliceGoal, NewCompliceGoal, RelevantCompliceGoalAttributes } from './interfaces/Complice-Goal';
+import { OptimizedTodo } from './interfaces/item';
 import { AdapterService } from './provider/adapter.service';
 import { GoalService } from './provider/goal.service';
 import { TodoListService } from './provider/todo-list.service';
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  @Output() public optimizedTodoListEvent = new EventEmitter<string>();
+  @Output() public optimizedTodoListEvent = new EventEmitter<OptimizedTodo[]>();
   @Output() public goalsEvent = new EventEmitter<RelevantCompliceGoalAttributes[]>();
 
   @Output() public addedGoalEvent = new EventEmitter<NewCompliceGoal>();
@@ -91,7 +92,6 @@ export class AppComponent implements OnInit, OnDestroy {
   private publishoptimizedTodoList(): void {
     this.todoListService.listenTooptimizedTodoList()
       .pipe(
-        map(todoList => this.adapterService.toRawCompliceIntentions(todoList)),
         takeUntil(this.destroy$)
       )
       .subscribe((rawTodoList) => {
@@ -154,8 +154,8 @@ export class AppComponent implements OnInit, OnDestroy {
       })
   }
 
-  private dispatchoptimizedTodoList(rawIntentions: string): void {
-    this.optimizedTodoListEvent.emit(rawIntentions);
+  private dispatchoptimizedTodoList(todoList: OptimizedTodo[]): void {
+    this.optimizedTodoListEvent.emit(todoList);
   }
 
   private dispatchGoals(goals: RelevantCompliceGoalAttributes[]): void {

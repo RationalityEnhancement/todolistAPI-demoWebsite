@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, ReplaySubject } from 'rxjs';
-import { filter, map, switchMap, take } from 'rxjs/operators';
+import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 
 import { Goal, OptimizedTodo } from "../interfaces/item";
 import { WorkflowyService } from "./workflowy.service";
@@ -12,8 +12,7 @@ import { ApiConfiguration } from "../interfaces/Api-Configuration";
 @Injectable()
 export class TodoListService {
 
-    private apiConfiguration: ApiConfiguration;
-
+    private apiConfiguration$ = new ReplaySubject<ApiConfiguration>(1);
     private optimizedTodoList$ = new ReplaySubject<OptimizedTodo[]>(1);
 
     constructor(
@@ -27,7 +26,7 @@ export class TodoListService {
     }
 
     public setApiConfiguration(apiConfiguration: ApiConfiguration) {
-        this.apiConfiguration = apiConfiguration;
+        this.apiConfiguration$.next(apiConfiguration);
     }
     
     public getoptimizedTodoList(): Observable<OptimizedTodo[]> {
@@ -38,8 +37,8 @@ export class TodoListService {
             );
     }
         
-    public getApiConfiguration(): ApiConfiguration {
-        return this.apiConfiguration;
+    public getApiConfiguration(): Observable<ApiConfiguration> {
+        return this.apiConfiguration$.asObservable();
     }
 
     public listenTooptimizedTodoList(): Observable<OptimizedTodo[]> {
@@ -49,16 +48,17 @@ export class TodoListService {
     public requestOptimalTodoList(): Observable<any> {
         return this.goalService.getGoals()
             .pipe(
-                map(goals => this.makeTodoListRequest(goals)),
+                withLatestFrom(this.getApiConfiguration()),
+                map(([goals, apiConfiguration]) => this.makeTodoListRequest(goals, apiConfiguration)),
                 switchMap(request => this.fetchOptimalTodoList(request))
             );
     }
 
-    private makeTodoListRequest(goals: Goal[]) {
+    private makeTodoListRequest(goals: Goal[], apiConfiguration: ApiConfiguration) {
         return {
            options: this.createRequestOptions(),
-           body: this.createRequestBody(goals),
-           url: this.apiConfiguration.apiUrl
+           body: this.createRequestBody(goals, apiConfiguration),
+           url: apiConfiguration.apiUrl
         };
     }
 
@@ -74,12 +74,12 @@ export class TodoListService {
         return { headers };
     }
 
-    private createRequestBody(goals: Goal[]) {
+    private createRequestBody(goals: Goal[], apiConfiguration: ApiConfiguration) {
         const defaultParameters = {
-            ymd: this.apiConfiguration.ymd,
-            hourOfYmd: this.apiConfiguration.hourOfYmd,
-            timezoneOffsetMinutes: this.apiConfiguration.timezoneOffsetMinutes || 0,
-            userkey: this.apiConfiguration.userkey || 'test',
+            ymd: apiConfiguration.ymd,
+            hourOfYmd: apiConfiguration.hourOfYmd,
+            timezoneOffsetMinutes: apiConfiguration.timezoneOffsetMinutes || 0,
+            userkey: apiConfiguration.userkey,
             updated: Date.now()
         };
 

@@ -63,18 +63,4 @@ export class AdapterService {
 
         return { ...defaultCompliceAttributes, ...relevantCompliceAttributes };
     }
-
-    public toRawCompliceIntentions(todoList: OptimizedTodo[]): string {
-        return todoList
-            .map(task => this.getRawCompliceIntentionName(task))
-            .join('\n')
-            .replace(/ ?#today/g, '');
-    }
-
-    private getRawCompliceIntentionName(task: OptimizedTodo): string {
-        const taskName = task.nm;
-        const taskValue = `=${task.val}`;
-
-        return `${taskName} ${taskValue}`;
-    }
 }

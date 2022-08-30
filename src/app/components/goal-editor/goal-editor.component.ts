@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { faCheck, faCircleNotch, faInfoCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { timer } from 'rxjs';
+import { Observable, timer } from 'rxjs';
+import { ApiConfiguration } from 'src/app/interfaces/Api-Configuration';
 import { Goal, Item } from 'src/app/interfaces/item';
 import { GoalService } from 'src/app/provider/goal.service';
 import { ImageUrlService } from 'src/app/provider/image-url.service';
@@ -27,24 +28,21 @@ export class GoalEditorComponent implements OnInit {
   public infoIcon = faInfoCircle;
   public loadingIcon = faCircleNotch;
 
+  public configuration$: Observable<ApiConfiguration>;
+
   public loading: boolean;
-
-
-  public imageUrls: Record<string, string>;
 
   public get validTodoList(): boolean {
     return this.validateTodolistData();
   }
 
-  private images = ['edit_icon.png'];
   private newTaskAdded: boolean;
 
   constructor(
-    private imageUrlService: ImageUrlService,
     private goalService: GoalService,
     private todoListService: TodoListService
   ) {
-    this.imageUrls = this.imageUrlService.createImageUrls(this.images);
+    this.configuration$ = this.todoListService.getApiConfiguration();
   }
 
   public ngOnInit(): void {

@@ -33,7 +33,8 @@
                     goal
                     is twice as valuable to you as your second goal, then its value should be twice as high.</p>
                 <h4>Estimated Time</h4>
-                <p>How many hours will it take to achieve this goal or task? You do not need to provide a super accurate estimate. Just think about the rough dimension of your goal.</p>
+                <p>How many hours will it take to achieve this goal or task? You do not need to provide a super accurate
+                    estimate. Just think about the rough dimension of your goal.</p>
                 <h4>Deadline</h4>
                 <p>If there is a deadline for this goal or task, then please fill it in!</p>
             </div>
@@ -74,8 +75,10 @@
                 </button>
             </div>
             <p>Try to think about very specific, small steps that would be necessary to achieve your goal. Ideally, your
-                tasks do not take longer than <b> 1-2 hours</b>. That way, you ensure that you have always a good overview about the next
-                steps. If tasks are too large, one likely looses track of what they are actually about. Consider the example
+                tasks do not take longer than <b> 1-2 hours</b>. That way, you ensure that you have always a good
+                overview about the next
+                steps. If tasks are too large, one likely looses track of what they are actually about. Consider the
+                example
                 below.</p>
 
             <h4>Write a term paper for my English class (Value: 100%)</h4>
@@ -132,9 +135,13 @@
                 on. However, these are still suggestions. If you want to work on different tasks instead, you can choose
                 them manually as well.
             </p>
-            <h4>Score for each task</h4>
-            <p>Additionally, CompliceX calculates a score for each suggested task. If you finish a task, you will earn a
-                virtual reward for it. That way, it can motivate you to work on the most relevant tasks each day.</p>
+            <ng-container *ngIf="(configuration$ | async).gamificationEnabled">
+                <h4>Score for each task</h4>
+                <p>Additionally, CompliceX calculates a score for each suggested task. If you finish a task, you will
+                    earn a
+                    virtual reward for it. That way, it can motivate you to work on the most relevant tasks each day.
+                </p>
+            </ng-container>
         </div>
     </div>
 

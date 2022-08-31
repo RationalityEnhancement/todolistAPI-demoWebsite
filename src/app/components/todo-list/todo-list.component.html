@@ -1,9 +1,14 @@
 <ng-container *ngIf="goals$ | async as goals">
   <ng-container [ngSwitch]="currentView">
+
     <initial-goal-view *ngSwitchCase="'initialGoal'" (submitInitialGoal)="toggleView('furtherGoals')">
     </initial-goal-view>
-    <further-goals-view *ngSwitchCase="'furtherGoals'" [goals]="goals" (continueToGoalEditor)="toggleView('goalEditor')">
+
+    <further-goals-view *ngSwitchCase="'furtherGoals'" [goals]="goals"
+      (continueToGoalEditor)="toggleView('goalEditor')">
     </further-goals-view>
-    <goal-editor *ngSwitchCase="'goalEditor'" [goals]="goals"></goal-editor>
+
+    <goal-editor *ngSwitchCase="'goalEditor'" [goals]="goals"
+      [gamificationEnabled]="(apiConfiguration$ | async)?.gamificationEnabled"></goal-editor>
   </ng-container>
 </ng-container>

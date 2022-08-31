@@ -1,10 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { faCheck, faCircleNotch, faInfoCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { Observable, timer } from 'rxjs';
-import { ApiConfiguration } from 'src/app/interfaces/Api-Configuration';
 import { Goal, Item } from 'src/app/interfaces/item';
 import { GoalService } from 'src/app/provider/goal.service';
-import { ImageUrlService } from 'src/app/provider/image-url.service';
 import { TodoListService } from 'src/app/provider/todo-list.service';
 
 @Component({
@@ -15,20 +12,16 @@ import { TodoListService } from 'src/app/provider/todo-list.service';
 export class GoalEditorComponent implements OnInit {
 
   @Input() public goals: Goal[] = [];
-
-  public selectedGoal: Goal;
-  public selectedTask: Item;
+  @Input() public gamificationEnabled: boolean;
 
   public currentGoalForm: 'addGoal' | 'addTask' | 'editTask' | 'editGoal' | 'none';
   public currentView: 'initialGoal' | 'goalExplanation' | 'goalEditor' | 'none';
-  public currentInstructionsPopup: 'goals' | 'tasks' | 'todolist' |'none';
+  public currentInstructionsPopup: 'goals' | 'tasks' | 'todolist' | 'none';
 
   public completeIcon = faCheck;
   public deleteIcon = faTrashAlt;
   public infoIcon = faInfoCircle;
   public loadingIcon = faCircleNotch;
-
-  public configuration$: Observable<ApiConfiguration>;
 
   public loading: boolean;
 
@@ -36,20 +29,33 @@ export class GoalEditorComponent implements OnInit {
     return this.validateTodolistData();
   }
 
+  public get selectedGoal(): Goal {
+    return this.goals
+      .find(goal => goal.code === this.selectedGoalCode);
+  }
+
+  public get selectedTask(): Item {
+    return this.selectedGoal?.tasks
+      .find(task => task.workflowyId === this.selectedTaskId);
+  }
+
+  public get overdueGoals(): boolean {
+    return this.goals.some(goal => this.deadlineInPast(goal.deadline));
+  }
+
   private newTaskAdded: boolean;
+
+  private selectedGoalCode: string;
+  private selectedTaskId: string;
 
   constructor(
     private goalService: GoalService,
     private todoListService: TodoListService
   ) {
-    this.configuration$ = this.todoListService.getApiConfiguration();
   }
 
   public ngOnInit(): void {
     this.newTaskAdded = this.getTaskAddedStatus();
-
-    timer(1000)
-      .subscribe(() => this.checkOverdueGoals());
   }
 
   public createTodoList() {
@@ -67,7 +73,7 @@ export class GoalEditorComponent implements OnInit {
     this.currentGoalForm = formType;
   }
 
-  public togglePopup(popupType: 'goals' | 'tasks' | 'todolist' |'none') {
+  public togglePopup(popupType: 'goals' | 'tasks' | 'todolist' | 'none') {
     this.currentInstructionsPopup = popupType;
   }
 
@@ -80,7 +86,8 @@ export class GoalEditorComponent implements OnInit {
   }
 
   public openAddTaskForm(goal: Goal) {
-    this.selectedGoal = goal;
+    this.selectGoal(goal);
+
     this.toggleForm('addTask');
   }
 
@@ -88,14 +95,16 @@ export class GoalEditorComponent implements OnInit {
     if (task.completed || task.scheduled) {
       return;
     }
-    
-    this.selectedGoal = goal;
-    this.selectedTask = task;
+
+    this.selectGoal(goal);
+    this.selectTask(task);
+
     this.toggleForm('editTask');
   }
 
   public openEditGoalForm(goal) {
-    this.selectedGoal = goal;
+    this.selectGoal(goal);
+
     this.toggleForm('editGoal');
   }
 
@@ -142,6 +151,14 @@ export class GoalEditorComponent implements OnInit {
     return tasks.filter(task => !task.workflowyId?.includes('everything-else'));
   }
 
+  private selectGoal(goal: Goal) {
+    this.selectedGoalCode = goal.code;
+  }
+
+  private selectTask(task: Item) {
+    this.selectedTaskId = task.workflowyId;
+  }
+
   private validateTodolistData(): boolean {
     if (this.goals
       .map(goal => this.getDisplayedTasks(goal.tasks))
@@ -175,14 +192,6 @@ export class GoalEditorComponent implements OnInit {
     return this.goals
       .reduce((allTasks, goal) => allTasks.concat(goal.tasks), [] as Item[])
       .some(task => !(task.scheduled || task.completed));
-  }
-
-  private checkOverdueGoals() {
-    this.goals.forEach(goal => {
-      if (this.deadlineInPast(goal.deadline)) {
-        alert(`Your goal ${goal.name} is overdue! Please think about a new deadline and adjust it properly.`);
-      }
-    })
   }
 
   private deadlineInPast(deadline: string): boolean {

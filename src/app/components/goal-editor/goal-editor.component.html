@@ -135,7 +135,7 @@
                 on. However, these are still suggestions. If you want to work on different tasks instead, you can choose
                 them manually as well.
             </p>
-            <ng-container *ngIf="(configuration$ | async).gamificationEnabled">
+            <ng-container *ngIf="gamificationEnabled">
                 <h4>Score for each task</h4>
                 <p>Additionally, CompliceX calculates a score for each suggested task. If you finish a task, you will
                     earn a
@@ -144,6 +144,10 @@
             </ng-container>
         </div>
     </div>
+
+    <p *ngIf="overdueGoals">
+        Some of your goals are overdue! Please adjust your goal deadlines before you create your optimal to-do list!
+    </p>
 
     <button (click)="createTodoList()" [disabled]="!validTodoList || loading" class="btn create-todo-list-btn">
         Create Optimal To-Do List

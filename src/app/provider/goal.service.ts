@@ -149,10 +149,6 @@ export class GoalService {
             tasks: []
         };
 
-        const everythingElseTask = this.taskService.getEverythingElseTask(newGoal);
-
-        newGoal.tasks.push(everythingElseTask);
-
         const updatedGoals = goals.concat(newGoal);
 
         return { addedGoal: newGoal, updatedGoals: updatedGoals };

@@ -9,85 +9,87 @@ export class TaskService {
   constructor() { }
 
   public addTaskToGoal(task: Item, goal: Goal): Goal {
-    const newTask: Item = {
+    const addedTask: Item = {
       ...task,
       workflowyId: `g${goal.code}-t${goal.tasks.length + 1}-${Date.now()}`
     };
 
-    goal.tasks.push(newTask);
+    const updatedTasks = goal.tasks.concat(addedTask);
 
-    return goal;
+    return { ...goal, tasks: updatedTasks };
   }
 
   public editTaskOfGoal(editedTask: Item, goal: Goal): Goal {
-    const updatedTasks =  goal.tasks.map(task => {
-      if (task.workflowyId === editedTask.workflowyId) {
-        return editedTask;
-      }
-      return task;
-    });
+    const updatedTasks = goal.tasks.map(task =>
+      task.workflowyId === editedTask.workflowyId ? editedTask : task
+    );
 
-    goal.tasks = updatedTasks;
-
-    return goal;
+    return { ...goal, tasks: updatedTasks };
   }
 
-  public deleteTaskFromGoal(task: Item, goal: Goal): Goal {
-    console.log(task, goal)
-    const index = goal.tasks.indexOf(task);
+  public deleteTaskFromGoal(deletedTask: Item, goal: Goal): Goal {
+    const updatedTasks = goal.tasks.filter(task =>
+      task.workflowyId !== deletedTask.workflowyId
+    );
 
-    goal.tasks.splice(index, 1);
-
-    return goal;
-  }
-
-  public getEverythingElseTask(goal: Goal): Item {
-    const everythingElseTask: Item = {
-      name: 'All tasks that are not clearly specified, but necesssary for your goal. It might be a good idea to divide this goal into smaller, more actionable tasks.',
-      time_est: goal.time_est,
-      deadline: goal.deadline,
-      workflowyId: `g${goal.code}-everything-else-${Date.now()}`
-    };
-
-    return everythingElseTask;
+    return { ...goal, tasks: updatedTasks };
   }
 
   public updateTasksForGoal(goal: Goal): Goal {
-    const tasks = this.getTasksWithUpdatedEverythingElseTask(goal);
+    const updatedTasks = this.handleEverythingElseTask(goal);
 
-    return { ...goal, tasks };
+    return { ...goal, tasks: updatedTasks }
   }
 
-  private getTasksWithUpdatedEverythingElseTask(goal: Goal): Item[] {
-    return goal.tasks.map(task => {
-      if (task.workflowyId?.includes('everything-else')) {
-        task = this.getUpdatedEverythingElseTask(task, goal);
-      }
+  private handleEverythingElseTask(goal: Goal): Item[] {
+    if (this.estimateEverythingElseTask(goal) > 0) {
+      const everythingElseTask = this.createEverythingElseTask(goal);
 
-      return task;
-    });
-  }
-
-  private getUpdatedEverythingElseTask(task: Item, goal: Goal): Item {
-    const goalEstimate = goal.time_est;
-    const totalTaskEstimate = this.getTotalEstimateOfRelevantTasks(goal.tasks);
-
-    if (goalEstimate > totalTaskEstimate) {
-      task.time_est = goalEstimate - totalTaskEstimate;
-      task.deadline = goal.deadline;
-      task.completed = false;
-    } else {
-      task.completed = true;
-      task.time_est = 0;
+      return this.updateEverythingElseTask(goal.tasks, everythingElseTask);
     }
 
-    return task;
+    return this.removeEverythingElseTask(goal.tasks);
   }
 
-  private getTotalEstimateOfRelevantTasks(tasks: Item[]): number {
-    return tasks
-      .filter(task => !task.workflowyId?.includes('everything-else'))
+
+
+  private createEverythingElseTask(goal: Goal): Item {
+    const name = 'All tasks that are not clearly specified, but necesssary for your goal. It might be a good idea to divide this goal into smaller, more actionable tasks.';
+    const estimate = this.estimateEverythingElseTask(goal);
+    const deadline = goal.deadline;
+    const workflowyId = `g${goal.code}-everything-else-${Date.now()}`;
+    
+    return {
+      name: name,
+      time_est: estimate,
+      deadline: deadline,
+      workflowyId: workflowyId
+    };
+  }
+
+  private estimateEverythingElseTask(goal: Goal) {
+    const goalEstimate = goal.time_est;
+    const totalTaskEstimate = this.totalEstimateOfRelevantTasks(goal.tasks);
+
+    return goalEstimate - totalTaskEstimate;
+  }
+
+  private totalEstimateOfRelevantTasks(tasks: Item[]) {
+    const relevantTasks = this.removeEverythingElseTask(tasks);
+
+    return relevantTasks
       .reduce((estimate, task) => estimate + task.time_est, 0);
   }
 
+  private removeEverythingElseTask(tasks: Item[]) {
+    const selector = 'everything-else';
+
+    return tasks.filter(task => !task.workflowyId?.includes(selector));
+  }
+
+  private updateEverythingElseTask(tasks: Item[], everythingElseTask: Item) {
+    const relevantTasks = this.removeEverythingElseTask(tasks);
+
+    return relevantTasks.concat(everythingElseTask);
+  }
 }

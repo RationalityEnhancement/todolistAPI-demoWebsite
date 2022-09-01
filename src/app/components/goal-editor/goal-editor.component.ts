@@ -25,10 +25,6 @@ export class GoalEditorComponent implements OnInit {
 
   public loading: boolean;
 
-  public get validTodoList(): boolean {
-    return this.validateTodolistData();
-  }
-
   public get selectedGoal(): Goal {
     return this.goals
       .find(goal => goal.code === this.selectedGoalCode);
@@ -39,11 +35,19 @@ export class GoalEditorComponent implements OnInit {
       .find(task => task.workflowyId === this.selectedTaskId);
   }
 
+  public get validTodoList(): boolean {
+    return this.validateTodolistData();
+  }
+
   public get overdueGoals(): boolean {
     return this.goals.some(goal => this.deadlineInPast(goal.deadline));
   }
 
-  private newTaskAdded: boolean;
+  public get noOpenTasks(): boolean {
+    return this.goals
+      .reduce((allTasks, goal) => allTasks.concat(this.getDisplayedTasks(goal.tasks)), [] as Item[])
+      .every(task => task.scheduled || task.completed);
+  }
 
   private selectedGoalCode: string;
   private selectedTaskId: string;
@@ -54,9 +58,7 @@ export class GoalEditorComponent implements OnInit {
   ) {
   }
 
-  public ngOnInit(): void {
-    this.newTaskAdded = this.getTaskAddedStatus();
-  }
+  public ngOnInit(): void { }
 
   public createTodoList() {
     this.loading = true;
@@ -160,6 +162,10 @@ export class GoalEditorComponent implements OnInit {
   }
 
   private validateTodolistData(): boolean {
+    if (this.goals.length < 3) {
+      return false;
+    }
+
     if (this.goals
       .map(goal => this.getDisplayedTasks(goal.tasks))
       .some(tasks => tasks?.length < 3)
@@ -167,11 +173,11 @@ export class GoalEditorComponent implements OnInit {
       return false;
     }
 
-    if (this.goals.length < 3) {
+    if (this.noOpenTasks) {
       return false;
     }
 
-    if (!this.newTaskAdded) {
+    if (this.overdueGoals) {
       return false;
     }
 
@@ -186,12 +192,6 @@ export class GoalEditorComponent implements OnInit {
   private requestOptimalTodoListError(error: any) {
     this.loading = false;
     alert(error?.error || 'An unexpected error occured. If you continue to encounter this issue, please contact us at reg.experiments@tuebingen.mpg.de.');
-  }
-
-  private getTaskAddedStatus(): boolean {
-    return this.goals
-      .reduce((allTasks, goal) => allTasks.concat(goal.tasks), [] as Item[])
-      .some(task => !(task.scheduled || task.completed));
   }
 
   private deadlineInPast(deadline: string): boolean {

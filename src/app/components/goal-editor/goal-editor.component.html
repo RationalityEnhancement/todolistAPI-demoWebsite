@@ -149,6 +149,10 @@
         Some of your goals are overdue! Please adjust your goal deadlines before you create your optimal to-do list!
     </p>
 
+    <p *ngIf="noOpenTasks">
+        All of your tasks are either scheduled or completed already. Please add new tasks before you create your optimal to-do list!
+    </p>
+
     <button (click)="createTodoList()" [disabled]="!validTodoList || loading" class="btn create-todo-list-btn">
         Create Optimal To-Do List
         <ng-container *ngIf="loading">

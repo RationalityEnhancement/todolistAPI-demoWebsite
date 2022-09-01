@@ -1,10 +1,11 @@
 import { Component, ViewEncapsulation, Output, EventEmitter, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { ApiConfiguration } from './interfaces/Api-Configuration';
+import { Configuration } from './interfaces/Configuration';
 import { CompliceGoal, NewCompliceGoal, RelevantCompliceGoalAttributes } from './interfaces/Complice-Goal';
 import { OptimizedTodo } from './interfaces/item';
 import { AdapterService } from './provider/adapter.service';
+import { ConfigService } from './provider/config.service';
 import { GoalService } from './provider/goal.service';
 import { TodoListService } from './provider/todo-list.service';
 
@@ -22,9 +23,9 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  @Input() public set regApiConfiguration(configuration: string) {
+  @Input() public set regConfiguration(configuration: string) {
     if (!!configuration) {
-      this.initializeApiConfiguration(configuration);
+      this.initializeConfiguration(configuration);
     }
   }
 
@@ -42,7 +43,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private goalService: GoalService,
     private todoListService: TodoListService,
-    private adapterService: AdapterService
+    private adapterService: AdapterService,
+    private configService: ConfigService
   ) { }
 
   public ngOnInit(): void {
@@ -65,11 +67,11 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  private initializeApiConfiguration(configuration: string): void {
+  private initializeConfiguration(config: string): void {
     try {
-      const apiConfiguration = this.adapterService.parseEntity<ApiConfiguration>(configuration);
+      const configuration = this.adapterService.parseEntity<Configuration>(config);
 
-      this.todoListService.setApiConfiguration(apiConfiguration);
+      this.configService.setConfiguration(configuration);
     } catch (e) {
       this.handleError();
     }

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { NewCompliceGoal, RelevantCompliceGoalAttributes } from "../interfaces/Complice-Goal";
-import { Goal, OptimizedTodo } from "../interfaces/item";
+import { Goal } from "../interfaces/item";
 
 @Injectable()
 export class AdapterService {

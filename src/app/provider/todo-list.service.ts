@@ -7,38 +7,31 @@ import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 import { Goal, OptimizedTodo } from "../interfaces/item";
 import { WorkflowyService } from "./workflowy.service";
 import { GoalService } from "./goal.service";
-import { ApiConfiguration } from "../interfaces/Api-Configuration";
+import { Configuration } from "../interfaces/Configuration";
+import { ConfigService } from "./config.service";
 
 @Injectable()
 export class TodoListService {
 
-    private apiConfiguration$ = new ReplaySubject<ApiConfiguration>(1);
     private optimizedTodoList$ = new ReplaySubject<OptimizedTodo[]>(1);
 
     constructor(
         private http: HttpClient,
         private goalService: GoalService,
-        private workflowyService: WorkflowyService
-    ) {}
+        private workflowyService: WorkflowyService,
+        private configService: ConfigService
+    ) { }
 
     public setoptimizedTodoList(optimizedTodoList: OptimizedTodo[]) {
         this.optimizedTodoList$.next(optimizedTodoList);
     }
 
-    public setApiConfiguration(apiConfiguration: ApiConfiguration) {
-        this.apiConfiguration$.next(apiConfiguration);
-    }
-    
     public getoptimizedTodoList(): Observable<OptimizedTodo[]> {
         return this.optimizedTodoList$
             .pipe(
                 filter(todoList => !!todoList.length),
                 take(1)
             );
-    }
-        
-    public getApiConfiguration(): Observable<ApiConfiguration> {
-        return this.apiConfiguration$.asObservable();
     }
 
     public listenTooptimizedTodoList(): Observable<OptimizedTodo[]> {
@@ -48,17 +41,17 @@ export class TodoListService {
     public requestOptimalTodoList(): Observable<any> {
         return this.goalService.getGoals()
             .pipe(
-                withLatestFrom(this.getApiConfiguration()),
-                map(([goals, apiConfiguration]) => this.makeTodoListRequest(goals, apiConfiguration)),
+                withLatestFrom(this.configService.getConfiguration()),
+                map(([goals, configuration]) => this.makeTodoListRequest(goals, configuration)),
                 switchMap(request => this.fetchOptimalTodoList(request))
             );
     }
 
-    private makeTodoListRequest(goals: Goal[], apiConfiguration: ApiConfiguration) {
+    private makeTodoListRequest(goals: Goal[], configuration: Configuration) {
         return {
-           options: this.createRequestOptions(),
-           body: this.createRequestBody(goals, apiConfiguration),
-           url: apiConfiguration.apiUrl
+            options: this.createRequestOptions(),
+            body: this.createRequestBody(goals, configuration),
+            url: configuration.apiUrl
         };
     }
 
@@ -74,22 +67,27 @@ export class TodoListService {
         return { headers };
     }
 
-    private createRequestBody(goals: Goal[], apiConfiguration: ApiConfiguration) {
-        const defaultParameters = {
-            ymd: apiConfiguration.ymd,
-            hourOfYmd: apiConfiguration.hourOfYmd,
-            timezoneOffsetMinutes: apiConfiguration.timezoneOffsetMinutes || 0,
-            userkey: apiConfiguration.userkey,
-            updated: Date.now()
-        };
+    private createRequestBody(goals: Goal[], configuration: Configuration) {
+        const now = new Date();
+
+        const ymd = now.toISOString().substring(0, 10);
+        const hourOfYmd = now.getHours() + now.getMinutes() / 60;
+        const timezoneOffsetMinutes = now.getTimezoneOffset();
+        const updated = now.getTime();
 
         const currentIntentions = this.makeCurrentIntentions();
         const projects = this.workflowyService.makeWorkflowyProjects(goals);
         const typicalHours = this.workflowyService.makeTypicalHours();
         const todayHours = this.workflowyService.makeTodayHours();
 
+        const userkey = configuration.userkey;
+
         return {
-            ...defaultParameters,
+            ymd: ymd,
+            hourOfYmd: hourOfYmd,
+            timezoneOffsetMinutes: timezoneOffsetMinutes,
+            updated: updated,
+            userkey: userkey,
             currentIntentionsList: currentIntentions,
             projects: projects,
             today_hours: todayHours,

@@ -29,6 +29,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SelectTaskComponent } from './components/select-task/select-task.component';
 import { TaskSelectPreviewComponent } from './components/task-select-preview/task-select-preview.component';
 import { SelectTaskButtonComponent } from './components/select-task-button/select-task-button.component';
+import { ConfigService } from './provider/config.service';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { SelectTaskButtonComponent } from './components/select-task-button/selec
     AdapterService,
     WorkflowyService,
     ColorService,
+    ConfigService,
     { provide: COLOR_CONFIG, useValue: COLORS }
   ],
   entryComponents: [AppComponent]

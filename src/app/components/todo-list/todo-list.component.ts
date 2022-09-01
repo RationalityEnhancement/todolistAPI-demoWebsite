@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { ApiConfiguration } from 'src/app/interfaces/Api-Configuration';
+import { Configuration } from 'src/app/interfaces/Configuration';
+import { ConfigService } from 'src/app/provider/config.service';
 import { GoalService } from 'src/app/provider/goal.service';
-import { TodoListService } from 'src/app/provider/todo-list.service';
 import { Goal } from '../../interfaces/item';
 
 
@@ -16,17 +16,17 @@ import { Goal } from '../../interfaces/item';
 export class ToDoListComponent {
 
   public goals$: Observable<Goal[]>;
-  public apiConfiguration$: Observable<ApiConfiguration>;
+  public configuration$: Observable<Configuration>;
   
   public currentView: 'initialGoal' | 'furtherGoals' | 'goalEditor' | 'none';
 
 
   constructor(
     private goalService: GoalService,
-    private todoListService: TodoListService
+    private configService: ConfigService
   ) {
     this.goals$ = this.initializeGoals();
-    this.apiConfiguration$ = this.todoListService.getApiConfiguration();
+    this.configuration$ = this.configService.getConfiguration();
   }
 
   public toggleView(view: 'initialGoal' | 'furtherGoals' | 'goalEditor' | 'none') {

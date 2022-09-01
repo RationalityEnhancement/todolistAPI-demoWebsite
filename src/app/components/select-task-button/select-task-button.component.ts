@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiConfiguration } from 'src/app/interfaces/Api-Configuration';
+import { Configuration } from 'src/app/interfaces/Configuration';
 import { CompliceGoal } from 'src/app/interfaces/Complice-Goal';
 import { Goal, Item } from 'src/app/interfaces/item';
 import { AdapterService } from 'src/app/provider/adapter.service';
+import { ConfigService } from 'src/app/provider/config.service';
 import { GoalService } from 'src/app/provider/goal.service';
 import { TodoListService } from 'src/app/provider/todo-list.service';
 
@@ -21,9 +22,9 @@ export class SelectTaskButtonComponent implements OnInit {
     }
   }
 
-  @Input() public set regApiConfiguration(configuration: string) {
+  @Input() public set regConfiguration(configuration: string) {
     if (!!configuration) {
-      this.initializeApiConfiguration(configuration);
+      this.initializeConfiguration(configuration);
     }
   }
 
@@ -37,7 +38,8 @@ export class SelectTaskButtonComponent implements OnInit {
   constructor(
     private adapterService: AdapterService,
     private todoListService: TodoListService,
-    private goalService: GoalService
+    private goalService: GoalService,
+    private configService: ConfigService
   ) {
     this.goals$ = this.goalService.listenToGoals();
   }
@@ -79,11 +81,11 @@ export class SelectTaskButtonComponent implements OnInit {
     }
   }
 
-  private initializeApiConfiguration(configuration: string): void {
+  private initializeConfiguration(config: string): void {
     try {
-      const apiConfiguration = this.adapterService.parseEntity<ApiConfiguration>(configuration);
+      const configuration = this.adapterService.parseEntity<Configuration>(config);
 
-      this.todoListService.setApiConfiguration(apiConfiguration);
+      this.configService.setConfiguration(configuration);
     } catch (e) {
       this.handleError();
     }

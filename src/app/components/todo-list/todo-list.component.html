@@ -9,6 +9,6 @@
     </further-goals-view>
 
     <goal-editor *ngSwitchCase="'goalEditor'" [goals]="goals"
-      [gamificationEnabled]="(apiConfiguration$ | async)?.gamificationEnabled"></goal-editor>
+      [gamificationEnabled]="gamificationEnabled$ | async"></goal-editor>
   </ng-container>
 </ng-container>

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { Configuration } from 'src/app/interfaces/Configuration';
+import { map, tap } from 'rxjs/operators';
 import { ConfigService } from 'src/app/provider/config.service';
 import { GoalService } from 'src/app/provider/goal.service';
 import { Goal } from '../../interfaces/item';
@@ -16,8 +15,8 @@ import { Goal } from '../../interfaces/item';
 export class ToDoListComponent {
 
   public goals$: Observable<Goal[]>;
-  public configuration$: Observable<Configuration>;
-  
+  public gamificationEnabled$: Observable<boolean>;
+
   public currentView: 'initialGoal' | 'furtherGoals' | 'goalEditor' | 'none';
 
 
@@ -26,7 +25,7 @@ export class ToDoListComponent {
     private configService: ConfigService
   ) {
     this.goals$ = this.initializeGoals();
-    this.configuration$ = this.configService.getConfiguration();
+    this.gamificationEnabled$ = this.initializeGamification();
   }
 
   public toggleView(view: 'initialGoal' | 'furtherGoals' | 'goalEditor' | 'none') {
@@ -40,11 +39,18 @@ export class ToDoListComponent {
       );
   }
 
+  private initializeGamification(): Observable<boolean> {
+    return this.configService.getConfiguration()
+      .pipe(
+        map(configuration => configuration.gamificationEnabled)
+      );
+  }
+
   private toggleDefaultView(goals: Goal[]): void {
     if (this.currentView === 'furtherGoals') {
       return;
     }
-    
+
     goals.length ? this.toggleView('goalEditor') : this.toggleView('initialGoal');
   }
 }

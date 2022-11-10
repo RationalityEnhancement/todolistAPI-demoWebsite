@@ -1,39 +1,58 @@
-# Demo Website for REG ToDo List Gamification Project"
+# Goal Editor for REG Gamification Project
 
-## Page information
- ```src/app/components/todo-list/todo-list.component.ts```
- is the file which contains the front-end where the user can enter the goals and tasks.
- 
- ```src/app/components/optimized-list/optimized-list.component.ts```
- is the file which contains the front-end where the optimized gamified to-do list is shown.
- 
-```src/app/provder/item.service.ts``` 
-contains the file which handles the API POST call. The Cross-Origin Resource Sharing has been fixed by means of an OPTION call which verifies that the domain https://saksham36.github.io is verified to access the API.
+This application is used as part of REG's To-Do List Gamification project. Our app serves two purposes:
+- It provides a graphical user interface to create & edit goals or tasks
+- It utilizes REG's To-Do List API to create daily task suggestions based on users' goals.
 
-## Website Deployment Information
+Currently, the app is meant to be integrated into the productivity app CompliceX to simplify important user interactions.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.2.
+Therefore, the current version significantly differs from the [initial version](https://saksham36.github.io/todolistAPI-demoWebsite/dist/ToDo/intro) used in another experiment.
+## Local development
 
-## Development server
+Before, you start setting up the project, ensure that you have an up-to-date version of [Node.js](https://nodejs.org/en/) installed on your machine.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+This project is developed using the frontend-framework [Angular](https://angular.io/).
 
-## Code scaffolding
+To speed up the development process, make sure to install the [Angular CLI](https://github.com/angular/angular-cli) version 11.2.2 on your machine.
+    
+    yarn global add @angular/cli@11.2.2
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+Afterward, install the necessary dependencies for this project
+    
+    yarn
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Then, start the local development server
+    
+    yarn start
 
-## Running unit tests
+In your browser, navigate to http://localhost:4200. The app will automatically reload if you change any of the source files.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Deployment
+To deploy a new production version of our app, run
 
-## Running end-to-end tests
+    yarn build-prod
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+The production artifacts will be written to `dist/todo-list`.
+They can then be copied/uploaded to the relevant target.
+## Integration with CompliceX
 
-## Further help
+Our app is currently integrated into CompliceX. To make integration easier it is wrapped as a [Web Component](https://developer.mozilla.org/en-US/docs/Web/Web_Components) using [Angular Elements](https://angular.io/guide/elements).
+CompliceX & our app communicate via the Web Components API to exchange data & events. This enables us to encapsulate our application and potentially use it in other applications besides CompliceX as well (as long as the necessary data is passed to our app using the Web Components API).
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Project structure
+
+All related source files are located in the directory `src/app`. They are structured as follows
+
+- `/components` - Contains the individual UI components
+- `/constants` - Contains constants that never change once the app is started.
+- `/interfaces` - Contains type definitions for entities used in our app.
+- `/provider` - Contains services that implement more abstract & complex logic (e.g API calls, handling state, etc.).
+
+## Important files
+- `index.html` - Wwraps our app and provides a mocked context for it. That way, we can develop our app without actually integrating it into CompliceX.
+- `app.module.ts` - Declares all relevant parts of our app & wraps them as an [Angular Element](https://angular.io/guide/elements)
+- `app.component.ts` - Is responsibile for communicating through the Web Component API.
+- `goal-editor.component.ts` - This component provides the primary functions for creating & editing goals. It utilizes a number of smaller components (e.g. certain forms or popups) to assemble the full layout of the goal editor UI.
+- `todo-list.service.ts` - Is responsible for posting user's data to the To-Do List API & publishing the received list of task suggestions throughout the app
+- `goal.service.ts` - Is responsible for handling users' goals and publishing potential goal changes throughout the app.

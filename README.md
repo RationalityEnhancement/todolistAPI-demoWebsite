@@ -9,7 +9,7 @@ Currently, the app is meant to be integrated into the productivity app CompliceX
 Therefore, the current version significantly differs from the [initial version](https://saksham36.github.io/todolistAPI-demoWebsite/dist/ToDo/intro) used in another experiment.
 ## Local development
 
-Before, you start setting up the project, ensure that you have an up-to-date version of [Node.js](https://nodejs.org/en/) installed on your machine.
+Before you start setting up the project, ensure that you have an up-to-date version of [Node.js](https://nodejs.org/en/) installed on your machine.
 
 This project is developed using the frontend-framework [Angular](https://angular.io/).
 
@@ -37,7 +37,7 @@ The production artifacts will be written to `dist/todo-list`.
 They can then be copied/uploaded to the relevant target.
 ## Integration with CompliceX
 
-Our app is currently integrated into CompliceX. To make integration easier it is wrapped as a [Web Component](https://developer.mozilla.org/en-US/docs/Web/Web_Components) using [Angular Elements](https://angular.io/guide/elements).
+Our app is currently integrated into CompliceX. To make integration easier, it is wrapped as a [Web Component](https://developer.mozilla.org/en-US/docs/Web/Web_Components) using [Angular Elements](https://angular.io/guide/elements).
 CompliceX & our app communicate via the Web Components API to exchange data & events. This enables us to encapsulate our application and potentially use it in other applications besides CompliceX as well (as long as the necessary data is passed to our app using the Web Components API).
 
 ## Project structure
@@ -50,9 +50,9 @@ All related source files are located in the directory `src/app`. They are struct
 - `/provider` - Contains services that implement more abstract & complex logic (e.g API calls, handling state, etc.).
 
 ## Important files
-- `index.html` - Wwraps our app and provides a mocked context for it. That way, we can develop our app without actually integrating it into CompliceX.
+- `index.html` - Wraps our app and provides a mocked context for it. That way, we can develop our app without actually integrating it into CompliceX.
 - `app.module.ts` - Declares all relevant parts of our app & wraps them as an [Angular Element](https://angular.io/guide/elements)
 - `app.component.ts` - Is responsibile for communicating through the Web Component API.
-- `goal-editor.component.ts` - This component provides the primary functions for creating & editing goals. It utilizes a number of smaller components (e.g. certain forms or popups) to assemble the full layout of the goal editor UI.
+- `goal-editor.component.ts` - Provides the primary functions for creating & editing goals. It utilizes a number of smaller components (e.g. certain forms or popups) to assemble the full layout of the goal editor UI.
 - `todo-list.service.ts` - Is responsible for posting user's data to the To-Do List API & publishing the received list of task suggestions throughout the app
 - `goal.service.ts` - Is responsible for handling users' goals and publishing potential goal changes throughout the app.
